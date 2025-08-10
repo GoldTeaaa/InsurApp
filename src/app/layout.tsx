@@ -1,4 +1,9 @@
-import "./globals.css";
+import "../style/globals.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = { 
+  title: "InsureCo", description: "Internal CRM" 
+};
 
 export default function RootLayout({
   children,

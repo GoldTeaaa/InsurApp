@@ -1,9 +1,9 @@
-import Image from "next/image";
+import SideNav from "@/components/dashboard/sideNav";
 
-export default function Home() {
-  return (
-    <div>
-      <h1>TEST</h1>
-    </div>
-  );
+export default function Dashboard() {
+    return (
+        <div>
+            <SideNav/>
+        </div>
+    );
 }

@@ -10,10 +10,11 @@ function cn(...classes: Array<string | false | null | undefined>) {
 
 const NAV = [
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/customers", label: "Customers" },
-  { href: "/policies", label: "Policies" },
-  { href: "/payments", label: "Payments" },
-  { href: "/reports", label: "Reports" },
+  { href: "/nasabah", label: "Nasabah" },
+  { href: "/perusahaan-asuransi", label: "Perusahaan Asuransi" },
+  { href: "/polis", label: "Polis" },
+  { href: "/pembayaran", label: "Pembayaran" },
+  { href: "/laporan", label: "Laporan" },
 ];
 
 export default function SideNav() {

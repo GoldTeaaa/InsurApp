@@ -2,206 +2,189 @@
 
 import * as React from 'react';
 import { useActionState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import insertNasabah from './actions';
 
-import {
-  nasabahFormSchema,
-  type NasabahFormData,
-} from '@/lib/nasabah/types';
+// --- UI Primitives ---
+// These components provide consistent styling for our form elements.
 
-import { createNasabahAction } from '@/features/nasabah/actions';
-
-// Minimal UI primitives
-function Label({ children, htmlFor }: { children: React.ReactNode; htmlFor?: string }) {
-  return <label htmlFor={htmlFor} className="block text-sm font-medium mb-1">{children}</label>;
-}
-function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={`w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 ${props.className || ''}`} />;
-}
-function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea {...props} className={`w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 ${props.className || ''}`} />;
-}
-function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return <button {...props} className={`rounded-xl px-3.5 py-2.5 font-medium bg-black text-white disabled:opacity-60 ${props.className || ''}`} />;
-}
-
-function Segmented({
-  value,
-  onChange,
-}: {
-  value: 'pribadi' | 'perusahaan';
-  onChange: (val: 'pribadi' | 'perusahaan') => void;
-}) {
+function Label({ children, htmlFor }: { children: React.ReactNode; htmlFor: string }) {
   return (
-    <div className="inline-grid grid-cols-2 rounded-2xl border p-0.5">
-      {(['pribadi', 'perusahaan'] as const).map((opt) => (
-        <button
-          key={opt}
-          type="button"
-          onClick={() => onChange(opt)}
-          className={`px-4 py-2 rounded-2xl text-sm font-medium ${
-            value === opt ? 'bg-white shadow border' : ''
-          }`}
-        >
-          {opt === 'pribadi' ? 'Pribadi' : 'Perusahaan'}
-        </button>
-      ))}
-    </div>
+    <label htmlFor={htmlFor} className="block text-sm font-medium text-gray-700 mb-1">
+      {children}
+    </label>
   );
 }
 
+function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
+  return (
+    <input
+      {...props}
+      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+    />
+  );
+}
+
+function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return (
+    <textarea
+      {...props}
+      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+    />
+  );
+}
+
+function FormField({ children }: { children: React.ReactNode }) {
+  return <div className="mb-4">{children}</div>;
+}
+
+function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      {...props}
+      className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+    />
+  );
+}
+
+// --- Main Form Component ---
+
+type Tipe = 'pribadi' | 'perusahaan';
+
 export default function NasabahForm() {
-  const [state, formAction, isPending] = useActionState(createNasabahAction, null);
+  const [state, formAction, isPending] = useActionState(insertNasabah, null);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm<NasabahFormData>({
-    resolver: zodResolver(nasabahFormSchema),
-    defaultValues: {
-      tipe: 'pribadi',
-      nomor_telfon: '',
-      email: null,
-      alamat: null,
-      pribadi: { nama_lengkap: '', no_ktp: '', tanggal_lahir: '' },
-    } as any,
-    mode: 'onBlur',
-  });
+  // State management for form fields
+  const [tipe, setTipe] = React.useState<Tipe>('pribadi');
+  const [nomorTelfon, setNomorTelfon] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [alamat, setAlamat] = React.useState('');
+  const [namaLengkap, setNamaLengkap] = React.useState('');
+  const [noKtp, setNoKtp] = React.useState('');
+  const [tanggalLahir, setTanggalLahir] = React.useState('');
+  const [namaPerusahaan, setNamaPerusahaan] = React.useState('');
+  const [picNama, setPicNama] = React.useState('');
+  const [noKtpPic, setNoKtpPic] = React.useState('');
 
-  const tipe = watch('tipe');
-
-  // Build a submit handler that sets the hidden JSON 'payload' before native submit
-  function onValid(values: NasabahFormData, ev?: React.BaseSyntheticEvent) {
-    const formEl = ev?.target as HTMLFormElement;
-    const payloadInput = formEl.querySelector('input[name="payload"]') as HTMLInputElement;
-    payloadInput.value = JSON.stringify(values);
-    // Let the browser continue with native submit to formAction
+  function handleChangeTipe(next: Tipe) {
+    setTipe(next);
+    if (next === 'pribadi') {
+      setNamaPerusahaan('');
+      setPicNama('');
+      setNoKtpPic('');
+    } else {
+      setNamaLengkap('');
+      setNoKtp('');
+      setTanggalLahir('');
+    }
   }
 
-  React.useEffect(() => {
-    if (state?.ok) {
-      alert('Nasabah tersimpan.');
-      reset({
-        tipe,
-        ...(tipe === 'pribadi'
-          ? { nomor_telfon: '', email: null, alamat: null, pribadi: { nama_lengkap: '', no_ktp: '', tanggal_lahir: '' } }
-          : { nomor_telfon: '', email: null, alamat: null, perusahaan: { nama_perusahaan: '', pic_nama: '', no_ktp_pic: '' } }),
-      } as any);
-    } else if (state?.error) {
-      alert(`Gagal menyimpan.\n${state.error}`);
-    }
-  }, [state, reset, tipe]);
+  function handleValidSubmit(ev: React.FormEvent<HTMLFormElement>) {
+    const payloadInput = ev.currentTarget.querySelector<HTMLInputElement>('input[name="payload"]');
+    if (!payloadInput) return;
+
+    const base = {
+      tipe,
+      nomor_telfon: nomorTelfon || undefined,
+      email: email || undefined,
+      alamat: alamat || undefined,
+    };
+
+    const payload =
+      tipe === 'pribadi'
+        ? { ...base, pribadi: { nama_lengkap: namaLengkap || '', no_ktp: noKtp || '', tanggal_lahir: tanggalLahir || undefined } }
+        : { ...base, perusahaan: { nama_perusahaan: namaPerusahaan || '', pic_nama: picNama || '', no_ktp_pic: noKtpPic || undefined } };
+
+    payloadInput.value = JSON.stringify(payload);
+  }
 
   return (
-    <form
-      action={formAction}
-      onSubmit={handleSubmit(onValid)}
-      className="mx-auto max-w-3xl space-y-8"
-    >
+    <form action={formAction} onSubmit={handleValidSubmit} className="max-w-xl mx-auto space-y-6 p-4 sm:p-6">
       <input type="hidden" name="payload" />
 
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold">Tambah Nasabah</h1>
-          <p className="text-sm text-gray-500">Isi data nasabah sesuai tipe.</p>
+      <fieldset className="space-y-2">
+        <legend className="text-lg font-medium">Tipe Nasabah</legend>
+        <div className="flex items-center gap-x-6">
+          <label className="flex items-center gap-2">
+            <input type="radio" name="tipe" value="pribadi" checked={tipe === 'pribadi'} onChange={() => handleChangeTipe('pribadi')} className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"/>
+            Pribadi
+          </label>
+          <label className="flex items-center gap-2">
+            <input type="radio" name="tipe" value="perusahaan" checked={tipe === 'perusahaan'} onChange={() => handleChangeTipe('perusahaan')} className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"/>
+            Perusahaan
+          </label>
         </div>
-        <Segmented
-          value={tipe}
-          onChange={(val) => {
-            setValue('tipe', val);
-            if (val === 'pribadi') {
-              setValue('perusahaan', undefined as any);
-              setValue('pribadi', { nama_lengkap: '', no_ktp: '', tanggal_lahir: '' } as any);
-            } else {
-              setValue('pribadi', undefined as any);
-              setValue('perusahaan', { nama_perusahaan: '', pic_nama: '', no_ktp_pic: '' } as any);
-            }
-          }}
-        />
-      </div>
+      </fieldset>
 
       {tipe === 'pribadi' ? (
-        <div className="rounded-2xl border p-4 space-y-4">
-          <h2 className="text-sm font-semibold">Identitas Pribadi</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="nama_lengkap">Nama Lengkap*</Label>
-              <Input id="nama_lengkap" placeholder="Budi Santoso" {...register('pribadi.nama_lengkap')} />
-              {errors?.pribadi?.nama_lengkap && <p className="mt-1 text-xs text-red-500">{errors.pribadi.nama_lengkap.message}</p>}
-            </div>
-            <div>
-              <Label htmlFor="no_ktp">No. KTP*</Label>
-              <Input id="no_ktp" placeholder="3174…" {...register('pribadi.no_ktp')} />
-              {errors?.pribadi?.no_ktp && <p className="mt-1 text-xs text-red-500">{errors.pribadi.no_ktp.message}</p>}
-            </div>
-            <div>
-              <Label htmlFor="tanggal_lahir">Tanggal Lahir</Label>
-              <Input id="tanggal_lahir" type="date" {...register('pribadi.tanggal_lahir')} />
-              {errors?.pribadi?.tanggal_lahir && <p className="mt-1 text-xs text-red-500">{errors.pribadi.tanggal_lahir.message}</p>}
-            </div>
-          </div>
-        </div>
+        <fieldset className="border-t pt-6 space-y-4">
+          <legend className="text-base font-medium text-gray-900">Identitas Pribadi</legend>
+          <FormField>
+            <Label htmlFor="namaLengkap">Nama Lengkap*</Label>
+            <Input id="namaLengkap" type="text" value={namaLengkap} onChange={(e) => setNamaLengkap(e.target.value)} placeholder="Budi Santoso" required />
+          </FormField>
+          <FormField>
+            <Label htmlFor="noKtp">No. KTP*</Label>
+            <Input id="noKtp" type="text" value={noKtp} onChange={(e) => setNoKtp(e.target.value)} placeholder="3174..." required />
+          </FormField>
+          <FormField>
+            <Label htmlFor="tanggalLahir">Tanggal Lahir</Label>
+            <Input id="tanggalLahir" type="date" value={tanggalLahir} onChange={(e) => setTanggalLahir(e.target.value)} />
+          </FormField>
+        </fieldset>
       ) : (
-        <div className="rounded-2xl border p-4 space-y-4">
-          <h2 className="text-sm font-semibold">Identitas Perusahaan</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-              <Label htmlFor="nama_perusahaan">Nama Perusahaan*</Label>
-              <Input id="nama_perusahaan" placeholder="PT Contoh Abadi" {...register('perusahaan.nama_perusahaan')} />
-              {errors?.perusahaan?.nama_perusahaan && <p className="mt-1 text-xs text-red-500">{errors.perusahaan.nama_perusahaan.message}</p>}
-            </div>
-            <div>
-              <Label htmlFor="pic_nama">PIC Nama*</Label>
-              <Input id="pic_nama" placeholder="Andi Saputra" {...register('perusahaan.pic_nama')} />
-              {errors?.perusahaan?.pic_nama && <p className="mt-1 text-xs text-red-500">{errors.perusahaan.pic_nama.message}</p>}
-            </div>
-            <div>
-              <Label htmlFor="no_ktp_pic">No. KTP PIC</Label>
-              <Input id="no_ktp_pic" placeholder="3201…" {...register('perusahaan.no_ktp_pic')} />
-              {errors?.perusahaan?.no_ktp_pic && <p className="mt-1 text-xs text-red-500">{errors.perusahaan.no_ktp_pic.message}</p>}
-            </div>
-          </div>
-        </div>
+        <fieldset className="border-t pt-6 space-y-4">
+          <legend className="text-base font-medium text-gray-900">Identitas Perusahaan</legend>
+          <FormField>
+            <Label htmlFor="namaPerusahaan">Nama Perusahaan*</Label>
+            <Input id="namaPerusahaan" type="text" value={namaPerusahaan} onChange={(e) => setNamaPerusahaan(e.target.value)} placeholder="PT Contoh Abadi" required />
+          </FormField>
+          <FormField>
+            <Label htmlFor="picNama">PIC Nama*</Label>
+            <Input id="picNama" type="text" value={picNama} onChange={(e) => setPicNama(e.target.value)} placeholder="Andi Saputra" required />
+          </FormField>
+          <FormField>
+            <Label htmlFor="noKtpPic">No. KTP PIC</Label>
+            <Input id="noKtpPic" type="text" value={noKtpPic} onChange={(e) => setNoKtpPic(e.target.value)} placeholder="3201..." />
+          </FormField>
+        </fieldset>
       )}
 
-      <div className="rounded-2xl border p-4 space-y-4">
-        <h2 className="text-sm font-semibold">Kontak</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="nomor_telfon">Nomor Telepon*</Label>
-            <Input id="nomor_telfon" placeholder="0812…" {...register('nomor_telfon')} />
-            {errors?.nomor_telfon && <p className="mt-1 text-xs text-red-500">{errors.nomor_telfon.message}</p>}
-          </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" placeholder="nama@contoh.id" {...register('email')} />
-            {errors?.email && <p className="mt-1 text-xs text-red-500">{errors.email.message as string}</p>}
-          </div>
-          <div className="md:col-span-2">
-            <Label htmlFor="alamat">Alamat</Label>
-            <Textarea id="alamat" placeholder="Jl. Merdeka No. 1" rows={3} {...register('alamat')} />
-            {errors?.alamat && <p className="mt-1 text-xs text-red-500">{errors.alamat.message as string}</p>}
-          </div>
-        </div>
-      </div>
+      <fieldset className="border-t pt-6 space-y-4">
+        <legend className="text-base font-medium text-gray-900">Informasi Kontak</legend>
+        <FormField>
+          <Label htmlFor="nomorTelfon">Nomor Telepon*</Label>
+          <Input id="nomorTelfon" type="text" value={nomorTelfon} onChange={(e) => setNomorTelfon(e.target.value)} placeholder="0812..." required />
+        </FormField>
+        <FormField>
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nama@contoh.id" />
+        </FormField>
+        <FormField>
+          <Label htmlFor="alamat">Alamat</Label>
+          <Textarea id="alamat" value={alamat} onChange={(e) => setAlamat(e.target.value)} placeholder="Jl. Merdeka No.1" rows={3} />
+        </FormField>
+      </fieldset>
 
-      <div className="flex items-center gap-3">
+      <div>
         <Button type="submit" disabled={isPending}>
           {isPending ? 'Menyimpan…' : 'Simpan Nasabah'}
         </Button>
-        <Button
-          type="button"
-          className="bg-gray-200 text-gray-900"
-          onClick={() => reset(undefined)}
-        >
-          Reset
-        </Button>
       </div>
+
+      {state && typeof state === 'object' && 'ok' in state && (
+        <div className="mt-4 p-4 rounded-md" style={{ backgroundColor: state.ok ? '#e0f2fe' : '#ffe4e6' }}>
+          {state.ok ? (
+            <div className="text-blue-800">Berhasil menyimpan.</div>
+          ) : (
+            <div className="text-red-800">
+              <p className="font-semibold">Gagal: {state.error}</p>
+              {state.issues && (
+                <pre className="mt-2 text-xs whitespace-pre-wrap">{JSON.stringify(state.issues, null, 2)}</pre>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </form>
   );
 }

@@ -1,4 +1,6 @@
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
+
+type FlattenedIssues = ReturnType<ZodError<any>['flatten']>;
 
 const tipeSchema = z.enum(['pribadi', 'perusahaan']);
 

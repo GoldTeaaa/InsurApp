@@ -29,7 +29,7 @@ export default function SideNav() {
 
       <nav className="space-y-1 px-2 py-4">
         {NAV.map((item) => {
-          const active = pathname?.startsWith(item.href);
+          const active = pathname === item.href;
           return (
             <Link
               key={item.href}

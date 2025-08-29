@@ -6,13 +6,14 @@ export function toNasabahCreateRpcArgs(input: NasabahFormData) {
     const p = input.pribadi;
     return {
       p_tipe: 'pribadi' as const,
+      p_nama: input.nama,
       p_contact_1: input.contact_1,
       p_contact_2: input.contact_2 ?? null,
       p_email: input.email ?? null,
       p_alamat: input.alamat ?? null,
       p_pribadi: {
         nik: p.nik,
-        nama_tertanggung: p.nama_tertanggung,
+        nama_tertanggung: input.nama,
         tempat_lahir: p.tempat_lahir,
         tanggal_lahir: p.tanggal_lahir,
         jenis_kelamin: p.jenis_kelamin,
@@ -37,13 +38,14 @@ export function toNasabahCreateRpcArgs(input: NasabahFormData) {
     const c = input.perusahaan;
     return {
       p_tipe: 'perusahaan' as const,
+      p_nama: input.nama,
       p_contact_1: input.contact_1,
       p_contact_2: input.contact_2 ?? null,
       p_email: input.email ?? null,
       p_alamat: input.alamat ?? null,
       p_pribadi: null,
       p_perusahaan: {
-        nama_perusahaan: c.nama_perusahaan,
+        nama_perusahaan: input.nama,
         npwp_perusahaan: c.npwp_perusahaan,
         nama_pic: c.nama_pic,
         jabatan_pic: c.jabatan_pic ?? null,

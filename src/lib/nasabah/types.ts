@@ -1,4 +1,5 @@
 import { z, ZodError } from 'zod';
+import { optional } from 'zod/v4-mini';
 
 export type FlattenedIssues = ReturnType<ZodError<any>['flatten']>;
 
@@ -43,6 +44,7 @@ const optionalEmail = z.preprocess(
 
 /* ===== Base (RPC: p_contact_1/2, p_email, p_alamat) ===== */
 export const baseSchema = z.object({
+  nama: optionalText,
   contact_1: nonEmpty,
   contact_2: optionalText,
   email: optionalEmail,
@@ -52,7 +54,7 @@ export const baseSchema = z.object({
 /* ===== PRIBADI (RPC: public.pribadi_input) ===== */
 export const pribadiSchema = z.object({
   nik: nonEmpty,
-  nama_tertanggung: nonEmpty,
+  // nama_tertanggung: nonEmpty,
   tempat_lahir: nonEmpty,
   // Must be a non-empty string in 'YYYY-MM-DD' format from the date input.
   tanggal_lahir: z.string().trim().min(1, 'Tanggal lahir wajib diisi'),
@@ -73,7 +75,7 @@ export const pribadiSchema = z.object({
 
 /* ===== PERUSAHAAN (RPC: public.perusahaan_input) ===== */
 export const perusahaanSchema = z.object({
-  nama_perusahaan: nonEmpty,
+  // nama_perusahaan: nonEmpty,
   npwp_perusahaan: nonEmpty,
   nama_pic: nonEmpty,
   jabatan_pic: optionalText,

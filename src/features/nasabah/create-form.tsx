@@ -112,6 +112,16 @@ export default function NasabahCreateForm() {
           <legend className="text-base font-medium text-gray-900 mb-4">Identitas Pribadi</legend>
 
           <Field>
+            <Label htmlFor="nama">Nama Tertanggung*</Label>
+            <Input
+              id="nama"
+              name="nama"
+              required
+              {...aria('nama')}
+            />
+            <ErrorText id={aria('nama').errId} message={getErr(state, 'pribadi.nama_tertanggung')} />
+          </Field>
+          {/* <Field>
             <Label htmlFor="pribadi.nama_tertanggung">Nama Tertanggung*</Label>
             <Input
               id="pribadi.nama_tertanggung"
@@ -120,7 +130,7 @@ export default function NasabahCreateForm() {
               {...aria('pribadi.nama_tertanggung')}
             />
             <ErrorText id={aria('pribadi.nama_tertanggung').errId} message={getErr(state, 'pribadi.nama_tertanggung')} />
-          </Field>
+          </Field> */}
 
           <Field>
             <Label htmlFor="pribadi.nik">NIK*</Label>
@@ -293,14 +303,14 @@ export default function NasabahCreateForm() {
           <legend className="text-base font-medium text-gray-900 mb-4">Identitas Perusahaan</legend>
 
           <Field>
-            <Label htmlFor="perusahaan.nama_perusahaan">Nama Perusahaan*</Label>
+            <Label htmlFor="nama">Nama Perusahaan*</Label>
             <Input
-              id="perusahaan.nama_perusahaan"
-              name="perusahaan.nama_perusahaan"
+              id="nama"
+              name="nama"
               required
-              {...aria('perusahaan.nama_perusahaan')}
+              {...aria('nama')}
             />
-            <ErrorText id={aria('perusahaan.nama_perusahaan').errId} message={getErr(state, 'perusahaan.nama_perusahaan')} />
+            <ErrorText id={aria('nama').errId} message={getErr(state, 'nama')} />
           </Field>
 
           <Field>

@@ -34,9 +34,11 @@ export default async function insertNasabah(
   formData: FormData
 ): Promise<State> {
   const tipe = String(formData.get("tipe") ?? "pribadi");
+  console.log("FormData: ", formData);
 
   // Common fields
   const base = {
+    nama : req(formData.get("nama")),
     contact_1: req(formData.get("contact_1")),
     contact_2: opt(formData.get("contact_2")),
     email: opt(formData.get("email")),
@@ -50,7 +52,8 @@ export default async function insertNasabah(
       ...base,
       tipe: "perusahaan" as const,
       perusahaan: {
-        nama_perusahaan: req(formData.get("perusahaan.nama_perusahaan")),
+        // nama_perusahaan: req(formData.get("perusahaan.nama_perusahaan")),
+        nama_perusahaan: req(formData.get("nama")),
         npwp_perusahaan: req(formData.get("perusahaan.npwp_perusahaan")),
         nama_pic: req(formData.get("perusahaan.nama_pic")),
         jabatan_pic: opt(formData.get("perusahaan.jabatan_pic")),
@@ -65,7 +68,8 @@ export default async function insertNasabah(
       tipe: "pribadi" as const,
       pribadi: {
         nik: req(formData.get("pribadi.nik")),
-        nama_tertanggung: req(formData.get("pribadi.nama_tertanggung")),
+        // nama_tertanggung: req(formData.get("pribadi.nama_tertanggung")),
+        nama_tertanggung: req(formData.get("nama")),
         tempat_lahir: req(formData.get("pribadi.tempat_lahir")),
         tanggal_lahir: req(formData.get("pribadi.tanggal_lahir")),
         jenis_kelamin: opt(formData.get("pribadi.jenis_kelamin")),
@@ -96,9 +100,11 @@ export default async function insertNasabah(
       success: false,
     };
   }
+  console.log("Parsed: ", parsed.data);
 
   // Map to RPC args
   const args = toNasabahCreateRpcArgs(parsed.data);
+  console.log("Args: ", args);
 
   // Call Supabase RPC
   const { data, error } = await supabase.rpc("nasabah_create_v1", args);
@@ -234,7 +240,7 @@ export async function updateNasabah(
     v.tipe === "pribadi"
       ? {
           nik: v.pribadi.nik,
-          nama_tertanggung: v.pribadi.nama_tertanggung,
+          nama_tertanggung: v.nama,
           tempat_lahir: v.pribadi.tempat_lahir,
           tanggal_lahir: v.pribadi.tanggal_lahir,
           jenis_kelamin: v.pribadi.jenis_kelamin,
@@ -256,7 +262,7 @@ export async function updateNasabah(
   const p_perusahaan =
     v.tipe === "perusahaan"
       ? {
-          nama_perusahaan: v.perusahaan.nama_perusahaan,
+          nama_perusahaan: v.nama,
           npwp_perusahaan: v.perusahaan.npwp_perusahaan,
           nama_pic: v.perusahaan.nama_pic,
           jabatan_pic: toNull(v.perusahaan.jabatan_pic),

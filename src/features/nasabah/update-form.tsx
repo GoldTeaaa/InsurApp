@@ -50,11 +50,12 @@ const sv = (v: string | null | undefined) => v ?? '';
 
 export default function EditNasabahForm({
   id,
-  defaultValues,
+  defaultValues
 }: {
   id: string;
   defaultValues: NasabahFormUIData & { updated_at?: string | null };
 }) {
+
   const initialState: State = { message: null, errors: {} };
 
   const updateWithId = useMemo(() => updateNasabah.bind(null, id), [id]);
@@ -63,7 +64,7 @@ export default function EditNasabahForm({
   // ---- KEY FIX #1: force remount when record changes so defaultValue is reapplied
   const formKey = useMemo(
     () => `${id}|${defaultValues.updated_at ?? ''}`,
-    [id, defaultValues.updated_at]
+    [id, defaultValues.updated_at]  
   );
 
   // ---- KEY FIX #2: make tipe controlled and in sync with props
@@ -71,6 +72,8 @@ export default function EditNasabahForm({
   useEffect(() => {
     setTipe(defaultValues.tipe);
   }, [defaultValues.tipe]);
+  // console.log("tipe: ", tipe);
+  // console.log("defaultValues: ", defaultValues.tipe);
 
   return (
     <form key={formKey} action={formAction} className="max-w-3xl">

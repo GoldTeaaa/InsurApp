@@ -156,11 +156,16 @@ export type NasabahDetail = NasabahFormData & { updated_at: string | null };
 export async function fetchNasabahById(
   id: string
 ): Promise<NasabahDetail | null> {
+  // This should be optimized in the future where tipe validation
+  // is checked in the Frontend and call the specific rpc
+  // Current rpc return the whole fields which can slow down parsing
   const { data, error } = await supabase.rpc("nasabah_get_v1", {
     p_id: id,
   });
+
+  const record =  Array.isArray(data) ? data[0] : data;
   if (error) throw new Error(error.message);
-  return data as NasabahDetail;
+  return record as NasabahDetail;
 }
 
 // ========================================== UPDATE ACTION ==========================================

@@ -8,7 +8,8 @@ export default async function EditPage({ params }: { params: Params }) {
   const { id } = await params;
   const detail = await fetchNasabahById(id);
   if (!detail) return notFound();
-  console.log(detail);
+  console.log("id: ", id);
+  console.log("Detail: ", detail);
 
   return (
     <div className="p-4">

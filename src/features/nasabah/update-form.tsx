@@ -1,8 +1,8 @@
 'use client';
 
 import { useActionState, useMemo } from 'react';
-import { updateNasabah, type State } from '@/features/nasabah/actions';
-import { tipeSchema, type NasabahFormUIData } from '@/lib/nasabah/types';
+import { updateNasabahV1, updateNasabahV2, type State } from '@/features/nasabah/actions';
+import { tipeSchema, type NasabahFormUIData, type NasabahFormServerData } from '@/lib/nasabah/types';
 import Link from 'next/link';
 
 function FieldError({ name, state }: { name: string; state: State }) {
@@ -57,7 +57,7 @@ function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
 // map null/undefined => '' to satisfy input defaultValue typing
 const sv = (v: string | null | undefined) => v ?? '';
 
-type updateNasabahValue = NasabahFormUIData & { updated_at?: string | null };
+type updateNasabahValue = NasabahFormServerData & { updated_at?: string | null };
 
 export default function EditNasabahForm({
   id,
@@ -68,8 +68,10 @@ export default function EditNasabahForm({
 }) {
   const initialState: State = { message: null, errors: {} };
 
-  const updateWithId = useMemo(() => updateNasabah.bind(null, id), [id]);
+  const updateWithId = useMemo(() => updateNasabahV2.bind(null, id), [id]);
   const [state, formAction, isPending] = useActionState(updateWithId, initialState);
+  // const updateWithId = useMemo(() => updateNasabahV1.bind(null, id), [id]);
+  // const [state, formAction, isPending] = useActionState(updateWithId, initialState);
 
   // Force remount when record changes so defaultValue is reapplied
   const formKey = useMemo(
@@ -245,7 +247,7 @@ export default function EditNasabahForm({
             <Label htmlFor="pribadi.status_perkawinan">Status Perkawinan</Label>
             <SelectInput id="pribadi.status_perkawinan" name="pribadi.status_perkawinan" defaultValue={sv(defaultValues.pribadi?.status_perkawinan)}>
               <option value="">-</option>
-              <option value="BelumKawin">BelumKawin</option>
+              <option value="Belum Kawin">Belum Kawin</option>
               <option value="Kawin">Kawin</option>
               <option value="CeraiHidup">CeraiHidup</option>
               <option value="CeraiMati">CeraiMati</option>
@@ -260,7 +262,7 @@ export default function EditNasabahForm({
               <option value="WNI">WNI</option>
               <option value="WNA">WNA</option>
             </SelectInput>
-            <FieldError name="pribadi.kewarganegaraan" state={state}/>
+            <FieldError name="pribadi.kewarganegaraan" state={state} />
           </div>
 
           <div className="mb-0">
@@ -327,8 +329,12 @@ export default function EditNasabahForm({
           <div className="mt-4 p-4 rounded-md bg-blue-50 text-blue-800">Berhasil menyimpan.</div>
         )}
         {!state?.success && state?.message && (
-          <div className="mt-4 p-4 rounded-md bg-rose-50 text-rose-800">{state.errors}</div>
+          <div className="mt-4 p-4 rounded-md bg-rose-50 text-rose-800">
+            {state.message}
+          </div>
         )}
+        <FieldError name="rpc" state={state} />
+
       </div>
     </form>
   );

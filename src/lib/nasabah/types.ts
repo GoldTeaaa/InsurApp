@@ -28,7 +28,7 @@ export const AGAMA = [
 ] as const;
 // pick one canonical spelling and stick to it everywhere:
 export const STATUS = [
-  "BelumKawin",
+  "Belum Kawin",
   "Kawin",
   "CeraiHidup",
   "CeraiMati",
@@ -135,6 +135,7 @@ export const nasabahInputFormSchema = z.discriminatedUnion("tipe", [
 // export type NasabahPribadiUpdate = z.
 export type NasabahFormData = z.infer<typeof nasabahInputFormSchema>;
 export type NasabahFormUIData = z.input<typeof nasabahInputFormSchema>;
+export type NasabahFormServerData = z.output<typeof nasabahInputFormSchema>;
 
 // ================================ DASHBOARD VIEW ================================
 

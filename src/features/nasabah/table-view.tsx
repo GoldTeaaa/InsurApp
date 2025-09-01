@@ -22,7 +22,7 @@ export default async function Table({ q, page, sort }: { q: string; page: number
             </div>
         );
     }
-    console.log(rows);
+    // console.log(rows);
 
     return (
         <div className="mt-6 flow-root">

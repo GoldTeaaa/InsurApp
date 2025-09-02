@@ -1,7 +1,7 @@
 import { fetchNasabahPage } from '@/features/nasabah/actions';
 import { type NasabahSort } from '@/lib/nasabah/types';
 import Pagination from './pagination';
-import { UpdateInvoice } from './buttons';
+import { UpdateInvoice, DeleteNasabah } from './buttons';
 
 function fmt(iso?: string | null) {
     if (!iso) return '—';
@@ -22,7 +22,7 @@ export default async function Table({ q, page, sort }: { q: string; page: number
             </div>
         );
     }
-    console.log(rows);
+    // console.log(rows);
 
     return (
         <div className="mt-6 flow-root">
@@ -48,6 +48,7 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                                 </div>
                                 <div className="flex justify-end pt-3">
                                     <UpdateInvoice id={r.id} />
+                                    <DeleteNasabah id={r.id} />
                                 </div>
                             </div>
 
@@ -84,6 +85,7 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                         <div className="flex justify-end gap-3">
                                             <UpdateInvoice id={r.id} />
+                                            <DeleteNasabah id={r.id} />
                                         </div>
                                     </td>
                                 </tr>

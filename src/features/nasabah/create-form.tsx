@@ -53,14 +53,18 @@ function getErr(state: State | null, name: string): string[] | undefined {
   return state?.errors?.[name];
 }
 
-export default function NasabahCreateForm() {
+type Props = {
+  tipe: 'pribadi' | 'perusahaan';
+  onTipeChange: (tipe: 'pribadi' | 'perusahaan') => void;
+}
+
+export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
   const initial: State = {
     message: null,
     errors: {},
     success: false
   };
   const [state, formAction, isPending] = useActionState(insertNasabah, initial);
-  const [tipe, setTipe] = useState<'pribadi' | 'perusahaan'>('pribadi');
 
   // Utility to connect input to an error block
   const aria = (name: string) => {
@@ -79,16 +83,22 @@ export default function NasabahCreateForm() {
   return (
     <form action={formAction} className="max-w-2xl mx-auto space-y-6 p-4 sm:p-6">
       {/* Tipe */}
-      <fieldset className="space-y-2">
+      <input type="hidden" name="tipe" value={tipe} />
+
+      <fieldset
+        className="space-y-2"
+        // 3) remount radios when outcome flips, avoids stale browser UI
+        key={`${tipe}|${state?.success ? 'ok' : 'idle'}`}
+      >
         <legend className="text-lg font-medium">Tipe Nasabah</legend>
         <div className="flex items-center gap-x-6">
           <label className="flex items-center gap-2">
             <input
               type="radio"
-              name="tipe"
+              name="tipe-radio"                 // 2) different name
               value="pribadi"
-              defaultChecked
-              onChange={() => setTipe('pribadi')}
+              checked={tipe === 'pribadi'}   // fully controlled by prop
+              onChange={() => onTipeChange('pribadi')}
               className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-600"
             />
             Pribadi
@@ -96,9 +106,10 @@ export default function NasabahCreateForm() {
           <label className="flex items-center gap-2">
             <input
               type="radio"
-              name="tipe"
+              name="tipe-radio"                 // 2) different name
               value="perusahaan"
-              onChange={() => setTipe('perusahaan')}
+              checked={tipe === 'perusahaan'}
+              onChange={() => onTipeChange('perusahaan')}
               className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-600"
             />
             Perusahaan
@@ -112,14 +123,14 @@ export default function NasabahCreateForm() {
           <legend className="text-base font-medium text-gray-900 mb-4">Identitas Pribadi</legend>
 
           <Field>
-            <Label htmlFor="pribadi.nama_tertanggung">Nama Tertanggung*</Label>
+            <Label htmlFor="nama">Nama Tertanggung*</Label>
             <Input
-              id="pribadi.nama_tertanggung"
-              name="pribadi.nama_tertanggung"
+              id="nama"
+              name="nama"
               required
-              {...aria('pribadi.nama_tertanggung')}
+              {...aria('nama')}
             />
-            <ErrorText id={aria('pribadi.nama_tertanggung').errId} message={getErr(state, 'pribadi.nama_tertanggung')} />
+            <ErrorText id={aria('nama').errId} message={getErr(state, 'nama')} />
           </Field>
 
           <Field>
@@ -158,10 +169,11 @@ export default function NasabahCreateForm() {
             </Field>
 
             <Field>
-              <Label htmlFor="pribadi.jenis_kelamin">Jenis Kelamin</Label>
+              <Label htmlFor="pribadi.jenis_kelamin">Jenis Kelamin*</Label>
               <select
                 id="pribadi.jenis_kelamin"
                 name="pribadi.jenis_kelamin"
+                required
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm"
                 {...aria('pribadi.jenis_kelamin')}
               >
@@ -253,7 +265,7 @@ export default function NasabahCreateForm() {
                 {...aria('pribadi.status_perkawinan')}
               >
                 <option value="">Pilih</option>
-                <option value="BelumKawin">Belum Kawin</option>
+                <option value="Belum Kawin">Belum Kawin</option>
                 <option value="Kawin">Kawin</option>
                 <option value="CeraiHidup">Cerai Hidup</option>
                 <option value="CeraiMati">Cerai Mati</option>
@@ -293,14 +305,14 @@ export default function NasabahCreateForm() {
           <legend className="text-base font-medium text-gray-900 mb-4">Identitas Perusahaan</legend>
 
           <Field>
-            <Label htmlFor="perusahaan.nama_perusahaan">Nama Perusahaan*</Label>
+            <Label htmlFor="nama">Nama Perusahaan*</Label>
             <Input
-              id="perusahaan.nama_perusahaan"
-              name="perusahaan.nama_perusahaan"
+              id="nama"
+              name="nama"
               required
-              {...aria('perusahaan.nama_perusahaan')}
+              {...aria('nama')}
             />
-            <ErrorText id={aria('perusahaan.nama_perusahaan').errId} message={getErr(state, 'perusahaan.nama_perusahaan')} />
+            <ErrorText id={aria('nama').errId} message={getErr(state, 'nama')} />
           </Field>
 
           <Field>

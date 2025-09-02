@@ -1,8 +1,8 @@
 'use client';
 
-import { useActionState, useMemo, useEffect, useState } from 'react';
-import { updateNasabah, type State } from '@/features/nasabah/actions';
-import { tipeSchema, type NasabahFormUIData } from '@/lib/nasabah/types';
+import { useActionState, useMemo } from 'react';
+import { updateNasabahV1, updateNasabahV2, type State } from '@/features/nasabah/actions';
+import { tipeSchema, type NasabahFormUIData, type NasabahFormServerData } from '@/lib/nasabah/types';
 import Link from 'next/link';
 
 function FieldError({ name, state }: { name: string; state: State }) {
@@ -45,61 +45,77 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      {...props}
+      className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50"
+    />
+  );
+}
+
 // map null/undefined => '' to satisfy input defaultValue typing
 const sv = (v: string | null | undefined) => v ?? '';
 
+type updateNasabahValue = NasabahFormServerData & { updated_at?: string | null };
+
 export default function EditNasabahForm({
   id,
-  defaultValues,
+  defaultValues
 }: {
   id: string;
-  defaultValues: NasabahFormUIData & { updated_at?: string | null };
+  defaultValues: updateNasabahValue;
 }) {
   const initialState: State = { message: null, errors: {} };
 
-  const updateWithId = useMemo(() => updateNasabah.bind(null, id), [id]);
-  const [state, formAction] = useActionState(updateWithId, initialState);
+  const updateWithId = useMemo(() => updateNasabahV2.bind(null, id), [id]);
+  const [state, formAction, isPending] = useActionState(updateWithId, initialState);
+  // const updateWithId = useMemo(() => updateNasabahV1.bind(null, id), [id]);
+  // const [state, formAction, isPending] = useActionState(updateWithId, initialState);
 
-  // ---- KEY FIX #1: force remount when record changes so defaultValue is reapplied
+  // Force remount when record changes so defaultValue is reapplied
   const formKey = useMemo(
     () => `${id}|${defaultValues.updated_at ?? ''}`,
     [id, defaultValues.updated_at]
   );
 
-  // ---- KEY FIX #2: make tipe controlled and in sync with props
-  const [tipe, setTipe] = useState(defaultValues.tipe);
-  useEffect(() => {
-    setTipe(defaultValues.tipe);
-  }, [defaultValues.tipe]);
+  // IMMUTABLE TIPE (no local state, no onChange)
+  const tipe = defaultValues.tipe;
 
   return (
     <form key={formKey} action={formAction} className="max-w-3xl">
-      {/* optional optimistic concurrency */}
+      {/* optimistic concurrency */}
       {defaultValues.updated_at ? (
         <input type="hidden" name="updated_at" value={sv(defaultValues.updated_at)} />
       ) : null}
 
+      {/* submit the immutable tipe via hidden input to satisfy server parsing */}
+      <input type="hidden" name="tipe" value={tipe} />
+
       <Section title="Data Utama">
         <div className="mb-4">
           <Label htmlFor="tipe">Tipe Nasabah</Label>
-          <SelectInput
+          {/* Readonly visible field so user sees the tipe but cannot change it */}
+          <TextInput
             id="tipe"
-            name="tipe"
             value={tipe}
-            onChange={(e) => setTipe(e.target.value as typeof defaultValues.tipe)}
-            aria-describedby="tipe-error"
-          >
-            {tipeSchema.options.map((opt) => (
-              <option key={opt} value={opt}>{opt}</option>
-            ))}
-          </SelectInput>
+            readOnly
+            aria-readonly="true"
+            aria-describedby="tipe-help"
+          />
+          <p id="tipe-help" className="mt-1 text-xs text-gray-500">
+            Tipe nasabah bersifat permanen dan tidak dapat diubah.
+          </p>
           <FieldError name="tipe" state={state} />
         </div>
 
-        {/* If you also have a 'nama' field, include it here, prefilled */}
         <div className="mb-4">
           <Label htmlFor="nama">Nama</Label>
-          <TextInput id="nama" name="nama" defaultValue={sv(defaultValues.nama)} />
+          <TextInput id="nama" name="nama" defaultValue={
+            tipe === 'pribadi' ?
+              sv(defaultValues.pribadi?.nama_tertanggung) :
+              sv(defaultValues.perusahaan?.nama_perusahaan)
+          } />
           <FieldError name="nama" state={state} />
         </div>
 
@@ -231,12 +247,22 @@ export default function EditNasabahForm({
             <Label htmlFor="pribadi.status_perkawinan">Status Perkawinan</Label>
             <SelectInput id="pribadi.status_perkawinan" name="pribadi.status_perkawinan" defaultValue={sv(defaultValues.pribadi?.status_perkawinan)}>
               <option value="">-</option>
-              <option value="BelumKawin">BelumKawin</option>
+              <option value="Belum Kawin">Belum Kawin</option>
               <option value="Kawin">Kawin</option>
               <option value="CeraiHidup">CeraiHidup</option>
               <option value="CeraiMati">CeraiMati</option>
             </SelectInput>
             <FieldError name="pribadi.status_perkawinan" state={state} />
+          </div>
+
+          <div>
+            <Label htmlFor="pribadi.kewarganegaraan">Kewarganegaraan</Label>
+            <SelectInput id="pribadi.kewarganegaraan" name="pribadi.kewarganegaraan" defaultValue={sv(defaultValues.pribadi?.kewarganegaraan)}>
+              <option value="">-</option>
+              <option value="WNI">WNI</option>
+              <option value="WNA">WNA</option>
+            </SelectInput>
+            <FieldError name="pribadi.kewarganegaraan" state={state} />
           </div>
 
           <div className="mb-0">
@@ -249,11 +275,16 @@ export default function EditNasabahForm({
 
       {tipe === 'perusahaan' && (
         <Section title="Data Perusahaan">
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <Label htmlFor="perusahaan.nama_perusahaan">Nama Perusahaan</Label>
-            <TextInput id="perusahaan.nama_perusahaan" name="perusahaan.nama_perusahaan" defaultValue={sv(defaultValues.perusahaan?.nama_perusahaan)} aria-describedby="perusahaan.nama_perusahaan-error" />
+            <TextInput
+              id="perusahaan.nama_perusahaan"
+              name="perusahaan.nama_perusahaan"
+              defaultValue={sv(defaultValues.perusahaan?.nama_perusahaan)}
+              aria-describedby="perusahaan.nama_perusahaan-error"
+            />
             <FieldError name="perusahaan.nama_perusahaan" state={state} />
-          </div>
+          </div> */}
           <div className="mb-4">
             <Label htmlFor="perusahaan.npwp_perusahaan">NPWP Perusahaan</Label>
             <TextInput id="perusahaan.npwp_perusahaan" name="perusahaan.npwp_perusahaan" defaultValue={sv(defaultValues.perusahaan?.npwp_perusahaan)} aria-describedby="perusahaan.npwp_perusahaan-error" />
@@ -284,13 +315,28 @@ export default function EditNasabahForm({
         >
           Batal
         </Link>
-        <button
+        {/* <button
           type="submit"
           className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700"
         >
-          Simpan Perubahan
-        </button>
+          Simpan DISINI!
+        </button> */}
+        <Button type="submit" disabled={isPending}>
+          {isPending ? 'Menyimpan…' : 'Simpan Nasabah'}
+        </Button>
+        {/* Submission feedback */}
+        {state?.success && (
+          <div className="mt-4 p-4 rounded-md bg-blue-50 text-blue-800">Berhasil menyimpan.</div>
+        )}
+        {!state?.success && state?.message && (
+          <div className="mt-4 p-4 rounded-md bg-rose-50 text-rose-800">
+            {state.message}
+          </div>
+        )}
+        <FieldError name="rpc" state={state} />
+
       </div>
     </form>
   );
 }
+

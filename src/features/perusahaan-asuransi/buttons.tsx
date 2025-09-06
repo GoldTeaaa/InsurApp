@@ -1,23 +1,11 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import {deleteNasabahAction} from '@/features/nasabah/actions';
+import deletePerusahaanAction from '@/features/perusahaan-asuransi/actions/delete';
 
-export function CreateInvoice() {
+export function UpdatePerusahaanAsuransi({ id }: { id: string }) {
   return (
     <Link
-      href="/dashboard/invoices/create"
-      className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-    >
-      <span className="hidden md:block">Create Invoice</span>{' '}
-      <PlusIcon className="h-5 md:ml-4" />
-    </Link>
-  );
-}
-
-export function UpdateInvoice({ id }: { id: string }) {
-  return (
-    <Link
-      href={`/dashboard/nasabah/${id}/edit`}
+      href={`/dashboard/perusahaan-asuransi/${id}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -26,7 +14,7 @@ export function UpdateInvoice({ id }: { id: string }) {
 }
 
 
-export function DeleteNasabah({ id }: { id: string }) {
+export function DeletePerusahaanAsuransi({ id }: { id: string }) {
 /**
  * Renders a delete button for a nasabah. The button is a form which submits to
  * the `deleteNasabahAction` action. The `id` prop should be the ID of the
@@ -37,7 +25,7 @@ export function DeleteNasabah({ id }: { id: string }) {
  * scrolling to the top of the page when clicked.
  */
   return (
-    <form action={deleteNasabahAction}>
+    <form action={deletePerusahaanAction}>
       <input type="hidden" name="id" value={id} />
       <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>

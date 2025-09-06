@@ -13,7 +13,7 @@ function fmt(iso?: string | null) {
 }
 
 export default async function Table({ q, page, sort }: { q: string; page: number; sort: NasabahSort }) {
-    const { rows, total, pageCount, pageSize } = await fetchNasabahPage({ q, page, sort });
+    const { rows, total, pageCount } = await fetchNasabahPage({ q, page, sort });
 
     if (rows.length === 0) {
         return (
@@ -31,10 +31,10 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                     {/* Mobile cards */}
                     <div className="md:hidden">
                         {rows.map((r) => (
-                            <div key={r.id} className="mb-2 w-full rounded-md bg-white p-4">
-                                <div className="flex items-center justify-between border-b pb-3">
+                            <div key={r.id} className="mb-2 w-full rounded-md bg-white p-4 shadow-sm transition-shadow duration-300 hover:shadow-lg">
+                                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                                     <div>
-                                        <p className="font-medium">{r.nama ?? '—'}</p>
+                                        <p className="font-semibold text-gray-800">{r.nama ?? '—'}</p>
                                         <p className="text-xs text-gray-500">{r.tipe}</p>
                                     </div>
                                     <div className="text-right text-xs text-gray-500">
@@ -44,45 +44,44 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                                 </div>
                                 <div className="pt-3 text-sm text-gray-700">
                                     <p className="line-clamp-2">{r.alamat ?? ''}</p>
-                                    <p className="mt-1 text-xs text-gray-500">Dibuat: {fmt(r.created_at)}</p>
+                                    <p className="mt-2 text-xs text-gray-400">Dibuat: {fmt(r.created_at)}</p>
                                 </div>
-                                <div className="flex justify-end pt-3">
+                                <div className="flex justify-end gap-2 pt-3">
                                     <UpdateInvoice id={r.id} />
                                     <DeleteNasabah id={r.id} />
                                 </div>
                             </div>
-
                         ))}
-                        <div className="mt-3 text-xs text-gray-500">Total: {total}</div>
+                        <div className="mt-4 text-center text-xs text-gray-500">Total: {total}</div>
                     </div>
 
                     {/* Desktop table */}
                     <table className="hidden min-w-full text-gray-900 md:table">
-                        <thead className="text-left text-sm font-medium">
+                        <thead className="text-left text-sm font-normal text-gray-500">
                             <tr>
-                                <th className="px-4 py-3 sm:pl-6">Nama</th>
-                                <th className="px-3 py-3">Tipe</th>
-                                <th className="px-3 py-3">Email</th>
-                                <th className="px-3 py-3">Kontak 1</th>
-                                <th className="px-3 py-3">Kontak 2</th>
-                                <th className="px-3 py-3">Alamat</th>
-                                <th className="px-3 py-3">Dibuat</th>
-                                <th className="px-3 py-3">Diubah</th>
+                                <th className="px-4 py-4 font-medium sm:pl-6">Nama</th>
+                                <th className="px-3 py-4 font-medium">Tipe</th>
+                                <th className="px-3 py-4 font-medium">Email</th>
+                                <th className="px-3 py-4 font-medium">Kontak 1</th>
+                                <th className="px-3 py-4 font-medium">Kontak 2</th>
+                                <th className="px-3 py-4 font-medium">Alamat</th>
+                                <th className="px-3 py-4 font-medium">Dibuat</th>
+                                <th className="px-3 py-4 font-medium">Diubah</th>
                                 <th className="relative py-3 pl-6 pr-3"><span className="sr-only">Edit</span></th>
                             </tr>
                         </thead>
                         <tbody className="bg-white text-sm">
                             {rows.map((r) => (
-                                <tr key={r.id} className="border-b last:border-none">
-                                    <td className="whitespace-nowrap py-3 pl-6 pr-3">{r.nama ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-3">{r.tipe}</td>
-                                    <td className="whitespace-nowrap px-3 py-3">{r.email ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-3">{r.contact_1 ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-3">{r.contact_2 ?? '—'}</td>
-                                    <td className="px-3 py-3">{r.alamat ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-3">{fmt(r.created_at)}</td>
-                                    <td className="whitespace-nowrap px-3 py-3">{fmt(r.updated_at)}</td>
-                                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                                <tr key={r.id} className="border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors">
+                                    <td className="whitespace-nowrap py-4 pl-6 pr-3 font-medium text-gray-800">{r.nama ?? '—'}</td>
+                                    <td className="whitespace-nowrap px-3 py-4">{r.tipe}</td>
+                                    <td className="whitespace-nowrap px-3 py-4">{r.email ?? '—'}</td>
+                                    <td className="whitespace-nowrap px-3 py-4">{r.contact_1 ?? '—'}</td>
+                                    <td className="whitespace-nowrap px-3 py-4">{r.contact_2 ?? '—'}</td>
+                                    <td className="px-3 py-4 max-w-xs truncate">{r.alamat ?? '—'}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.created_at)}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.updated_at)}</td>
+                                    <td className="whitespace-nowrap py-4 pl-6 pr-3">
                                         <div className="flex justify-end gap-3">
                                             <UpdateInvoice id={r.id} />
                                             <DeleteNasabah id={r.id} />
@@ -93,9 +92,9 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                         </tbody>
                     </table>
 
-                    <div className="hidden md:flex items-center justify-between px-4 py-2 text-xs text-gray-500">
+                    <div className="hidden md:flex items-center justify-between px-4 py-3 text-xs text-gray-500 border-t border-gray-200 mt-2">
                         <Pagination page={page} pageCount={pageCount} />
-                        <div className="mt-2 px-2 text-xs text-gray-600">Total: {total}</div>
+                        <div className="px-2 text-xs text-gray-600">Total: {total}</div>
                     </div>
                 </div>
             </div>

@@ -136,14 +136,14 @@ export async function fetchNasabahPage({
   page?: number;
   sort?: NasabahSort;
 }) {
-  const { data, error } = await supabase.rpc("nasabah_list_v1", {
+  const { data, error } = await supabase.rpc("nasabah_pagination_v1", {
     p_q: q.trim(),
     p_page: page,
     p_page_size: ITEMS_PER_PAGE,
     p_sort: sort,
   });
 
-  if (error) throw new Error(`nasabah_list_v1: ${error.message}`);
+  if (error) throw new Error(`nasabah_pagination_v1: ${error.message}`);
 
   const rows = (data ?? []) as (NasabahRow & { total_count: number })[];
   const total = rows[0]?.total_count ? Number(rows[0].total_count) : 0;
@@ -165,7 +165,7 @@ export async function fetchNasabahById(
   // This should be optimized in the future where tipe validation
   // is checked in the Frontend and call the specific rpc
   // Current rpc return the whole fields which can slow down parsing
-  const { data, error } = await supabase.rpc("nasabah_get_ui_v1", {
+  const { data, error } = await supabase.rpc("nasabah_fill_update_form_v1", {
     p_id: id,
   });
   // console.log("data: ", data);
@@ -329,7 +329,6 @@ export async function updateNasabahV1(
   redirect("/dashboard/nasabah");
 }
 
-// helpers
 
 export async function updateNasabahV2(
   id: string,

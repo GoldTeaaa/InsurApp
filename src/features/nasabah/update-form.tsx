@@ -70,10 +70,7 @@ export default function EditNasabahForm({
 
   const updateWithId = useMemo(() => updateNasabahV2.bind(null, id), [id]);
   const [state, formAction, isPending] = useActionState(updateWithId, initialState);
-  // const updateWithId = useMemo(() => updateNasabahV1.bind(null, id), [id]);
-  // const [state, formAction, isPending] = useActionState(updateWithId, initialState);
 
-  // Force remount when record changes so defaultValue is reapplied
   const formKey = useMemo(
     () => `${id}|${defaultValues.updated_at ?? ''}`,
     [id, defaultValues.updated_at]

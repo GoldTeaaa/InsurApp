@@ -66,10 +66,11 @@ export default async function Table({ q, page, sort }: { q: string; page: number
               <tr>
                 <th className="px-4 py-4 font-medium sm:pl-6">Nama</th>
                 <th className="px-3 py-4 font-medium">Email</th>
-                <th className="px-3 py-4 font-medium">Kontak</th>
+                <th className="px-3 py-4 font-medium">Kontak 1</th>
+                <th className="px-3 py-4 font-medium">Kontak 2</th>
                 <th className="px-3 py-4 font-medium">Alamat</th>
-                <th className="px-3 py-4 font-medium">Dibuat</th>
-                <th className="px-3 py-4 font-medium">Diubah</th>
+                {/* <th className="px-3 py-4 font-medium">Dibuat</th>
+                <th className="px-3 py-4 font-medium">Diubah</th> */}
                 <th className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Aksi</span>
                 </th>
@@ -80,12 +81,14 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                 <tr key={r.id} className="border-b border-gray-100 last:border-none transition-colors hover:bg-gray-50">
                   <td className="whitespace-nowrap py-4 pl-6 pr-3 font-medium text-gray-800">{r.nama}</td>
                   <td className="whitespace-nowrap px-3 py-4">{r.email ?? "-"}</td>
-                  <td className="whitespace-nowrap px-3 py-4">
+                  <td className="whitespace-nowrap px-3 py-4">{r.kontak_1 ?? "-"}</td>
+                  <td className="whitespace-nowrap px-3 py-4">{r.kontak_2 ?? "-"}</td>
+                  {/* <td className="whitespace-nowrap px-3 py-4">
                     {[r.kontak_1, r.kontak_2].filter(Boolean).join(" / ") || "-"}
-                  </td>
+                  </td> */}
                   <td className="max-w-xs truncate px-3 py-4">{r.alamat ?? "-"}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.created_at)}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.updated_at)}</td>
+                  {/* <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.created_at)}</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.updated_at)}</td> */}
                   <td className="whitespace-nowrap py-4 pl-6 pr-3">
                     <div className="flex justify-end gap-2">
                       <UpdatePerusahaanAsuransi id={r.id} />

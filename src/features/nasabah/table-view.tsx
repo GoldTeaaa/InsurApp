@@ -65,8 +65,8 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                                 <th className="px-3 py-4 font-medium">Kontak 1</th>
                                 <th className="px-3 py-4 font-medium">Kontak 2</th>
                                 <th className="px-3 py-4 font-medium">Alamat</th>
-                                <th className="px-3 py-4 font-medium">Dibuat</th>
-                                <th className="px-3 py-4 font-medium">Diubah</th>
+                                {/* <th className="px-3 py-4 font-medium">Dibuat</th>
+                                <th className="px-3 py-4 font-medium">Diubah</th> */}
                                 <th className="relative py-3 pl-6 pr-3"><span className="sr-only">Edit</span></th>
                             </tr>
                         </thead>
@@ -79,8 +79,8 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                                     <td className="whitespace-nowrap px-3 py-4">{r.contact_1 ?? '—'}</td>
                                     <td className="whitespace-nowrap px-3 py-4">{r.contact_2 ?? '—'}</td>
                                     <td className="px-3 py-4 max-w-xs truncate">{r.alamat ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.created_at)}</td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.updated_at)}</td>
+                                    {/* <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.created_at)}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.updated_at)}</td> */}
                                     <td className="whitespace-nowrap py-4 pl-6 pr-3">
                                         <div className="flex justify-end gap-3">
                                             <UpdateInvoice id={r.id} />

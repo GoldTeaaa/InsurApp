@@ -1,13 +1,13 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState } from 'react';
 import insertNasabah, { type State } from './actions';
+import Link from 'next/link';
 
 /* Minimal UI primitives */
 function Label(props: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return <label {...props} className="block text-sm font-medium text-gray-700 mb-1" />;
 }
-
 function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
@@ -16,7 +16,6 @@ function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
     />
   );
 }
-
 function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
@@ -25,11 +24,9 @@ function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
     />
   );
 }
-
 function Field({ children }: { children: React.ReactNode }) {
   return <div className="mb-4">{children}</div>;
 }
-
 function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
@@ -38,7 +35,6 @@ function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
     />
   );
 }
-
 function ErrorText({ id, message }: { id: string; message?: string[] }) {
   if (!message || message.length === 0) return null;
   return (
@@ -56,18 +52,21 @@ function getErr(state: State | null, name: string): string[] | undefined {
 type Props = {
   tipe: 'pribadi' | 'perusahaan';
   onTipeChange: (tipe: 'pribadi' | 'perusahaan') => void;
-}
+};
 
 export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
   const initial: State = {
     message: null,
     errors: {},
-    success: false
+    success: false,
   };
   const [state, formAction, isPending] = useActionState(insertNasabah, initial);
 
-  // Utility to connect input to an error block
-  const aria = (name: string) => {
+  // Only return ARIA attrs for DOM spread + the computed error id
+  const aria = (name: string): {
+    attrs: { 'aria-invalid'?: true; 'aria-describedby'?: string };
+    errId: string;
+  } => {
     const hasError = Boolean(getErr(state, name)?.length);
     const errId = `${name.replaceAll('.', '-')}-error`;
     return {
@@ -76,9 +75,8 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
         'aria-describedby': hasError ? errId : undefined,
       },
       errId,
-    } as const;
+    };
   };
-
 
   return (
     <form action={formAction} className="max-w-2xl mx-auto space-y-6 p-4 sm:p-6">
@@ -87,7 +85,6 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
 
       <fieldset
         className="space-y-2"
-        // 3) remount radios when outcome flips, avoids stale browser UI
         key={`${tipe}|${state?.success ? 'ok' : 'idle'}`}
       >
         <legend className="text-lg font-medium">Tipe Nasabah</legend>
@@ -95,9 +92,9 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
           <label className="flex items-center gap-2">
             <input
               type="radio"
-              name="tipe-radio"                 // 2) different name
+              name="tipe-radio"
               value="pribadi"
-              checked={tipe === 'pribadi'}   // fully controlled by prop
+              checked={tipe === 'pribadi'}
               onChange={() => onTipeChange('pribadi')}
               className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-600"
             />
@@ -106,7 +103,7 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
           <label className="flex items-center gap-2">
             <input
               type="radio"
-              name="tipe-radio"                 // 2) different name
+              name="tipe-radio"
               value="perusahaan"
               checked={tipe === 'perusahaan'}
               onChange={() => onTipeChange('perusahaan')}
@@ -124,23 +121,13 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
 
           <Field>
             <Label htmlFor="nama">Nama Tertanggung*</Label>
-            <Input
-              id="nama"
-              name="nama"
-              required
-              {...aria('nama')}
-            />
+            <Input id="nama" name="nama" required {...aria('nama').attrs} />
             <ErrorText id={aria('nama').errId} message={getErr(state, 'nama')} />
           </Field>
 
           <Field>
             <Label htmlFor="pribadi.nik">NIK*</Label>
-            <Input
-              id="pribadi.nik"
-              name="pribadi.nik"
-              required
-              {...aria('pribadi.nik')}
-            />
+            <Input id="pribadi.nik" name="pribadi.nik" required {...aria('pribadi.nik').attrs} />
             <ErrorText id={aria('pribadi.nik').errId} message={getErr(state, 'pribadi.nik')} />
           </Field>
 
@@ -150,9 +137,12 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
               id="pribadi.tempat_lahir"
               name="pribadi.tempat_lahir"
               required
-              {...aria('pribadi.tempat_lahir')}
+              {...aria('pribadi.tempat_lahir').attrs}
             />
-            <ErrorText id={aria('pribadi.tempat_lahir').errId} message={getErr(state, 'pribadi.tempat_lahir')} />
+            <ErrorText
+              id={aria('pribadi.tempat_lahir').errId}
+              message={getErr(state, 'pribadi.tempat_lahir')}
+            />
           </Field>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -163,9 +153,12 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
                 name="pribadi.tanggal_lahir"
                 type="date"
                 required
-                {...aria('pribadi.tanggal_lahir')}
+                {...aria('pribadi.tanggal_lahir').attrs}
               />
-              <ErrorText id={aria('pribadi.tanggal_lahir').errId} message={getErr(state, 'pribadi.tanggal_lahir')} />
+              <ErrorText
+                id={aria('pribadi.tanggal_lahir').errId}
+                message={getErr(state, 'pribadi.tanggal_lahir')}
+              />
             </Field>
 
             <Field>
@@ -175,62 +168,67 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
                 name="pribadi.jenis_kelamin"
                 required
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm"
-                {...aria('pribadi.jenis_kelamin')}
+                {...aria('pribadi.jenis_kelamin').attrs}
               >
                 <option value="">Pilih</option>
                 <option value="L">L</option>
                 <option value="P">P</option>
               </select>
-              <ErrorText id={aria('pribadi.jenis_kelamin').errId} message={getErr(state, 'pribadi.jenis_kelamin')} />
+              <ErrorText
+                id={aria('pribadi.jenis_kelamin').errId}
+                message={getErr(state, 'pribadi.jenis_kelamin')}
+              />
             </Field>
 
             <Field>
               <Label htmlFor="pribadi.pekerjaan">Pekerjaan</Label>
-              <Input
-                id="pribadi.pekerjaan"
-                name="pribadi.pekerjaan"
-                {...aria('pribadi.pekerjaan')}
+              <Input id="pribadi.pekerjaan" name="pribadi.pekerjaan" {...aria('pribadi.pekerjaan').attrs} />
+              <ErrorText
+                id={aria('pribadi.pekerjaan').errId}
+                message={getErr(state, 'pribadi.pekerjaan')}
               />
-              <ErrorText id={aria('pribadi.pekerjaan').errId} message={getErr(state, 'pribadi.pekerjaan')} />
             </Field>
           </div>
 
           <Field>
             <Label htmlFor="pribadi.alamat_ktp">Alamat KTP</Label>
-            <Textarea
-              id="pribadi.alamat_ktp"
-              name="pribadi.alamat_ktp"
-              rows={2}
-              {...aria('pribadi.alamat_ktp')}
+            <Textarea id="pribadi.alamat_ktp" name="pribadi.alamat_ktp" rows={2} {...aria('pribadi.alamat_ktp').attrs} />
+            <ErrorText
+              id={aria('pribadi.alamat_ktp').errId}
+              message={getErr(state, 'pribadi.alamat_ktp')}
             />
-            <ErrorText id={aria('pribadi.alamat_ktp').errId} message={getErr(state, 'pribadi.alamat_ktp')} />
           </Field>
 
           <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
             <Field>
               <Label htmlFor="pribadi.rt">RT</Label>
-              <Input id="pribadi.rt" name="pribadi.rt" />
+              <Input id="pribadi.rt" name="pribadi.rt" {...aria('pribadi.rt').attrs} />
+              <ErrorText id={aria('pribadi.rt').errId} message={getErr(state, 'pribadi.rt')} />
             </Field>
             <Field>
               <Label htmlFor="pribadi.rw">RW</Label>
-              <Input id="pribadi.rw" name="pribadi.rw" />
+              <Input id="pribadi.rw" name="pribadi.rw" {...aria('pribadi.rw').attrs} />
+              <ErrorText id={aria('pribadi.rw').errId} message={getErr(state, 'pribadi.rw')} />
             </Field>
             <Field>
               <Label htmlFor="pribadi.kelurahan_desa">Kelurahan/Desa</Label>
-              <Input
-                id="pribadi.kelurahan_desa"
-                name="pribadi.kelurahan_desa"
+              <Input id="pribadi.kelurahan_desa" name="pribadi.kelurahan_desa" {...aria('pribadi.kelurahan_desa').attrs} />
+              <ErrorText
+                id={aria('pribadi.kelurahan_desa').errId}
+                message={getErr(state, 'pribadi.kelurahan_desa')}
               />
             </Field>
             <Field>
               <Label htmlFor="pribadi.kecamatan">Kecamatan</Label>
-              <Input id="pribadi.kecamatan" name="pribadi.kecamatan" />
+              <Input id="pribadi.kecamatan" name="pribadi.kecamatan" {...aria('pribadi.kecamatan').attrs} />
+              <ErrorText id={aria('pribadi.kecamatan').errId} message={getErr(state, 'pribadi.kecamatan')} />
             </Field>
             <Field>
               <Label htmlFor="pribadi.kota_kabupaten">Kota/Kabupaten</Label>
-              <Input
-                id="pribadi.kota_kabupaten"
-                name="pribadi.kota_kabupaten"
+              <Input id="pribadi.kota_kabupaten" name="pribadi.kota_kabupaten" {...aria('pribadi.kota_kabupaten').attrs} />
+              <ErrorText
+                id={aria('pribadi.kota_kabupaten').errId}
+                message={getErr(state, 'pribadi.kota_kabupaten')}
               />
             </Field>
           </div>
@@ -242,7 +240,7 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
                 id="pribadi.agama"
                 name="pribadi.agama"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm"
-                {...aria('pribadi.agama')}
+                {...aria('pribadi.agama').attrs}
               >
                 <option value="">Pilih</option>
                 <option value="Islam">Islam</option>
@@ -262,7 +260,7 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
                 id="pribadi.status_perkawinan"
                 name="pribadi.status_perkawinan"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm"
-                {...aria('pribadi.status_perkawinan')}
+                {...aria('pribadi.status_perkawinan').attrs}
               >
                 <option value="">Pilih</option>
                 <option value="Belum Kawin">Belum Kawin</option>
@@ -270,18 +268,23 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
                 <option value="CeraiHidup">Cerai Hidup</option>
                 <option value="CeraiMati">Cerai Mati</option>
               </select>
-              <ErrorText id={aria('pribadi.status_perkawinan').errId} message={getErr(state, 'pribadi.status_perkawinan')} />
+              <ErrorText
+                id={aria('pribadi.status_perkawinan').errId}
+                message={getErr(state, 'pribadi.status_perkawinan')}
+              />
             </Field>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Field>
               <Label htmlFor="pribadi.provinsi">Provinsi</Label>
-              <Input id="pribadi.provinsi" name="pribadi.provinsi" />
+              <Input id="pribadi.provinsi" name="pribadi.provinsi" {...aria('pribadi.provinsi').attrs} />
+              <ErrorText id={aria('pribadi.provinsi').errId} message={getErr(state, 'pribadi.provinsi')} />
             </Field>
             <Field>
               <Label htmlFor="pribadi.kode_pos">Kode Pos</Label>
-              <Input id="pribadi.kode_pos" name="pribadi.kode_pos" />
+              <Input id="pribadi.kode_pos" name="pribadi.kode_pos" {...aria('pribadi.kode_pos').attrs} />
+              <ErrorText id={aria('pribadi.kode_pos').errId} message={getErr(state, 'pribadi.kode_pos')} />
             </Field>
             <Field>
               <Label htmlFor="pribadi.kewarganegaraan">Kewarganegaraan</Label>
@@ -289,13 +292,16 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
                 id="pribadi.kewarganegaraan"
                 name="pribadi.kewarganegaraan"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm"
-                {...aria('pribadi.kewarganegaraan')}
+                {...aria('pribadi.kewarganegaraan').attrs}
               >
                 <option value="">Pilih</option>
                 <option value="WNI">WNI</option>
                 <option value="WNA">WNA</option>
               </select>
-              <ErrorText id={aria('pribadi.kewarganegaraan').errId} message={getErr(state, 'pribadi.kewarganegaraan')} />
+              <ErrorText
+                id={aria('pribadi.kewarganegaraan').errId}
+                message={getErr(state, 'pribadi.kewarganegaraan')}
+              />
             </Field>
           </div>
         </fieldset>
@@ -306,12 +312,7 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
 
           <Field>
             <Label htmlFor="nama">Nama Perusahaan*</Label>
-            <Input
-              id="nama"
-              name="nama"
-              required
-              {...aria('nama')}
-            />
+            <Input id="nama" name="nama" required {...aria('nama').attrs} />
             <ErrorText id={aria('nama').errId} message={getErr(state, 'nama')} />
           </Field>
 
@@ -321,9 +322,12 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
               id="perusahaan.npwp_perusahaan"
               name="perusahaan.npwp_perusahaan"
               required
-              {...aria('perusahaan.npwp_perusahaan')}
+              {...aria('perusahaan.npwp_perusahaan').attrs}
             />
-            <ErrorText id={aria('perusahaan.npwp_perusahaan').errId} message={getErr(state, 'perusahaan.npwp_perusahaan')} />
+            <ErrorText
+              id={aria('perusahaan.npwp_perusahaan').errId}
+              message={getErr(state, 'perusahaan.npwp_perusahaan')}
+            />
           </Field>
 
           <Field>
@@ -332,7 +336,7 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
               id="perusahaan.nama_pic"
               name="perusahaan.nama_pic"
               required
-              {...aria('perusahaan.nama_pic')}
+              {...aria('perusahaan.nama_pic').attrs}
             />
             <ErrorText id={aria('perusahaan.nama_pic').errId} message={getErr(state, 'perusahaan.nama_pic')} />
           </Field>
@@ -343,9 +347,12 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
               <Input
                 id="perusahaan.jabatan_pic"
                 name="perusahaan.jabatan_pic"
-                {...aria('perusahaan.jabatan_pic')}
+                {...aria('perusahaan.jabatan_pic').attrs}
               />
-              <ErrorText id={aria('perusahaan.jabatan_pic').errId} message={getErr(state, 'perusahaan.jabatan_pic')} />
+              <ErrorText
+                id={aria('perusahaan.jabatan_pic').errId}
+                message={getErr(state, 'perusahaan.jabatan_pic')}
+              />
             </Field>
             <Field>
               <Label htmlFor="perusahaan.email_pic">Email PIC</Label>
@@ -353,9 +360,12 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
                 id="perusahaan.email_pic"
                 name="perusahaan.email_pic"
                 type="email"
-                {...aria('perusahaan.email_pic')}
+                {...aria('perusahaan.email_pic').attrs}
               />
-              <ErrorText id={aria('perusahaan.email_pic').errId} message={getErr(state, 'perusahaan.email_pic')} />
+              <ErrorText
+                id={aria('perusahaan.email_pic').errId}
+                message={getErr(state, 'perusahaan.email_pic')}
+              />
             </Field>
           </div>
         </fieldset>
@@ -367,44 +377,25 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
 
         <Field>
           <Label htmlFor="contact_1">Kontak utama*</Label>
-          <Input
-            id="contact_1"
-            name="contact_1"
-            required
-            {...aria('contact_1')}
-          />
+          <Input id="contact_1" name="contact_1" required {...aria('contact_1').attrs} />
           <ErrorText id={aria('contact_1').errId} message={getErr(state, 'contact_1')} />
         </Field>
 
         <Field>
           <Label htmlFor="contact_2">Kontak tambahan</Label>
-          <Input
-            id="contact_2"
-            name="contact_2"
-            {...aria('contact_2')}
-          />
+          <Input id="contact_2" name="contact_2" {...aria('contact_2').attrs} />
           <ErrorText id={aria('contact_2').errId} message={getErr(state, 'contact_2')} />
         </Field>
 
         <Field>
           <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            {...aria('email')}
-          />
+          <Input id="email" name="email" type="email" {...aria('email').attrs} />
           <ErrorText id={aria('email').errId} message={getErr(state, 'email')} />
         </Field>
 
         <Field>
           <Label htmlFor="alamat">Alamat</Label>
-          <Textarea
-            id="alamat"
-            name="alamat"
-            rows={3}
-            {...aria('alamat')}
-          />
+          <Textarea id="alamat" name="alamat" rows={3} {...aria('alamat').attrs} />
           <ErrorText id={aria('alamat').errId} message={getErr(state, 'alamat')} />
         </Field>
       </fieldset>
@@ -413,7 +404,11 @@ export default function NasabahCreateForm({ tipe, onTipeChange }: Props) {
         <Button type="submit" disabled={isPending}>
           {isPending ? 'Menyimpan…' : 'Simpan Nasabah'}
         </Button>
+        <Link href="/dashboard/nasabah" className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50">
+          Kembali
+        </Link>
       </div>
+
 
       {/* Submission feedback */}
       {state?.success && (

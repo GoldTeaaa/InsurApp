@@ -28,6 +28,13 @@ export default async function Page({
                     Create Nasabah
                 </button>
             </Link>
+            <Link
+                href={"/dashboard/nasabah/tambah-nasabah"}
+            >
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Tambah Nasabah
+                </button>
+            </Link>
         </div>
     );
 }

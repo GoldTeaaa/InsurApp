@@ -1,7 +1,9 @@
+import CreateNasabahForm from "@/features/nasabah/main-create-form";
+
 export default function Page() {
     return (
         <div>
-            <p>Form Tambah Nasabah</p>
+            <CreateNasabahForm />
         </div>
     );
 }

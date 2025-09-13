@@ -3,13 +3,13 @@ import {
     perusahaanUpdateFormSchema, 
     perusahaanUpdateRpcParamsSchema, 
     type PerusahaanUpdateFormValues,
-    type PerusahaanUpdateParams
+    type PerusahaanUpdateParams,
+    type PerusahaanReturnResult
 } from "@/lib/perusahaan_asuransi/types";
 import { supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-export type UpdateInsurerState = { ok: boolean; message: string; errors?: Record<string, string[]> }
+import { ActionReturnState } from "@/lib/types";
 
 function toUpdateRpc(v: PerusahaanUpdateFormValues): PerusahaanUpdateParams {
   return {
@@ -22,13 +22,16 @@ function toUpdateRpc(v: PerusahaanUpdateFormValues): PerusahaanUpdateParams {
   };
 }
 
+export type ReturnState = ActionReturnState<PerusahaanReturnResult>;
+
 export async function updatePerusahaanAction(
-  _prev: UpdateInsurerState,
+  id: string,
+  _prev: ReturnState,
   formData: FormData
-): Promise<UpdateInsurerState> {
+): Promise<ActionReturnState> {
   // 1) Shape FormData to a plain object that matches the UI schema
   const shaped: PerusahaanUpdateFormValues = {
-    id: String(formData.get("id") ?? ""),
+    id: id,
     nama: String(formData.get("nama") ?? ""),
     email: ((): string | null => {
       const v = formData.get("email");
@@ -52,7 +55,7 @@ export async function updatePerusahaanAction(
   const parsed = perusahaanUpdateFormSchema.safeParse(shaped);
   if (!parsed.success) {
     return {
-      ok: false,
+      success: false,
       message: "Periksa kembali input",
       errors: parsed.error.flatten().fieldErrors,
     };
@@ -66,7 +69,7 @@ export async function updatePerusahaanAction(
   const { error } = await supabase.rpc("perusahaan_asuransi_update_v1", rpcParams);
   if (error) {
     return {
-      ok: false,
+      success: false,
       message: error.message ?? "Gagal menyimpan perubahan",
     };
   }

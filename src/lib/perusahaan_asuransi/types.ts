@@ -78,7 +78,7 @@ export const optionalEmail = z
 
 /* ====================== NEW (base reusable field set) ====================== */
 
-export const perusahaanCreateFormSchema = z.object({
+export const perusahaanFormSchema = z.object({
   nama: nonEmpty3,
   email: optionalEmail,
   alamat: optionalText,
@@ -87,9 +87,9 @@ export const perusahaanCreateFormSchema = z.object({
 });
 
 // 1) Form input (UI)
-export type PerusahaanCreateForm = z.infer<typeof perusahaanCreateFormSchema>;
+export type PerusahaanForm = z.infer<typeof perusahaanFormSchema>;
 
-export const defaultPerusahaanCreateForm: PerusahaanCreateForm = {
+export const defaultPerusahaanForm: PerusahaanForm = {
   nama: "",
   email: "",
   alamat: "",
@@ -108,7 +108,7 @@ export const perusahaanCreateRpcParamsSchema = z.object({
 export type PerusahaanCreateParams = z.infer<typeof perusahaanCreateRpcParamsSchema>;
 
 // 3) Zod-powered mapper: Form → RPC params
-export const perusahaanCreateToRpcSchema = perusahaanCreateFormSchema
+export const perusahaanCreateToRpcSchema = perusahaanFormSchema
   .transform((v) => ({
     p_nama: v.nama.trim(),
     p_email: v.email ?? null,
@@ -119,12 +119,12 @@ export const perusahaanCreateToRpcSchema = perusahaanCreateFormSchema
   .pipe(perusahaanCreateRpcParamsSchema);
 
 // 4) RPC result
-export const perusahaanCreateResultSchema = z.object({
+export const perusahaanReturnResultSchema = z.object({
   id: z.string().uuid(),
   nama_asuransi: z.string(),
 });
-export const perusahaanCreateResultArraySchema = z.array(perusahaanCreateResultSchema).min(1);
-export type PerusahaanCreateResult = z.infer<typeof perusahaanCreateResultSchema>;
+export const perusahaanCreateResultArraySchema = z.array(perusahaanReturnResultSchema).min(1);
+export type PerusahaanReturnResult = z.infer<typeof perusahaanReturnResultSchema>;
 
 // ====================== PREFILL UPDATE TABLE SCHEMA ================
 

@@ -1,28 +1,33 @@
 'use client';
 import { useActionState, useEffect } from "react";
 import {
-    perusahaanCreateFormSchema,
-    defaultPerusahaanCreateForm,
-    type PerusahaanCreateForm
+    perusahaanFormSchema,
+    type PerusahaanForm
 } from "@/lib/perusahaan_asuransi/types";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormTextField from "@/components/TextField";
-import { createPerusahaan, type CreateState } from "./actions/createAction";
+import { createPerusahaan, type ReturnState } from "./actions/createAction";
 import { Button } from "@/components/button";
+import { updatePerusahaanAction } from "./actions/update-form";
 
-export default function CreatePerusahaanForm() {
+type Props = {
+    id: string,
+    defaultValues: PerusahaanForm
+}
 
-    const method = useForm<PerusahaanCreateForm>({
+export default function UpdatePerusahaanForm({id, defaultValues}: Props) {
+
+    const method = useForm<PerusahaanForm>({
         mode: 'all',
-        resolver: zodResolver(perusahaanCreateFormSchema),
-        defaultValues: defaultPerusahaanCreateForm
+        resolver: zodResolver(perusahaanFormSchema),
+        defaultValues: defaultValues
     });
 
-    const [state, formAction, isPending] = useActionState<CreateState, FormData>(createPerusahaan, { success: false, message: "" });
+    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(updatePerusahaanAction.bind(null, id), { success: false, message: "" });
 
     const handleReset = () => {
-        method.reset(defaultPerusahaanCreateForm);
+        method.reset(defaultValues);
     }
 
     useEffect(() => {
@@ -34,25 +39,25 @@ export default function CreatePerusahaanForm() {
     return (
         <FormProvider {...method}>
             <form action={formAction} className="max-w-xl mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-                <h2 className="text-lg font-semibold">Tambah Perusahaan Asuransi</h2>
+                <h2 className="text-lg font-semibold">Edit Perusahaan {defaultValues.nama}</h2>
 
-                <FormTextField<PerusahaanCreateForm>
+                <FormTextField<PerusahaanForm>
                     name='nama'
                     label="Nama Asuransi"
                 />
-                <FormTextField<PerusahaanCreateForm>
+                <FormTextField<PerusahaanForm>
                     name='email'
                     label="Email"
                 />
-                <FormTextField<PerusahaanCreateForm>
+                <FormTextField<PerusahaanForm>
                     name='alamat'
                     label="Alamat Perusahaan"
                 />
-                <FormTextField<PerusahaanCreateForm>
+                <FormTextField<PerusahaanForm>
                     name='kontak_1'
                     label="Kontak 1"
                 />
-                <FormTextField<PerusahaanCreateForm>
+                <FormTextField<PerusahaanForm>
                     name='kontak_2'
                     label="Kontak 2"
                 />
@@ -61,7 +66,7 @@ export default function CreatePerusahaanForm() {
                     <Button type="submit" disabled={isPending}>
                         {isPending ? "Menyimpan..." : "Simpan"}
                     </Button>
-                    <Button onClick={handleReset}>
+                    <Button type="reset" onClick={handleReset}>
                         Reset
                     </Button>
                 </div>

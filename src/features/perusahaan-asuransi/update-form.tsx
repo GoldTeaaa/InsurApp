@@ -4,17 +4,17 @@
 import { useActionState, startTransition } from "react";
 import { useForm } from "react-hook-form";
 import type {
-  PerusahaanPrefillUpdate,
+  PerusahaanForm,
   PerusahaanUpdateFormValues,
 } from "@/lib/perusahaan_asuransi/types";
 import {
   updatePerusahaanAction,
-  type UpdateInsurerState,
+  type ReturnState,
 } from "@/features/perusahaan-asuransi/actions/update-form";
 
 type Props = {
   id: string;
-  defaultValues: PerusahaanPrefillUpdate; // from perusahaan_asuransi_get_v1
+  defaultValues: PerusahaanForm; // from perusahaan_asuransi_get_v1
 };
 
 export default function UpdatePerusahaanAsuransiForm({ id, defaultValues }: Props) {
@@ -32,9 +32,9 @@ export default function UpdatePerusahaanAsuransiForm({ id, defaultValues }: Prop
     defaultValues: formDefaults,
   });
 
-  const [state, formAction] = useActionState<UpdateInsurerState, FormData>(
+  const [state, formAction] = useActionState<ReturnState, FormData>(
     updatePerusahaanAction,
-    { ok: false, message: "" }
+    { success: false, message: "" }
   );
 
   const onSubmit = (v: PerusahaanUpdateFormValues) => {

@@ -1,5 +1,6 @@
 // "use client";
-import UpdatePerusahaanAsuransiForm from "@/features/perusahaan-asuransi/update-form";
+// import UpdatePerusahaanAsuransiForm from "@/features/perusahaan-asuransi/update-form";
+import UpdatePerusahaanForm from "@/features/perusahaan-asuransi/updateForm";
 import { notFound } from "next/navigation";
 import { getPerusahaanAsuransiById } from "@/features/perusahaan-asuransi/actions/prefill-update-form";
 
@@ -13,7 +14,7 @@ export default async function Page({ params }: { params: id }) {
   return (
     <div className="p-4">
       <h1 className="text-xl font-semibold mb-4">Edit Perusahaan Asuransi</h1>
-      <UpdatePerusahaanAsuransiForm id={id} defaultValues={prefill} />
+      <UpdatePerusahaanForm id={id} defaultValues={prefill} />
     </div>
   );
 }

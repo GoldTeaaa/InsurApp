@@ -2,25 +2,24 @@
 
 import {
   perusahaanCreateResultArraySchema,
-  perusahaanCreateFormSchema,
+  perusahaanFormSchema,
   perusahaanCreateToRpcSchema,
-  type PerusahaanCreateResult,
+  type PerusahaanReturnResult,
 } from "@/lib/perusahaan_asuransi/types";
 import { supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { ActionReturnState } from "@/lib/types";
 
-export type CreateState = ActionReturnState<PerusahaanCreateResult>;
+export type ReturnState = ActionReturnState<PerusahaanReturnResult>;
 
 export async function createPerusahaan(
-
-  _prevState: CreateState,
+  _prevState: ReturnState,
   formData: FormData
-): Promise<CreateState> {
+): Promise<ReturnState> {
   
   // 1. Validate
   console.log("formData: ", formData);
-  const parsed = perusahaanCreateFormSchema.safeParse(
+  const parsed = perusahaanFormSchema.safeParse(
     Object.fromEntries(formData.entries())
   );
   if (!parsed.success) {

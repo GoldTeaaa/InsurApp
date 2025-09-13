@@ -2,7 +2,6 @@
 import { useActionState, useEffect } from "react";
 import {
     perusahaanFormSchema,
-    defaultPerusahaanForm,
     type PerusahaanForm
 } from "@/lib/perusahaan_asuransi/types";
 import { FormProvider, useForm } from "react-hook-form";
@@ -10,19 +9,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormTextField from "@/components/TextField";
 import { createPerusahaan, type ReturnState } from "./actions/createAction";
 import { Button } from "@/components/button";
+import { updatePerusahaanAction } from "./actions/update-form";
 
-export default function CreatePerusahaanForm() {
+type Props = {
+    id: string,
+    defaultValues: PerusahaanForm
+}
+
+export default function UpdatePerusahaanForm({id, defaultValues}: Props) {
 
     const method = useForm<PerusahaanForm>({
         mode: 'all',
         resolver: zodResolver(perusahaanFormSchema),
-        defaultValues: defaultPerusahaanForm
+        defaultValues: defaultValues
     });
 
-    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(createPerusahaan, { success: false, message: "" });
+    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(updatePerusahaanAction.bind(null, id), { success: false, message: "" });
 
     const handleReset = () => {
-        method.reset(defaultPerusahaanForm);
+        method.reset(defaultValues);
     }
 
     useEffect(() => {
@@ -34,7 +39,7 @@ export default function CreatePerusahaanForm() {
     return (
         <FormProvider {...method}>
             <form action={formAction} className="max-w-xl mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-                <h2 className="text-lg font-semibold">Tambah Perusahaan Asuransi</h2>
+                <h2 className="text-lg font-semibold">Edit Perusahaan {defaultValues.nama}</h2>
 
                 <FormTextField<PerusahaanForm>
                     name='nama'
@@ -61,7 +66,7 @@ export default function CreatePerusahaanForm() {
                     <Button type="submit" disabled={isPending}>
                         {isPending ? "Menyimpan..." : "Simpan"}
                     </Button>
-                    <Button onClick={handleReset}>
+                    <Button type="reset" onClick={handleReset}>
                         Reset
                     </Button>
                 </div>

@@ -67,18 +67,18 @@ export const optionalText = z
   .nullable()
   .optional();
 
-export const optionalEmail = z.preprocess(
-  (v) => {
-    if (typeof v !== "string") return v;
-    const s = v.trim();
-    return s === "" ? null : s.toLowerCase();
-  },
-  z.string().email("Format email tidak valid").nullable().optional()
-);
+export const optionalEmail = z
+  .string()
+  .trim()
+  .email("Format email tidak valid")
+  .or(z.literal("")) // Allow empty string
+  .transform((v) => (v === "" ? null : v.toLowerCase())) // transform empty to null, and lowercase
+  .nullable()
+  .optional();
 
 /* ====================== NEW (base reusable field set) ====================== */
 
-export const perusahaanFieldBaseSchema = z.object({
+export const perusahaanFormSchema = z.object({
   nama: nonEmpty3,
   email: optionalEmail,
   alamat: optionalText,
@@ -86,11 +86,16 @@ export const perusahaanFieldBaseSchema = z.object({
   kontak_2: optionalText,
 });
 
-/* ====================== NEW (Create) ====================== */
-
 // 1) Form input (UI)
-export const perusahaanCreateFormSchema = perusahaanFieldBaseSchema;
-export type PerusahaanCreateForm = z.infer<typeof perusahaanCreateFormSchema>;
+export type PerusahaanForm = z.infer<typeof perusahaanFormSchema>;
+
+export const defaultPerusahaanForm: PerusahaanForm = {
+  nama: "",
+  email: "",
+  alamat: "",
+  kontak_1: "",
+  kontak_2: "",
+}
 
 // 2) RPC params (exact SQL signature)
 export const perusahaanCreateRpcParamsSchema = z.object({
@@ -103,7 +108,7 @@ export const perusahaanCreateRpcParamsSchema = z.object({
 export type PerusahaanCreateParams = z.infer<typeof perusahaanCreateRpcParamsSchema>;
 
 // 3) Zod-powered mapper: Form → RPC params
-export const perusahaanCreateToRpcSchema = perusahaanCreateFormSchema
+export const perusahaanCreateToRpcSchema = perusahaanFormSchema
   .transform((v) => ({
     p_nama: v.nama.trim(),
     p_email: v.email ?? null,
@@ -114,12 +119,12 @@ export const perusahaanCreateToRpcSchema = perusahaanCreateFormSchema
   .pipe(perusahaanCreateRpcParamsSchema);
 
 // 4) RPC result
-export const perusahaanCreateResultSchema = z.object({
+export const perusahaanReturnResultSchema = z.object({
   id: z.string().uuid(),
   nama_asuransi: z.string(),
 });
-export const perusahaanCreateResultArraySchema = z.array(perusahaanCreateResultSchema).min(1);
-export type PerusahaanCreateResult = z.infer<typeof perusahaanCreateResultSchema>;
+export const perusahaanCreateResultArraySchema = z.array(perusahaanReturnResultSchema).min(1);
+export type PerusahaanReturnResult = z.infer<typeof perusahaanReturnResultSchema>;
 
 // ====================== PREFILL UPDATE TABLE SCHEMA ================
 
@@ -158,4 +163,3 @@ export const perusahaanUpdateRpcParamsSchema = z.object({
 });
 
 export type PerusahaanUpdateParams = z.infer<typeof perusahaanUpdateRpcParamsSchema>;
-

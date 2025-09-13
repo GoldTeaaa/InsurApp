@@ -55,11 +55,11 @@ export default function WelcomeLanding() {
                 <LogIn className="mr-2 h-5 w-5" /> Masuk
               </Button>
             </Link>
-            <div className="flex items-center gap-6 pt-2 opacity-90">
+            {/* <div className="flex items-center gap-6 pt-2 opacity-90">
               <Stat label="Akurasi input" value="99%" />
               <Stat label="Waktu input" value="-42%" />
               <Stat label="Staf awal" value="5" />
-            </div>
+            </div> */}
           </motion.div>
 
           {/* Playful 3D-ish orb */}

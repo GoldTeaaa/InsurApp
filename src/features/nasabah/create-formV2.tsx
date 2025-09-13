@@ -1,7 +1,17 @@
+import { FormProvider, useForm } from "react-hook-form";
+
 export default function CreateNasabahForm() {
+    const method = useForm(
+
+    );
+
     return (
-        <div>
-            <p>Form Create Nasabah</p>
-        </div>
+        <FormProvider {...method}>
+            <form action="">
+                <FormTextField
+                    
+                />
+            </form>
+        </FormProvider>
     );
 }

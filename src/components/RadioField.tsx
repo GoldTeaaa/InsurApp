@@ -3,7 +3,7 @@ import { Controller, useFormContext, type FieldValues, type Path } from "react-h
 type Props<T extends FieldValues> = {
   name: Path<T>;
   label: string;
-  options: string[];
+  options: readonly string[];
 };
 
 export function RadioField<T extends FieldValues>({

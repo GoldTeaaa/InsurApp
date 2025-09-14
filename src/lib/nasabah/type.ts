@@ -27,6 +27,8 @@ export const STATUS_PERKAWINAN = ["Belum Kawin", "Kawin", "Cerai Hidup", "Cerai 
 
 export const KEWARGANEGARAAN = ["WNI", "WNA"] as const;
 
+export const GENDER = ["Pria", "Wanita"] as const;
+
 // const emptyToNull = (value: unknown) =>
 //   typeof value === "string" && value.trim() === "" ? null : value;
 
@@ -53,9 +55,7 @@ export const pribadiSchema = baseSchema.extend({
   nik: nonEmpty,
   tempat_lahir: nonEmpty,
   tanggal_lahir: z.string().trim().min(1, "Tanggal lahir wajib diisi"),
-  jenis_kelamin: z.enum(["Pria", "Wanita"], {
-    message: "Jenis kelamin wajib diisi",
-  }),
+  jenis_kelamin: z.enum(GENDER).nullable(),
   alamat_ktp: optionalText,
   rt: optionalText,
   rw: optionalText,
@@ -88,11 +88,10 @@ export const defaultPribadiFormValues: NasabahForm = {
   email: "",
   alamat: "",
 
-  // pribadi-only branch
   nik: "",
   tempat_lahir: "",
   tanggal_lahir: "",
-  jenis_kelamin: "Pria",
+  jenis_kelamin: null,
   alamat_ktp: "",
   rt: "",
   rw: "",

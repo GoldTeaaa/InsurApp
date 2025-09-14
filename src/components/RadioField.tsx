@@ -19,21 +19,21 @@ export function RadioField<T extends FieldValues>({
       control={control}
       render={({ field, fieldState: { error } }) => (
         <div className="flex flex-col space-y-2">
-          <span className="text-sm font-medium text-gray-700">{label}</span>
-          <div className="flex flex-col space-y-2">
+          <span className="text-base font-medium text-gray-800">{label}</span>
+          <div className="flex flex-wrap gap-6">
             {options.map((option) => (
               <label
                 key={option}
-                className="flex items-center space-x-2 cursor-pointer"
+                className="flex items-center gap-2 cursor-pointer"
               >
                 <input
                   type="radio"
                   value={option}
                   checked={field.value === option}
                   onChange={() => field.onChange(option)}
-                  className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                  className="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700">{option}</span>
+                <span className="text-base text-gray-800">{option}</span>
               </label>
             ))}
           </div>
@@ -44,4 +44,5 @@ export function RadioField<T extends FieldValues>({
       )}
     />
   );
+
 }

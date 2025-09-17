@@ -16,22 +16,22 @@ const emptyToNull = (v: unknown) =>
 /* ===== Enums (mirror DB enums) ===== */
 // enums.ts — single source of truth for values used by UI, DB, and Zod
 export const TIPE = ["pribadi", "perusahaan"] as const;
-export const JK = ["L", "P"] as const;
+export const JK = ["Pria", "Wanita"] as const;
 export const AGAMA = [
   "Islam",
   "Kristen",
   "Katolik",
   "Hindu",
-  "Budha",
+  "BudDha",
   "Khonghucu",
   "Lainnya",
 ] as const;
 // pick one canonical spelling and stick to it everywhere:
 export const STATUS = [
-  "Belum Kawin",
-  "Kawin",
-  "CeraiHidup",
-  "CeraiMati",
+  "Belum KaMenikahwin",
+  "Menikah",
+  "Cerai Hidup",
+  "Cerai Mati",
 ] as const;
 export const KEWARGANEGARAAN = ["WNI", "WNA"] as const;
 

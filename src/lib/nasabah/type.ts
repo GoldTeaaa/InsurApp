@@ -11,7 +11,7 @@ const optionalText = z
 
 const optionalEmail = z.string().email().optional();
 
-export const TIPE = ["Pribadi", "Perusahaan"] as const;
+export const TIPE = ["pribadi", "perusahaan"] as const;
 
 export const AGAMA = [
   "Islam",
@@ -23,7 +23,12 @@ export const AGAMA = [
   "Lainnya",
 ] as const;
 
-export const STATUS_PERKAWINAN = ["Belum Kawin", "Kawin", "Cerai Hidup", "Cerai Mati"] as const;
+export const STATUS_PERKAWINAN = [
+  "Belum Menikah",
+  "Menikah",
+  "Cerai Hidup",
+  "Cerai Mati",
+] as const;
 
 export const KEWARGANEGARAAN = ["WNI", "WNA"] as const;
 
@@ -43,7 +48,7 @@ export const baseSchema = z.object({
 export type BaseForm = z.infer<typeof baseSchema>;
 
 export const perusahaanSchema = baseSchema.extend({
-  tipe: z.literal("Perusahaan"),
+  tipe: z.literal("perusahaan"),
   npwp_perusahaan: nonEmpty,
   nama_pic: nonEmpty,
   jabatan_pic: optionalText,
@@ -51,7 +56,7 @@ export const perusahaanSchema = baseSchema.extend({
 });
 
 export const pribadiSchema = baseSchema.extend({
-  tipe: z.literal("Pribadi"),
+  tipe: z.literal("pribadi"),
   nik: nonEmpty,
   tempat_lahir: nonEmpty,
   tanggal_lahir: z.string().trim().min(1, "Tanggal lahir wajib diisi"),
@@ -65,10 +70,7 @@ export const pribadiSchema = baseSchema.extend({
   provinsi: optionalText,
   kode_pos: optionalText,
   agama: z.enum(AGAMA).nullable().optional(),
-  status_perkawinan: z
-    .enum(STATUS_PERKAWINAN)
-    .nullable()
-    .optional(),
+  status_perkawinan: z.enum(STATUS_PERKAWINAN).nullable().optional(),
   pekerjaan: optionalText,
   kewarganegaraan: z.enum(KEWARGANEGARAAN).nullable().optional(),
 });
@@ -81,7 +83,7 @@ export const formSchema = z.discriminatedUnion("tipe", [
 export type NasabahForm = z.infer<typeof formSchema>;
 
 export const defaultPribadiFormValues: NasabahForm = {
-  tipe: "Pribadi",
+  tipe: "pribadi",
   nama: "",
   contact_1: "",
   contact_2: "",
@@ -107,7 +109,7 @@ export const defaultPribadiFormValues: NasabahForm = {
 };
 
 export const defaultPerusahaanFormValues: NasabahForm = {
-  tipe: "Perusahaan",
+  tipe: "perusahaan",
   nama: "",
   contact_1: "",
   contact_2: "",
@@ -119,3 +121,86 @@ export const defaultPerusahaanFormValues: NasabahForm = {
   jabatan_pic: "",
   email_pic: "",
 };
+
+// payload shape to Rpc function
+export const toRpcCreatePribadi = z
+  .object({
+    tipe: z.literal("pribadi"),
+    nama: nonEmpty,
+    contact_1: nonEmpty,
+    contact_2: optionalText,
+    email: optionalEmail,
+    alamat: optionalText,
+
+    nik: nonEmpty,
+    tempat_lahir: nonEmpty,
+    tanggal_lahir: z.string().trim().min(1, "Tanggal lahir wajib diisi"),
+    jenis_kelamin: z.enum(GENDER).nullable(),
+    alamat_ktp: optionalText,
+    rt: optionalText,
+    rw: optionalText,
+    kelurahan_desa: optionalText,
+    kecamatan: optionalText,
+    kota_kabupaten: optionalText,
+    provinsi: optionalText,
+    kode_pos: optionalText,
+    agama: z.enum(AGAMA).nullable().optional(),
+    status_perkawinan: z.enum(STATUS_PERKAWINAN).nullable().optional(),
+    pekerjaan: optionalText,
+    kewarganegaraan: z.enum(KEWARGANEGARAAN).nullable().optional(),
+  })
+  .transform((v) => ({
+    // the rpc function directly fill the tipe so no need to include in in the payload
+    nama: v.nama,
+    contact_1: v.contact_1,
+    contact_2: v.contact_2,
+    email: v.email,
+    alamat: v.alamat,
+    pribadi: {
+      nik: v.nik,
+      tempat_lahir: v.tempat_lahir,
+      tanggal_lahir: v.tanggal_lahir,
+      jenis_kelamin: v.jenis_kelamin,
+      alamat_ktp: v.alamat_ktp,
+      rt: v.rt,
+      rw: v.rw,
+      kelurahan_desa: v.kelurahan_desa,
+      kecamatan: v.kecamatan,
+      kota_kabupaten: v.kota_kabupaten,
+      provinsi: v.provinsi,
+      kode_pos: v.kode_pos,
+      agama: v.agama,
+      status_perkawinan: v.status_perkawinan,
+      pekerjaan: v.pekerjaan,
+      kewarganegaraan: v.kewarganegaraan,
+    },
+  }));
+
+export const toRpcCreatePerusahaan = z
+  .object({
+    tipe: z.literal("perusahaan"),
+    nama: nonEmpty,
+    contact_1: nonEmpty,
+    contact_2: optionalText,
+    email: optionalEmail,
+    alamat: optionalText,
+
+    npwp_perusahaan: nonEmpty,
+    nama_pic: nonEmpty,
+    jabatan_pic: optionalText,
+    email_pic: optionalEmail,
+  })
+  .transform((v) => ({
+    // the rpc function directly fill the tipe so no need to include in in the payload
+    nama: v.nama,
+    contact_1: v.contact_1,
+    contact_2: v.contact_2,
+    email: v.email,
+    alamat: v.alamat,
+    perusahaan: {
+      npwp_perusahaan: v.npwp_perusahaan,
+      nama_pic: v.nama_pic,
+      jabatan_pic: v.jabatan_pic,
+      email_pic: v.email_pic,
+    },
+  }));

@@ -171,8 +171,8 @@ export default function EditNasabahForm({
             <Label htmlFor="pribadi.jenis_kelamin">Jenis Kelamin</Label>
             <SelectInput id="pribadi.jenis_kelamin" name="pribadi.jenis_kelamin" defaultValue={sv(defaultValues.pribadi?.jenis_kelamin)}>
               <option value="">-</option>
-              <option value="L">L</option>
-              <option value="P">P</option>
+              <option value="PriaL">Pria</option>
+              <option value="Wanita">Wanita</option>
             </SelectInput>
             <FieldError name="pribadi.jenis_kelamin" state={state} />
           </div>
@@ -233,7 +233,7 @@ export default function EditNasabahForm({
               <option>Kristen</option>
               <option>Katolik</option>
               <option>Hindu</option>
-              <option>Budha</option>
+              <option>Buddha</option>
               <option>Khonghucu</option>
               <option>Lainnya</option>
             </SelectInput>
@@ -244,10 +244,10 @@ export default function EditNasabahForm({
             <Label htmlFor="pribadi.status_perkawinan">Status Perkawinan</Label>
             <SelectInput id="pribadi.status_perkawinan" name="pribadi.status_perkawinan" defaultValue={sv(defaultValues.pribadi?.status_perkawinan)}>
               <option value="">-</option>
-              <option value="Belum Kawin">Belum Kawin</option>
-              <option value="Kawin">Kawin</option>
-              <option value="CeraiHidup">CeraiHidup</option>
-              <option value="CeraiMati">CeraiMati</option>
+              <option value="Belum Menikah">Belum Menikah</option>
+              <option value="Menikah">Menikah</option>
+              <option value="Cerai Hidup">Cerai Hidup</option>
+              <option value="Cerai Mati">Cerai Mati</option>
             </SelectInput>
             <FieldError name="pribadi.status_perkawinan" state={state} />
           </div>

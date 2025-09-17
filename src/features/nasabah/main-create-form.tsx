@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioField } from "@/components/RadioField";
 import PribadiForm from "./form/pribadi-form";
 import PerusahaanForm from "./form/perusahaan-form";
-import { createNasabahAction } from "./actions/create-form";
+import createNasabahAction from "./actions/create-form";
 import { Button } from "@/components/button";
 
 export default function CreateNasabahForm() {
@@ -29,10 +29,10 @@ export default function CreateNasabahForm() {
     });
 
     useEffect(() => {
-        if (tipe === 'Perusahaan') {
-            method.reset({ ...defaultPerusahaanFormValues, tipe: 'Perusahaan' });
+        if (tipe === 'perusahaan') {
+            method.reset({ ...defaultPerusahaanFormValues, tipe: 'perusahaan' });
         } else {
-            method.reset({ ...defaultPribadiFormValues, tipe: 'Pribadi' });
+            method.reset({ ...defaultPribadiFormValues, tipe: 'pribadi' });
         }
     }, [tipe]);
 
@@ -56,7 +56,7 @@ export default function CreateNasabahForm() {
             if (!res.success) {
                 method.setError('root', { message: res.message ?? 'Gagal menyimpan' });
             }
-            const base = data.tipe === 'Perusahaan' ? defaultPerusahaanFormValues : defaultPribadiFormValues;
+            const base = data.tipe === 'perusahaan' ? defaultPerusahaanFormValues : defaultPribadiFormValues;
             method.reset(base);
             setReturnMessage(res.message);
         } catch (e) {
@@ -112,13 +112,10 @@ export default function CreateNasabahForm() {
                 )}
 
                 {/* Card: Tipe + Placeholder for form sections */}
-                <div
-                    className="
+                <div className="
                         rounded-lg border border-gray-200 bg-white
-                        px-3 py-3 sm:px-4 sm:py-4
-                    "
+                        px-3 py-3 sm:px-4 sm:py-4"
                 >
-                    {/* Section title */}
                     {/* Tipe selector */}
                     <div className="mb-4">
                         <div className="mb-1.5 text-s font-medium text-gray-600">Tipe Nasabah</div>
@@ -130,13 +127,9 @@ export default function CreateNasabahForm() {
                     </div>
 
                     {/* Dynamic form area */}
-                    <div
-                        className="
-                            mt-4 grid grid-cols-1 gap-4
-                        "
-                    >
-                        {tipe === 'Pribadi' && <PribadiForm />}
-                        {tipe === 'Perusahaan' && <PerusahaanForm />}
+                    <div className="mt-4 grid grid-cols-1 gap-4">
+                        {tipe === 'pribadi' && <PribadiForm />}
+                        {tipe === 'perusahaan' && <PerusahaanForm />}
                     </div>
                 </div>
 

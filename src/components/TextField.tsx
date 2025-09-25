@@ -19,6 +19,7 @@ export default function FormTextField<T extends FieldValues>({ name, label, ...p
                     <input
                         {...field}
                         {...props}
+                        value={field.value ?? ""}
                         aria-invalid={!!error}
                         className={[
                             "block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none",

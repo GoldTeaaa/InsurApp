@@ -16,22 +16,22 @@ const emptyToNull = (v: unknown) =>
 /* ===== Enums (mirror DB enums) ===== */
 // enums.ts — single source of truth for values used by UI, DB, and Zod
 export const TIPE = ["pribadi", "perusahaan"] as const;
-export const JK = ["L", "P"] as const;
+export const JK = ["Pria", "Wanita"] as const;
 export const AGAMA = [
   "Islam",
   "Kristen",
   "Katolik",
   "Hindu",
-  "Budha",
+  "BudDha",
   "Khonghucu",
   "Lainnya",
 ] as const;
 // pick one canonical spelling and stick to it everywhere:
 export const STATUS = [
-  "Belum Kawin",
-  "Kawin",
-  "CeraiHidup",
-  "CeraiMati",
+  "Belum KaMenikahwin",
+  "Menikah",
+  "Cerai Hidup",
+  "Cerai Mati",
 ] as const;
 export const KEWARGANEGARAAN = ["WNI", "WNA"] as const;
 
@@ -60,19 +60,12 @@ export const kewarganegaraanSchema = z.preprocess(
 /* ===== String helpers (keep ZodString; avoid ZodEffects for .min) ===== */
 const nonEmpty = z.string().trim().min(1, "Wajib diisi");
 
-const optionalText = z
-  .string()
-  .trim()
-  .transform((v) => (v === "" ? null : v))
-  .optional()
-  .nullable();
+const optionalText = z.string().trim().transform(v => v === "" ? null : v).nullable().optional();
 
-const optionalEmail = z.preprocess((v) => {
-  if (typeof v !== "string") return v;
-  const s = v.trim();
-  // Treat empty string as "no value"
-  return s === "" ? null : s.toLowerCase();
-}, z.string().email("Format email tidak valid").nullable().optional());
+const optionalEmail = z.string().trim().toLowerCase()
+  .transform(v => v === "" ? null : v)
+  .pipe(z.string().email("Format email tidak valid").nullable())
+  .optional();
 
 /* ===== Base (RPC: p_contact_1/2, p_email, p_alamat) ===== */
 export const baseSchema = z.object({
@@ -88,7 +81,6 @@ export const pribadiSchema = z.object({
   nik: nonEmpty,
   nama_tertanggung: nonEmpty,
   tempat_lahir: nonEmpty,
-  // Must be a non-empty string in 'YYYY-MM-DD' format from the date input.
   tanggal_lahir: z.string().trim().min(1, "Tanggal lahir wajib diisi"),
   jenis_kelamin: jenisKelaminSchema,
   alamat_ktp: optionalText,

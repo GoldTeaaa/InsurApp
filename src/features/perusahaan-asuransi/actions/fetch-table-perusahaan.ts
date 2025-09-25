@@ -7,14 +7,13 @@ import {
   type PerusahaanSort,
 } from "@/lib/perusahaan_asuransi/types";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 /** Fetch one page via RPC with Zod-verified params + results */
 export async function fetchPerusahaanPage({
   q,
   page,
   sort,
-  pageSize = PAGE_SIZE,
 }: {
   q: string;
   page: number;
@@ -24,10 +23,7 @@ export async function fetchPerusahaanPage({
   const params = perusahaanListParamsSchema.parse({
     p_search: q.trim(),
     p_page: Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1,
-    p_page_size:
-      Number.isFinite(pageSize) && pageSize >= 1 && pageSize <= 50
-        ? Math.floor(pageSize)
-        : PAGE_SIZE,
+    p_page_size: PAGE_SIZE,
     p_sort: sort,
   });
 
@@ -40,7 +36,7 @@ export async function fetchPerusahaanPage({
     throw new Error(error.message || "Gagal memuat data perusahaan.");
   }
 
-  const rows = perusahaanRowsSchema.parse(data ?? []);
+  const rows = perusahaanRowsSchema.parse(data ?? []) as PerusahaanRow[];
   const total = rows.length > 0 ? rows[0].total_count : 0;
   const pageCount = Math.max(1, Math.ceil(total / params.p_page_size));
 

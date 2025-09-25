@@ -34,7 +34,7 @@ export default async function insertNasabah(
   formData: FormData
 ): Promise<State> {
   const tipe = String(formData.get("tipe") ?? "pribadi");
-  console.log("FormData: ", formData);
+  // console.log("FormData: ", formData);
 
   // Common fields
   const base = {
@@ -100,11 +100,11 @@ export default async function insertNasabah(
       success: false,
     };
   }
-  console.log("Parsed: ", parsed.data);
+  // console.log("Parsed: ", parsed.data);
 
   // Map to RPC args
   const args = toNasabahCreateRpcArgs(parsed.data);
-  console.log("Args: ", args);
+  // console.log("Args: ", args);
 
   // Call Supabase RPC
   const { data, error } = await supabase.rpc("nasabah_create_v1", args);
@@ -124,38 +124,6 @@ export default async function insertNasabah(
 }
 
 // ========================================== DASHBOARD VIEW ==========================================
-
-const ITEMS_PER_PAGE = 5 as const;
-
-export async function fetchNasabahPage({
-  q = "",
-  page = 1,
-  sort = "created_asc",
-}: {
-  q?: string;
-  page?: number;
-  sort?: NasabahSort;
-}) {
-  const { data, error } = await supabase.rpc("nasabah_pagination_v1", {
-    p_q: q.trim(),
-    p_page: page,
-    p_page_size: ITEMS_PER_PAGE,
-    p_sort: sort,
-  });
-
-  if (error) throw new Error(`nasabah_pagination_v1: ${error.message}`);
-
-  const rows = (data ?? []) as (NasabahRow & { total_count: number })[];
-  const total = rows[0]?.total_count ? Number(rows[0].total_count) : 0;
-
-  return {
-    rows: rows.map(({ total_count, ...r }) => r),
-    total,
-    page,
-    pageSize: ITEMS_PER_PAGE,
-    pageCount: Math.max(1, Math.ceil(total / ITEMS_PER_PAGE)),
-  };
-}
 
 export type NasabahDetail = NasabahFormData & { updated_at: string | null };
 
@@ -246,7 +214,7 @@ export async function updateNasabahV1(
 
   // 2) Validate (discriminated union: pribadi | perusahaan)
   const parsed = nasabahInputFormSchema.safeParse(shaped);
-  console.log("parsed: ", parsed);
+  // console.log("parsed: ", parsed);
   if (!parsed.success) {
     return {
       errors: parsed.error.flatten().fieldErrors,
@@ -303,9 +271,9 @@ export async function updateNasabahV1(
       email_pic: v.perusahaan.email_pic ?? null,
     };
   }
-  console.log("email: ", p_email);
-  console.log("p_pribadi: ", p_pribadi);
-  console.log("p_perusahaan: ", p_perusahaan);
+  // console.log("email: ", p_email);
+  // console.log("p_pribadi: ", p_pribadi);
+  // console.log("p_perusahaan: ", p_perusahaan);
 
   // 5) Call RPC (same-type update; tidak mengirim p_tipe)
   const { error } = await supabase.rpc("nasabah_update_same_type_v2", {
@@ -357,7 +325,7 @@ export async function updateNasabahV2(
 
   // 2) Validate (discriminated union: pribadi | perusahaan)
   const parsed = nasabahInputFormSchema.safeParse(shaped);
-  console.log("parsed: ", parsed);
+  // console.log("parsed: ", parsed);
   if (!parsed.success) {
     return {
       errors: parsed.error.flatten().fieldErrors,
@@ -462,6 +430,7 @@ export async function updateNasabahV2(
 
 // ========================================== DELETE ACTION ==========================================
 export async function deleteNasabahAction(formData: FormData) {
+  console.log("Delete FormData From Server: ", formData);
   const id = String(formData.get("id") || "");
   if (!id) throw new Error("Missing id");
 

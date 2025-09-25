@@ -1,6 +1,6 @@
-import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/table-view";
+import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/fetch-table-perusahaan";
 import Pagination from "@/features/perusahaan-asuransi/pagination";
-import { type PerusahaanSort } from "@/lib/perusahaan_asuransi/types";
+import { PerusahaanRow, type PerusahaanSort } from "@/lib/perusahaan_asuransi/types";
 import { UpdatePerusahaanAsuransi, DeletePerusahaanAsuransi } from "@/features/perusahaan-asuransi/buttons";
 
 function fmt(iso?: string | null) {
@@ -13,9 +13,7 @@ function fmt(iso?: string | null) {
 }
 
 /** Server Component */
-export default async function Table({ q, page, sort }: { q: string; page: number; sort: PerusahaanSort }) {
-  const { rows, total, pageCount } = await fetchPerusahaanPage({ q, page, sort });
-
+export default async function Table({rows, totalPage} : {rows: PerusahaanRow[]; totalPage: number}) {
   if (rows.length === 0) {
     return (
       <div className="mt-6 rounded-md bg-gray-50 p-4 text-sm text-gray-600">
@@ -57,7 +55,7 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                 </div>
               </div>
             ))}
-            <div className="mt-4 text-center text-xs text-gray-500">Total: {total}</div>
+            <div className="mt-4 text-center text-xs text-gray-500">Total: {totalPage}</div>
           </div>
 
           {/* Desktop table */}
@@ -98,8 +96,8 @@ export default async function Table({ q, page, sort }: { q: string; page: number
           </table>
 
           <div className="mt-2 hidden items-center justify-between border-t border-gray-200 px-4 py-3 text-xs text-gray-500 md:flex">
-            <Pagination page={page} pageCount={pageCount} />
-            <div className="px-2 text-xs text-gray-600">Total: {total}</div>
+            {/* <Pagination page={page} pageCount={pageCount} /> */}
+            <div className="px-2 text-xs text-gray-600">Total: {totalPage}</div>
           </div>
         </div>
       </div>

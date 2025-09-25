@@ -1,7 +1,9 @@
-import { fetchNasabahPage } from '@/features/nasabah/actions';
+import { fetchNasabahPage } from '@/features/nasabah/actions/fetch-table-page';
 import { type NasabahSort } from '@/lib/nasabah/types';
 import Pagination from './pagination';
 import { UpdateInvoice, DeleteNasabah } from './buttons';
+import { DeleteButton } from '@/components/DeleteButton';
+import {deleteNasabahAction} from '@/features/nasabah/actions';
 
 function fmt(iso?: string | null) {
     if (!iso) return '—';
@@ -12,8 +14,8 @@ function fmt(iso?: string | null) {
     }
 }
 
-export default async function Table({ q, page, sort }: { q: string; page: number; sort: NasabahSort }) {
-    const { rows, total, pageCount } = await fetchNasabahPage({ q, page, sort });
+export default async function Table({ search, page, sort }: { search: string; page: number; sort: NasabahSort }) {
+    const { rows, total, pageCount } = await fetchNasabahPage({ search, page, sort });
 
     if (rows.length === 0) {
         return (
@@ -84,7 +86,8 @@ export default async function Table({ q, page, sort }: { q: string; page: number
                                     <td className="whitespace-nowrap py-4 pl-6 pr-3">
                                         <div className="flex justify-end gap-3">
                                             <UpdateInvoice id={r.id} />
-                                            <DeleteNasabah id={r.id} />
+                                            {/* <DeleteNasabah id={r.id} /> */}
+                                            <DeleteButton id={r.id} action={deleteNasabahAction} entityName="nasabah" />
                                         </div>
                                     </td>
                                 </tr>

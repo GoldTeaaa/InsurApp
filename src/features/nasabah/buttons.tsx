@@ -27,15 +27,6 @@ export function UpdateInvoice({ id }: { id: string }) {
 
 
 export function DeleteNasabah({ id }: { id: string }) {
-/**
- * Renders a delete button for a nasabah. The button is a form which submits to
- * the `deleteNasabahAction` action. The `id` prop should be the ID of the
- * nasabah to be deleted.
- *
- * The button is visually hidden, but screen readers will read out the text
- * "Delete". The button is wrapped in a form to prevent the browser from
- * scrolling to the top of the page when clicked.
- */
   return (
     <form action={deleteNasabahAction}>
       <input type="hidden" name="id" value={id} />

@@ -18,7 +18,7 @@ export async function createPerusahaan(
 ): Promise<ReturnState> {
   
   // 1. Validate
-  console.log("formData: ", formData);
+  // console.log("formData: ", formData);
   const parsed = perusahaanFormSchema.safeParse(
     Object.fromEntries(formData.entries())
   );
@@ -32,7 +32,7 @@ export async function createPerusahaan(
 
   // 2. Transform to RPC parameters
   const rpcParams = perusahaanCreateToRpcSchema.parse(parsed.data);
-  console.log("rpcParams: ", rpcParams);
+  // console.log("rpcParams: ", rpcParams);
 
   // 3. Call Supabase RPC
   const { data, error } = await supabase.rpc("perusahaan_asuransi_create_v1", rpcParams);

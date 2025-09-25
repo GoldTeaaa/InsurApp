@@ -6,20 +6,20 @@ import Search from "@/features/nasabah/search";
 export const metadata = { title: 'Nasabah' };
 
 export default async function Page({
-    searchParams,
+    searchParams
 }: {
-    searchParams?: { q?: string; page?: string; sort?: 'created_desc' | 'created_asc' | 'name_asc' | 'name_desc' };
+    searchParams?: { search?: string; page?: string; sort?: 'created_desc' | 'created_asc' | 'name_asc' | 'name_desc' };
 }) {
-    const search = await searchParams;
-    const q = search?.q ?? '';
-    const page = Number(search?.page ?? 1);
-    const sort = (search?.sort ?? 'created_desc') as 'created_desc' | 'created_asc' | 'name_asc' | 'name_desc';
+    const params = await searchParams;
+    const search = params?.search ?? '';
+    const page = Number(params?.page ?? 1);
+    const sort = (params?.sort ?? 'created_desc') as 'created_desc' | 'created_asc' | 'name_asc' | 'name_desc';
 
     return (
         <div className="w-full p-4">   
-            <Search q = {q}/>
-            <Suspense key={`${q}-${page}-${sort}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
-                <Table q={q} page={page} sort={sort} />
+            <Search search = {search}/>
+            <Suspense key={`${search}-${page}-${sort}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
+                <Table search={search} page={page} sort={sort} />
             </Suspense>
             <Link
                 href={"/dashboard/nasabah/create-nasabah"}

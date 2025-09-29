@@ -1,5 +1,5 @@
 "use server";
-import { ListNasabah, type ListNasabahType } from "@/lib/polis/step-one";
+import { ListNasabah, type ListNasabahType } from "@/lib/polis/step1";
 import { supabase } from "@/lib/supabase";
 
 export default async function getListNasabah(): Promise<ListNasabahType[]> {

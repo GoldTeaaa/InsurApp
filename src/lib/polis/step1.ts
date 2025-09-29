@@ -63,4 +63,3 @@ export const nasabahDetailsSchema = baseDetailsSchema.extend({
 
 export type NasabahDetailsType = z.infer<typeof nasabahDetailsSchema>;
 export type ListNasabahType = z.infer<typeof ListNasabah>;
-

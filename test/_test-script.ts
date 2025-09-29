@@ -1,6 +1,6 @@
 // _test-script.ts
 import "dotenv/config"; // To load .env.local variables
-import getListNasabah from "../src/features/polis/actions/get_nasabah_list";
+import getListNasabah from "../src/features/polis/actions/get-nasabah-list";
 
 async function main() {
   console.log("Running getListNasabah...");

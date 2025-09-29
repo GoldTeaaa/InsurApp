@@ -205,5 +205,3 @@ export const toRpcCreatePerusahaan = z
     },
   }));
 
-
-  

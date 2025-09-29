@@ -5,8 +5,6 @@ import { useFormContext } from "react-hook-form";
 
 export default function PerusahaanForm() {
 
-    const { control } = useFormContext<NasabahForm>();
-
     return (
         <div className="space-y-6">
             {/* Identitas Perusahaan */}

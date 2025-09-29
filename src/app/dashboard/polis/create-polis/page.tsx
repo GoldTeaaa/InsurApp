@@ -1,5 +1,9 @@
-import CreatePolisForm from "@/features/polis/CreatePolisForm";
+import CreatePolisForm from "@/features/polis/form/CreatePolisForm";
 
 export default function CreatePolisPage() {
-    return <CreatePolisForm />;
+    return (
+        <div>
+            <CreatePolisForm />
+        </div>
+    );
 }

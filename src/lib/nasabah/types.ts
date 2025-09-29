@@ -1,7 +1,4 @@
-import { z, ZodError } from "zod";
-import { optional } from "zod/v4-mini";
-
-export type FlattenedIssues = ReturnType<ZodError<any>["flatten"]>;
+import { z } from "zod";
 
 export type initialState = {
   ok: boolean;

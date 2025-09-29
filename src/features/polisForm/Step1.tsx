@@ -1,9 +1,9 @@
 import SelectSearchField from "@/components/Select-Search-Field";
 import { Polis } from "@/lib/polis/types";
-import { useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card";
+import { useEffect, useState } from "react";
 import getListNasabah from "../polis/actions/get_nasabah_list";
 import type { ListNasabahType, NasabahDetailsType } from "@/lib/polis/step-one";
-import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import getNasabahCardDetails from "../polis/actions/get-nasabah-card";
 
@@ -15,18 +15,22 @@ function NasabahCard({ details }: { details: NasabahDetailsType }) {
     );
 
     return (
-        <div className="mt-4 p-4 border rounded-md shadow-sm bg-gray-50">
-            <h3 className="text-lg font-semibold">{details.nama}</h3>
-            <p className="text-sm text-gray-600">Tipe Nasabah: {details.tipe}</p>
-            <p className="text-sm text-gray-600">Alamat : {details.alamat}</p>
-            <p className="text-sm text-gray-600">Contact 1: {details.contact_1}</p>
-            {details.pribadi && <p className="text-sm text-gray-600">
-                Tanggal Lahir: {new Date(details.pribadi.tanggal_lahir).toLocaleDateString()}
-            </p>}
-            {details.perusahaan && <p className="text-sm text-gray-600">
-                Nama PIC: {details.perusahaan.nama_pic}
-            </p>}
-        </div>
+        <Card className="mt-6">
+            <CardHeader>
+                <CardTitle>{details.nama}</CardTitle>
+                <CardDescription>Tipe Nasabah: {details.tipe}</CardDescription>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <p><span className="font-medium text-gray-600">Alamat:</span> {details.alamat}</p>
+                <p><span className="font-medium text-gray-600">Kontak:</span> {details.contact_1}</p>
+                {details.pribadi && <p>
+                    <span className="font-medium text-gray-600">Tanggal Lahir:</span> {new Date(details.pribadi.tanggal_lahir).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}
+                </p>}
+                {details.perusahaan && <p>
+                    <span className="font-medium text-gray-600">Nama PIC:</span> {details.perusahaan.nama_pic}
+                </p>}
+            </CardContent>
+        </Card>
     );
 }
 
@@ -61,9 +65,6 @@ export default function Step1() {
                     setNasabahDetails(null);
                     setNotFound(true);
                 }
-                console.log("id nasabah", selectedNasabahId);
-                console.log("details: ", result);
-                console.log("nasabah details: ", nasabahDetails);
             } else {
                 setNasabahDetails(null);
             }
@@ -73,7 +74,8 @@ export default function Step1() {
     }, [selectedNasabahId]);
 
     return (
-        <div>
+        <section className="space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Pilih Nasabah</h2>
             <div>
                 <SelectSearchField<Polis>
                     name='id_nasabah'
@@ -81,12 +83,12 @@ export default function Step1() {
                     options={nasabahList}
                 />
             </div>
-            {nasabahDetails && <NasabahCard details={nasabahDetails} />}
+            {nasabahDetails && !notFound && <NasabahCard details={nasabahDetails} />}
             {notFound && (
-                <div className="mt-4 p-4 border rounded-md shadow-sm bg-gray-50 text-red-500">
-                    <h3 className="text-lg font-semibold">Details Not Found...</h3>
+                <div className="mt-6 p-4 border border-red-200 rounded-lg bg-red-50 text-red-700">
+                    <p className="font-medium">Detail nasabah tidak ditemukan.</p>
                 </div>
             )}
-        </div>
+        </section>
     );
 }

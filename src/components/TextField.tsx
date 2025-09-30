@@ -1,4 +1,3 @@
-import { div } from "framer-motion/client";
 import { Controller, FieldValues, Path, useFormContext } from "react-hook-form";
 
 type Props<T extends FieldValues> = {
@@ -19,8 +18,8 @@ export default function FormTextField<T extends FieldValues>({ name, label, ...p
                     <input
                         {...field}
                         {...props}
-                        value={field.value ?? ""}
                         aria-invalid={!!error}
+                        defaultValue={field.value ?? ""}
                         className={[
                             "block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none",
                             "focus:border-blue-600 focus:ring-1 focus:ring-blue-600",

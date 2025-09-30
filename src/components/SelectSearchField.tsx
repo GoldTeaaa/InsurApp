@@ -72,9 +72,8 @@ export default function SelectSearchField<T extends FieldValues>({
                       setOpen(true);
                     }
                   }}
-                  className={`relative w-full cursor-default rounded-md border bg-white py-2 pl-3 pr-10 text-left text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    error ? "border-red-500 focus:ring-red-500" : "border-gray-300"
-                  }`}
+                  className={`relative w-full cursor-default rounded-md border bg-white py-2 pl-3 pr-10 text-left text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                    }`}
                 >
                   <span className={`block truncate ${selected ? "text-gray-900" : "text-gray-500"}`}>
                     {selected ? selected.value : placeholder ?? `-- Pilih ${label} --`}
@@ -114,9 +113,9 @@ export default function SelectSearchField<T extends FieldValues>({
                             field.onBlur();
                             setOpen(false);
                           }}
-                          className={`relative flex w-full cursor-default select-none items-center py-2 pl-3 pr-9 text-left text-sm hover:bg-blue-500 hover:text-white focus:bg-blue-500 focus:text-white focus:outline-none ${
-                            field.value === opt.id ? "bg-blue-500 text-white" : "text-gray-900"
-                          }`}
+                          className={`relative flex w-full cursor-default select-none items-center py-2 pl-3 pr-9 text-left text-sm hover:bg-blue-500 hover:text-white focus:bg-blue-500 focus:text-white focus:outline-none 
+                            ${field.value === opt.id ? "bg-blue-500 text-white" : "text-gray-900"}`
+                          }
                         >
                           <span className="block truncate">{opt.value}</span>
                           {field.value === opt.id && (

@@ -1,15 +1,15 @@
 import getPerusahaanList from "../polis/actions/get-perusahaan-list";
 import { useFormContext, useWatch } from "react-hook-form";
-import { Polis, PolisShare } from "@/lib/polis/types";
+import { DetailPremi, Polis, PolisShare } from "@/lib/polis/types";
 import { useEffect, useState } from "react";
 import { ListPerusahaanType } from "@/lib/polis/step3";
 import SelectSearchField from "@/components/SelectSearchField";
+import TextField from "@/components/TextField";
 
 export default function PremiInputBox() {
     const [perusahaanList, setPerusahaanList] = useState<ListPerusahaanType[]>([]);
     const [loading, setLoading] = useState(true);
 
-    
     const { control } = useFormContext<Polis>();
 
     useEffect(() => {
@@ -37,13 +37,29 @@ export default function PremiInputBox() {
 
     return (
         <div className="space-y-4 animate-in fade-in-0">
-            {/* This is where you would add your form fields for "non-coas" */}
-            <p className="text-sm text-gray-700">Premi Input Box Content</p>
-            {loading && <p className="text-sm text-gray-500">Memuat data perusahaan...</p>}
-            <SelectSearchField<PolisShare>
-                name='id_perusahaan_asuransi'
-                label="Perusahaan"
-                options={perusahaanList}
+            <div>
+                {loading && <p className="text-sm text-gray-500">Memuat data perusahaan...</p>}
+                <SelectSearchField<PolisShare>
+                    name='id_perusahaan_asuransi'
+                    label="Perusahaan"
+                    options={perusahaanList}
+                />
+            </div>
+            <TextField<PolisShare> 
+                name='persentase_share'
+                label="Persentase Share"
+            />
+            <TextField<DetailPremi> 
+                name='discount'
+                label="Discount"
+            />
+            <TextField<DetailPremi> 
+                name='premi_gross'
+                label="Premi Gross"
+            />
+            <TextField<DetailPremi>
+                name='biaya_admin_materai'
+                label="Biaya Admin & Materai"
             />
         </div>
     );

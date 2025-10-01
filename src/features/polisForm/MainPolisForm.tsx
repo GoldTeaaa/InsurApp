@@ -1,26 +1,27 @@
 "use client"
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useEffect, useMemo, useState } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/button";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import { motion } from 'framer-motion'
 import ReviewPolis from "./ReviewPolis";
+import { getDefaultValues, Polis } from "@/lib/polis/types";
 
 const steps = [
     {
         id: 'Step 1',
-        name: 'Pilih Nasabah',
-        fields: ['firstName', 'lastName', 'email']
+        name: 'Data Nasabah',
+        component: <Step1 />
     },
     {
         id: 'Step 2',
         name: 'Detail Polis',
-        fields: ['country', 'state', 'city', 'street', 'zip']
+        component: <Step2 />
     },
-    { id: 'Step 3', name: 'Detail Komisi' },
-    { id: 'Step 4', name: 'Review' }
+    { id: 'Step 3', name: 'Premi & Share', component: <Step3 /> },
+    { id: 'Step 4', name: 'Review & Submit', component: <ReviewPolis /> }
 ]
 
 export default function MainPolisForm() {
@@ -29,9 +30,21 @@ export default function MainPolisForm() {
     const [currentStep, setCurrentStep] = useState<number>(0);
     const delta = currentStep - previousStep
 
-    const methods = useForm({
-        mode: 'all'
+    const methods = useForm<Polis>({
+        mode: 'all',
+        defaultValues: getDefaultValues("non-coas"),
     });
+
+    const { control, reset, formState: { isSubmitting } } = methods
+    
+    const jenisCoas = useWatch({
+        control,
+        name: "jenis_coas",
+    })
+
+    useEffect(() =>{
+        reset(getDefaultValues(jenisCoas)) 
+    },[jenisCoas, reset])
 
     const next = async () => {
         // const fields = steps[currentStep].fields
@@ -95,49 +108,23 @@ export default function MainPolisForm() {
                 </ol>
             </nav>
             <form onSubmit={methods.handleSubmit(submit)} className="max-w-4xl mx-auto space-y-6 p-4">
-                {currentStep === 0 && (
-                    <motion.div
-                        initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    >
-                        <Step1 />
-                    </motion.div>
-                )
-                }
-                {currentStep === 1 && (
-                    <motion.div
-                        initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    >
-                        <Step2 />
-                    </motion.div>
-                )
-                }
-                {currentStep === 2 && (
-                    <motion.div
-                        initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    >
-                        <Step3 />
-                    </motion.div>
-                )
-                }
-                {currentStep === 3 && (
-                    <motion.div
-                        initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    >
-                        <ReviewPolis />
-                        <div className="flex justify-end">
-                            <Button type="submit">Submit</Button>
+                <motion.div
+                    key={currentStep} // Add key to ensure motion triggers on step change
+                    initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                >
+                    {steps[currentStep].component}
+                    {currentStep === steps.length - 1 && (
+                        <div className="mt-8 flex justify-end">
+                            <Button type="submit" disabled={isSubmitting}>
+                                {isSubmitting ? (
+                                    <span className="flex items-center gap-2">Submitting...</span>
+                                ) : 'Submit Polis'}
+                            </Button>
                         </div>
-                    </motion.div>
-                )
-                }
+                    )}
+                </motion.div>
             </form>
             <div className='mt-8 pt-5'>
                 <div className='flex justify-between'>

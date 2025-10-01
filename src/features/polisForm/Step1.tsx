@@ -6,30 +6,44 @@ import getListNasabah from "../polis/actions/get-nasabah-list";
 import type { ListNasabahType, NasabahDetailsType } from "@/lib/polis/step1";
 import { useFormContext, useWatch } from "react-hook-form";
 import getNasabahCardDetails from "../polis/actions/get-nasabah-card";
+import {
+    BuildingOffice2Icon,
+    CakeIcon,
+    MapPinIcon,
+    PhoneIcon,
+    UserIcon,
+} from "@heroicons/react/24/outline";
 import { SelectField } from "@/components/SelectField";
 
-function NasabahCard({ details }: { details: NasabahDetailsType }) {
-    if (!details) return (
-        <div className="mt-4 p-4 border rounded-md shadow-sm bg-gray-50">
-            <h3 className="text-lg font-semibold">Details Not Found...</h3>
+function DetailItem({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: React.ReactNode }) {
+    if (!value) return null;
+    return (
+        <div className="flex items-start gap-3">
+            <Icon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+            <div className="text-sm">
+                <p className="font-medium text-gray-500">{label}</p>
+                <p className="text-gray-800">{value}</p>
+            </div>
         </div>
     );
+}
 
+function NasabahCard({ details }: { details: NasabahDetailsType }) {
     return (
         <Card className="mt-6">
             <CardHeader>
                 <CardTitle>{details.nama}</CardTitle>
                 <CardDescription>Tipe Nasabah: {details.tipe}</CardDescription>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <p><span className="font-medium text-gray-600">Alamat:</span> {details.alamat}</p>
-                <p><span className="font-medium text-gray-600">Kontak:</span> {details.contact_1}</p>
-                {details.pribadi && <p>
-                    <span className="font-medium text-gray-600">Tanggal Lahir:</span> {new Date(details.pribadi.tanggal_lahir).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}
-                </p>}
-                {details.perusahaan && <p>
-                    <span className="font-medium text-gray-600">Nama PIC:</span> {details.perusahaan.nama_pic}
-                </p>}
+            <CardContent className="grid grid-cols-1 gap-x-6 gap-y-5 md:grid-cols-2">
+                <DetailItem icon={MapPinIcon} label="Alamat" value={details.alamat} />
+                <DetailItem icon={PhoneIcon} label="Kontak" value={details.contact_1} />
+                {details.pribadi && (
+                    <DetailItem icon={CakeIcon} label="Tanggal Lahir" value={new Date(details.pribadi.tanggal_lahir).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })} />
+                )}
+                {details.perusahaan && (
+                    <DetailItem icon={UserIcon} label="Nama PIC" value={details.perusahaan.nama_pic} />
+                )}
             </CardContent>
         </Card>
     );
@@ -38,6 +52,7 @@ function NasabahCard({ details }: { details: NasabahDetailsType }) {
 export default function Step1() {
     const [nasabahList, setNasabahList] = useState<ListNasabahType[]>([]);
     const [nasabahDetails, setNasabahDetails] = useState<NasabahDetailsType | null>(null);
+    const [loadingDetails, setLoadingDetails] = useState(false);
     const [notFound, setNotFound] = useState(false);
 
     const {
@@ -62,6 +77,7 @@ export default function Step1() {
     useEffect(() => {
         async function fetchNasabahDetails() {
             if (selectedNasabahId) {
+                setLoadingDetails(true);
                 const result = await getNasabahCardDetails(selectedNasabahId);
                 if (result.success) {
                     setNotFound(false);
@@ -70,6 +86,7 @@ export default function Step1() {
                     setNasabahDetails(null);
                     setNotFound(true);
                 }
+                setLoadingDetails(false);
             } else {
                 setNasabahDetails(null);
             }
@@ -90,6 +107,7 @@ export default function Step1() {
                     />
                 </div>
                 <div>
+                    {loadingDetails && <p className="mt-6 text-sm text-gray-500">Loading details...</p>}
                     {nasabahDetails && !notFound && <NasabahCard details={nasabahDetails} />}
                     {notFound && (
                         <div className="mt-6 p-4 border border-red-200 rounded-lg bg-red-50 text-red-700">

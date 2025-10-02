@@ -7,25 +7,36 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import { motion } from 'framer-motion'
 import ReviewPolis from "./ReviewPolis";
-import { getDefaultValues, Polis } from "@/lib/polis/types";
+import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const steps = [
     {
         id: 'Step 1',
         name: 'Data Nasabah',
-        component: <Step1 />
+        component: <Step1 />,
+        fields: ['id_nasabah', 'bisnis']
     },
     {
         id: 'Step 2',
         name: 'Detail Polis',
-        component: <Step2 />
+        component: <Step2 />,
+        fields: ['nomor_polis', 'total_premi', 'periode_mulai', 'periode_akhir', 'jenis_coas']
     },
-    { id: 'Step 3', name: 'Premi & Share', component: <Step3 /> },
-    { id: 'Step 4', name: 'Review & Submit', component: <ReviewPolis /> }
+    {
+        id: 'Step 3',
+        name: 'Premi & Share',
+        component: <Step3 />,
+        // fields: ['detail_premi', 'detail_komisi', 'shares']
+    },
+    {
+        id: 'Step 4',
+        name: 'Review & Submit',
+        component: <ReviewPolis />
+    }
 ]
 
 export default function MainPolisForm() {
-    // const [currentStep, setStep] = useState<number>(0);
     const [previousStep, setPreviousStep] = useState<number>(0);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const delta = currentStep - previousStep
@@ -33,24 +44,33 @@ export default function MainPolisForm() {
     const methods = useForm<Polis>({
         mode: 'all',
         defaultValues: getDefaultValues("non-coas"),
+        resolver: zodResolver(PolisSchema),
     });
 
-    const { control, reset, formState: { isSubmitting } } = methods
-    
+    const { 
+        control, 
+        reset, 
+        formState: { isSubmitting, errors },
+        trigger 
+    } = methods
+
     const jenisCoas = useWatch({
         control,
         name: "jenis_coas",
     })
 
-    useEffect(() =>{
-        reset(getDefaultValues(jenisCoas)) 
-    },[jenisCoas, reset])
+    useEffect(() => {
+        reset(getDefaultValues(jenisCoas))
+    }, [jenisCoas, reset]);
+
+    type FieldName = keyof Polis;
 
     const next = async () => {
-        // const fields = steps[currentStep].fields
-        // const output = await trigger(fields as FieldName[], { shouldFocus: true })
+        const fields = steps[currentStep].fields
+        const output = await trigger(fields as FieldName[], { shouldFocus: true })
+        console.log("output: ", output)
 
-        // if (!output) return
+        if (!output) return
 
         if (currentStep < steps.length - 1) {
             // if (currentStep === steps.length - 2) {
@@ -72,6 +92,11 @@ export default function MainPolisForm() {
         console.log("Form Data Submitted: ", data);
     }
 
+    const goTo = (stepIndex: number) => {
+        setPreviousStep(currentStep);
+        setCurrentStep(stepIndex);
+    }
+
     return (
         <FormProvider {...methods} >
             <nav aria-label='Progress'>
@@ -79,28 +104,22 @@ export default function MainPolisForm() {
                     {steps.map((step, index) => (
                         <li key={step.name} className='md:flex-1'>
                             {currentStep > index ? (
-                                <div className='group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4'>
-                                    <span className='text-sm font-medium text-sky-600 transition-colors '>
-                                        {step.id}
-                                    </span>
-                                    <span className='text-sm font-medium'>{step.name}</span>
-                                </div>
-                            ) : currentStep === index ? (
-                                <div
-                                    className='flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4'
-                                    aria-current='step'
+                                <button
+                                    type="button"
+                                    className='group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 text-left transition-colors hover:border-sky-800 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4'
+                                    onClick={() => goTo(index)}
                                 >
-                                    <span className='text-sm font-medium text-sky-600'>
-                                        {step.id}
-                                    </span>
+                                    <span className='text-sm font-medium text-sky-600 transition-colors'>{step.id}</span>
                                     <span className='text-sm font-medium'>{step.name}</span>
-                                </div>
+                                </button>
                             ) : (
-                                <div className='group flex w-full flex-col border-l-4 border-gray-200 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4'>
-                                    <span className='text-sm font-medium text-gray-500 transition-colors'>
-                                        {step.id}
-                                    </span>
-                                    <span className='text-sm font-medium'>{step.name}</span>
+                                <div
+                                    className={`flex w-full flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4 ${currentStep === index ? 'border-sky-600' : 'border-gray-200'
+                                        }`}
+                                    aria-current={currentStep === index ? 'step' : undefined}
+                                >
+                                    <span className={`text-sm font-medium ${currentStep === index ? 'text-sky-600' : 'text-gray-500'}`}>{step.id}</span>
+                                    <span className="text-sm font-medium">{step.name}</span>
                                 </div>
                             )}
                         </li>

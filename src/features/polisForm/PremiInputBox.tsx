@@ -9,14 +9,13 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 
 type PremiInputBoxProps = {
     baseName: `shares` | `shares.${number}`;
-    index?: number;
     onRemove?: () => void;
 };
 
-export default function PremiInputBox({ baseName, index, onRemove }: PremiInputBoxProps) {
+export default function PremiInputBox({ baseName, onRemove }: PremiInputBoxProps) {
     const [perusahaanList, setPerusahaanList] = useState<ListPerusahaanType[]>([]);
     const [loading, setLoading] = useState(true);
-    const isCoas = baseName.includes('.'); // More robust check: only co-as has an index in the name
+    const isCoas = baseName.includes('.');
 
 
     useEffect(() => {
@@ -45,10 +44,10 @@ export default function PremiInputBox({ baseName, index, onRemove }: PremiInputB
     const currentIndex = Number(baseName.split('.')[1]);
 
     return (
-        <div className="relative rounded-lg border border-gray-200 bg-white p-4 shadow-sm animate-in fade-in-0">
+        <div className="relative rounded-lg border border-gray-200 bg-white p-3 shadow-sm animate-in fade-in-0">
             {currentIndex === 0 ? 
-            (<h2 className="mb-4 text-lg font-semibold text-blue-500">Coas Leader</h2>) 
-            : (<h2 className="mb-4 text-lg font-semibold text-gray-900">Coas Member</h2>)}
+            (<h2 className="mb-3 text-base font-semibold text-blue-500">Coas Leader</h2>) 
+            : (<h2 className="mb-3 text-base font-semibold text-gray-900">Coas Member</h2>)}
             {onRemove && currentIndex > 1 && (
                 <button
                     type="button"
@@ -59,7 +58,7 @@ export default function PremiInputBox({ baseName, index, onRemove }: PremiInputB
                     <TrashIcon className="h-5 w-5" />
                 </button>
             )}
-            <div className="grid grid-cols-1 gap-x-4 gap-y-5 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-x-3 gap-y-3 md:grid-cols-3">
                 {loading && <p className="text-sm text-gray-500 md:col-span-2">Memuat data perusahaan...</p>}
                 <SelectSearchField<Polis>
                     name={fieldName('id_perusahaan_asuransi')}

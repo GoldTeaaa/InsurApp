@@ -28,9 +28,8 @@ export const DetailKomisiSchema = z.object({
 export const PolisShareSchema = z.object({
   nomor_polis: noPolis,
   persentase_share: z.coerce.number().min(0).max(100),
-  coas_role: COAS_ROLE.optional(), // in non-coas maybe absent; make optional if appropriate
-  id_perusahaan_asuransi: uuid.optional(), // may be unknown client-side
-  polis_id: uuid.optional(), // typically provided by server after creation
+  coas_role: COAS_ROLE,
+  id_perusahaan_asuransi: uuid,
   detail_premi: DetailPremiSchema,
   detail_komisi: DetailKomisiSchema,
 });
@@ -39,8 +38,8 @@ export const PolisShareSchema = z.object({
 const basePolisSchema = z.object({
   nomor_polis: noPolis,
   bisnis: JENIS_BISNIS,
-  id_nasabah: uuid.optional(), // sometimes customer id is optional at creation
-  total_premi: nonNegative, // keep if UI sends it; server should recompute
+  id_nasabah: uuid,
+  total_premi: nonNegative,
   jenis_coas: JENIS_COAS,
   periode_mulai: z.coerce.date({
     required_error: "Periode mulai wajib diisi.",
@@ -68,7 +67,7 @@ const coasSchema = basePolisSchema.extend({
 });
 
 export type PolisCoas = z.infer<typeof coasSchema>;
-// Discriminated union with a thorough superRefine
+
 export const PolisSchema = z
   .discriminatedUnion("jenis_coas", [coasSchema, nonCoasSchema])
   .superRefine((data, ctx) => {
@@ -132,6 +131,7 @@ export const PolisSchema = z
     });
   });
 
+type BasePolis = z.infer<typeof basePolisSchema>;
 export type Polis = z.infer<typeof PolisSchema>;
 export type PolisShare = z.infer<typeof PolisShareSchema>;
 export type DetailPremi = z.infer<typeof DetailPremiSchema>;
@@ -139,9 +139,9 @@ export type DetailKomisi = z.infer<typeof DetailKomisiSchema>;
 
 const baseDefault = {
   nomor_polis: "",
-  bisnis: "kendaraan" as const,
-  id_nasabah: undefined,
-  total_premi: 0,
+  bisnis: undefined,
+  id_nasabah: "",
+  total_premi: undefined,
   periode_mulai: new Date(),
   periode_akhir: new Date(),
   detail_bisnis: {},
@@ -166,14 +166,13 @@ const emptyShare = {
   nomor_polis: "",
   persentase_share: 100,
   coas_role: "leader" as const, // for non-coas can be fixed/ignored
-  id_perusahaan_asuransi: undefined, 
-  polis_id: undefined,
+  id_perusahaan_asuransi: "", 
   detail_premi: emptyDetailPremi,
   detail_komisi: emptyDetailKomisi,
 };
 
 const nonCoasDefault = {
-  jenis_coas: "non-coas" as const,
+  jenis_coas: 'non-coas' as const,
   shares: emptyShare,
 };
 

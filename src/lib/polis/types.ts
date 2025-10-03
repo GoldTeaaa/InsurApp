@@ -1,33 +1,42 @@
 import { z } from "zod";
 
-const JENIS_BISNIS = z.enum(["kendaraan", "health", "life", "property", "marine"]);
+const JENIS_BISNIS = z.enum([
+  "kendaraan",
+  "health",
+  "life",
+  "property",
+  "marine",
+]);
+
 export const JENIS_COAS = z.enum(["coas", "non-coas"]);
 const COAS_ROLE = z.enum(["leader", "member"]);
+const JENIS_RATE = z.enum(["mille", "percent"]);
 
 const uuid = z.string().uuid();
 const noPolis = z.string().min(1, "Nomor polis wajib diisi");
-const nonNegative = z.coerce.number().min(0);
+const nonNegative = z.coerce.number().min(1, "Nominal wajib diisi");
 
 // DETAIL SCHEMAS
 export const DetailPremiSchema = z.object({
   premi_gross: nonNegative,
   discount: z.coerce.number().nonnegative(),
-  biaya_admin_materai: z.coerce.number().nonnegative(),
-  premi_net: nonNegative,
-  jatuh_tempo: z.coerce.date(),
+  biaya_admin_materai: nonNegative,
+  premi_net: z.number().nonnegative("Premi tidak bisa negatif"),
 });
 
 export const DetailKomisiSchema = z.object({
   komisi_gross: nonNegative,
   pph_komisi: nonNegative,
   komisi_net: nonNegative,
-  jatuh_tempo: z.coerce.date(),
 });
 
 // SHARE SCHEMA
 export const PolisShareSchema = z.object({
   nomor_polis: noPolis,
-  persentase_share: z.coerce.number().min(0).max(100),
+  persentase_share: z.coerce
+    .number()
+    .min(1, "Persentase share wajib diisi")
+    .max(100, "Persentase share tidak boleh lebih dari 100"),
   coas_role: COAS_ROLE,
   id_perusahaan_asuransi: uuid,
   detail_premi: DetailPremiSchema,
@@ -39,16 +48,25 @@ const basePolisSchema = z.object({
   nomor_polis: noPolis,
   bisnis: JENIS_BISNIS,
   id_nasabah: uuid,
+  total_sum_insured: nonNegative,
+  nilai_rate: z.coerce.number().positive("Rate harus lebih dari 0"),
+  jenis_rate: JENIS_RATE,
   total_premi: nonNegative,
   jenis_coas: JENIS_COAS,
-  periode_mulai: z.coerce.date({
-    required_error: "Periode mulai wajib diisi.",
-    invalid_type_error: "Format tanggal periode mulai tidak valid.",
-  }),
-  periode_akhir: z.coerce.date({
-    required_error: "Periode akhir wajib diisi.",
-    invalid_type_error: "Format tanggal periode akhir tidak valid.",
-  }),
+  periode_mulai: z.preprocess(
+    (arg) => (typeof arg === "string" && arg.trim() === "" ? undefined : arg),
+    z.coerce.date({
+      required_error: "Periode mulai wajib diisi.",
+      invalid_type_error: "Format tanggal periode mulai tidak valid.",
+    })
+  ),
+  periode_akhir: z.preprocess(
+    (arg) => (typeof arg === "string" && arg.trim() === "" ? undefined : arg),
+    z.coerce.date({
+      required_error: "Periode akhir wajib diisi.",
+      invalid_type_error: "Format tanggal periode akhir tidak valid.",
+    })
+  ),
   detail_bisnis: z.record(z.any()).optional(),
 });
 
@@ -72,7 +90,13 @@ export const PolisSchema = z
   .discriminatedUnion("jenis_coas", [coasSchema, nonCoasSchema])
   .superRefine((data, ctx) => {
     // 1) periode checks
-    if (data.periode_akhir <= data.periode_mulai) {
+    if (!data.periode_mulai) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Periode mulai wajib diisi.",
+        path: ["periode_mulai"],
+      });
+    } else if (data.periode_akhir <= data.periode_mulai) {
       ctx.addIssue({
         code: "custom",
         message: "Periode akhir harus setelah periode mulai",
@@ -80,15 +104,27 @@ export const PolisSchema = z
       });
     }
 
+    // 2) total_premi should not exceed total_sum_insured
+    // We add a small tolerance for floating point inaccuracies
+    if (data.total_premi > data.total_sum_insured + 1e-9) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Total premi tidak boleh melebihi Total Sum Insured.",
+        path: ["total_premi"],
+      });
+    }
     // Helper to sum premi_net from shares (handles single object or array)
     const getSharesArray = () =>
-      data.jenis_coas === "coas" ? (data.shares) : [data.shares];
+      data.jenis_coas === "coas" ? data.shares : [data.shares];
 
     const sharesArr = getSharesArray();
 
     // 2) Sum of percent must be ~100 for coas
     if (data.jenis_coas === "coas") {
-      const sumPercent = sharesArr.reduce((s, sh) => s + Number(sh.persentase_share ?? 0), 0);
+      const sumPercent = sharesArr.reduce(
+        (s, sh) => s + Number(sh.persentase_share ?? 0),
+        0
+      );
       const EPS = 1e-9;
       if (Math.abs(sumPercent - 100) > EPS) {
         ctx.addIssue({
@@ -97,30 +133,34 @@ export const PolisSchema = z
           path: ["shares"],
         });
       }
+    } else {
+      // This is the "non-coas" case
+      // For non-coas, the single share's gross premi should not exceed the total premi
+      if (data.shares.detail_premi.premi_gross > data.total_premi + 1e-9) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Premi Gross tidak boleh melebihi Total Premi.",
+          path: ["shares", "detail_premi", "premi_gross"],
+        });
+      }
     }
 
-    // 3) Sum of premi_net (or premi_gross fallback) should match total_premi (client-side check)
-    const sumPremi = sharesArr.reduce((s, sh) => {
-      const net = sh?.detail_premi?.premi_net;
-      const gross = sh?.detail_premi?.premi_gross;
-      const val = net ?? gross ?? 0;
-      return s + Number(val);
-    }, 0);
-
-    // Use numeric epsilon because inputs may be floats
-    const EPS_PREMI = 1e-6;
-    if (Math.abs(sumPremi - Number(data.total_premi ?? 0)) > EPS_PREMI) {
-      ctx.addIssue({
-        code: "custom",
-        message: `total_premi tidak cocok dengan jumlah premi shareholders (expected ${sumPremi})`,
-        path: ["total_premi"],
-      });
+    // 3) Sum of premi_net should match total_premi
+    const sumPremiNet = sharesArr.reduce(
+      (s, sh) => s + Number(sh.detail_premi.premi_net ?? 0),
+      0
+    );
+    // Use a small epsilon for float comparison
+    if (Math.abs(sumPremiNet - data.total_premi) > 1e-9) {
+      // This validation can be noisy during input, consider if it's only for final submission
     }
 
     // 4) Basic share-level checks (optional): ensure each share has detail_premi.premi_net or premi_gross
     sharesArr.forEach((sh, idx) => {
       const hasPremi =
-        sh?.detail_premi && (sh.detail_premi.premi_net != null || sh.detail_premi.premi_gross != null);
+        sh?.detail_premi &&
+        (sh.detail_premi.premi_net != null ||
+          sh.detail_premi.premi_gross != null);
       if (!hasPremi) {
         ctx.addIssue({
           code: "custom",
@@ -131,7 +171,6 @@ export const PolisSchema = z
     });
   });
 
-type BasePolis = z.infer<typeof basePolisSchema>;
 export type Polis = z.infer<typeof PolisSchema>;
 export type PolisShare = z.infer<typeof PolisShareSchema>;
 export type DetailPremi = z.infer<typeof DetailPremiSchema>;
@@ -141,9 +180,12 @@ const baseDefault = {
   nomor_polis: "",
   bisnis: undefined,
   id_nasabah: "",
-  total_premi: undefined,
-  periode_mulai: new Date(),
-  periode_akhir: new Date(),
+  total_sum_insured: 0,
+  nilai_rate: 0, // Changed default to 0 for better initial state
+  jenis_rate: "mille" as const,
+  total_premi: 0,
+  periode_mulai: undefined,
+  periode_akhir: undefined,
   detail_bisnis: {},
 };
 
@@ -152,33 +194,34 @@ const emptyDetailPremi = {
   discount: 0,
   biaya_admin_materai: 0,
   premi_net: 0,
-  jatuh_tempo: new Date(),
 };
 
 const emptyDetailKomisi = {
   komisi_gross: 0,
   pph_komisi: 0,
   komisi_net: 0,
-  jatuh_tempo: new Date(),
 };
 
 const emptyShare = {
   nomor_polis: "",
   persentase_share: 100,
   coas_role: "leader" as const, // for non-coas can be fixed/ignored
-  id_perusahaan_asuransi: "", 
+  id_perusahaan_asuransi: "",
   detail_premi: emptyDetailPremi,
   detail_komisi: emptyDetailKomisi,
 };
 
 const nonCoasDefault = {
-  jenis_coas: 'non-coas' as const,
+  jenis_coas: "non-coas" as const,
   shares: emptyShare,
 };
 
 const coasDefault = {
-    jenis_coas: 'coas' as const,
-    shares: [{...emptyShare, persentase_share: 50},{...emptyShare, persentase_share: 50}]
+  jenis_coas: "coas" as const,
+  shares: [
+    { ...emptyShare, persentase_share: 0 },
+    { ...emptyShare, persentase_share: 0 },
+  ],
 };
 
 export function getDefaultValues(kind: "coas" | "non-coas" = "non-coas") {

@@ -96,7 +96,7 @@ export default function Step1() {
     }, [selectedNasabahId]);
 
     return (
-        <section className="space-y-6">
+        <section className="space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-gray-900">Pilih Nasabah</h2>
             <div>
                 <div>

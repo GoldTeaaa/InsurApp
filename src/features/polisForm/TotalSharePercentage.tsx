@@ -1,12 +1,11 @@
 import { ListPerusahaanType } from "@/lib/polis/step3";
 import { Polis } from "@/lib/polis/types";
-import { useEffect, useMemo } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useEffect } from "react";
+import { useFormContext, useWatch, useFormState } from "react-hook-form";
 
 export default function TotalSharePercentage({ perusahaanList }: { perusahaanList: ListPerusahaanType[] }) {
     const {
         control,
-        trigger,
         formState: { errors },
         setValue
     } = useFormContext<Polis>();
@@ -16,17 +15,18 @@ export default function TotalSharePercentage({ perusahaanList }: { perusahaanLis
         name: 'shares',
     });
 
-    const totalPercentage = useMemo(() => {
-        if (!Array.isArray(shares)) {
-            setValue('total_premi', 0);
-            return 100;
-        }
-        return shares.reduce((sum, share) => sum + (Number(share.persentase_share) || 0), 0);
-    }, [shares, setValue]);
+    // Calculate total directly. It's cheap and avoids state-in-render issues.
+    const totalPercentage = Array.isArray(shares)
+        ? shares.reduce((sum, share) => sum + (Number(share.persentase_share) || 0), 0)
+        : 0;
 
     useEffect(() => {
-        trigger('shares');
-    }, [totalPercentage, trigger]);
+        // Side effects like setValue belong in useEffect.
+        // This runs after render, when `shares` changes.
+        if (!Array.isArray(shares) || shares.length === 0) {
+            setValue('total_premi', 0);
+        }
+    }, [shares, setValue]);
 
     const isError = totalPercentage !== 100;
     const errorMessage = errors.shares?.message || (errors.shares)?.root?.message;

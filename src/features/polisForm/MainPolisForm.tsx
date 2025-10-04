@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { FormProvider, Resolver, useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/button";
 import Step1 from "./Step1";
@@ -39,6 +39,15 @@ const steps = [
         component: <ReviewPolis />
     }
 ]
+
+const useIsFirstRender = () => {
+    const isFirst = useRef(true);
+    if (isFirst.current) {
+        isFirst.current = false;
+        return true;
+    }
+    return isFirst.current;
+}
 
 export default function MainPolisForm() {
     const [previousStep, setPreviousStep] = useState<number>(0);
@@ -81,23 +90,20 @@ export default function MainPolisForm() {
         name: "jenis_coas",
     })
 
-    useEffect(() => {
-        const newDefaultValues = getDefaultValues(jenisCoas);
+    const isFirstRender = useIsFirstRender();
 
-        // Ensure the 'shares' property is always an array to match the schema.
-        // For "non-coas", getDefaultValues might return a single object.
-        const isCoas = Array.isArray(newDefaultValues.shares);
-        const coasShares = Array.isArray(newDefaultValues.shares)
-            ? newDefaultValues.shares
-            : [newDefaultValues.shares];
-        
-        // Needed to handle non-coas fields
-        const newShares = isCoas ? coasShares : newDefaultValues.shares;
+    useEffect(() => {
+        // Prevent this from running on initial load to keep localStorage values
+        if (isFirstRender) return;
+
+        const newDefaultValues = getDefaultValues(jenisCoas);
 
         // Use setValue to update a field array. This is the recommended approach
         // to avoid type conflicts that can occur with reset().
-        setValue('shares', newShares, { shouldValidate: true });
-    }, [jenisCoas]);
+        // We set shouldValidate to true so changing the dropdown re-validates the shares.
+        setValue('shares', newDefaultValues.shares);
+
+    }, [jenisCoas, setValue, isFirstRender]);
 
     type FieldName = keyof Polis;
 

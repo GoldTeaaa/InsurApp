@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { FormProvider, Resolver, useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/button";
 import Step1 from "./Step1";
@@ -9,7 +9,10 @@ import { motion } from 'framer-motion'
 import ReviewPolis from "./ReviewPolis";
 import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDebounce } from "./useDebounce";
 import FormErrors from "@/components/FormErrors";
+
+const LOCAL_STORAGE_KEY = 'polisFormData';
 
 const steps = [
     {
@@ -28,7 +31,7 @@ const steps = [
         id: 'Step 3',
         name: 'Premi & Share',
         component: <Step3 />,
-        fields: ['shares'] // Also validate the shares array itself
+        fields: ['shares']
     },
     {
         id: 'Step 4',
@@ -42,19 +45,36 @@ export default function MainPolisForm() {
     const [currentStep, setCurrentStep] = useState<number>(0);
     const delta = currentStep - previousStep
 
+    const getInitialValues = () => {
+        try {
+            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            return savedData ? JSON.parse(savedData) : getDefaultValues("non-coas");
+        } catch (error) {
+            console.error("Failed to parse form data from localStorage", error);
+            return getDefaultValues("non-coas");
+        }
+    };
+
     const methods = useForm<Polis>({
         mode: 'all',
         resolver: zodResolver(PolisSchema) as Resolver<Polis>,
-        defaultValues: getDefaultValues("non-coas"),
+        defaultValues: getInitialValues(),
     });
 
     const {
         control,
-        reset,
-        getValues,
+        setValue,
         formState: { isSubmitting },
         trigger
     } = methods
+
+    const watchedValues = useWatch({ control });
+    const debouncedWatchedValues = useDebounce(watchedValues, 500);
+
+    // Save to localStorage only when the debounced values change
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(debouncedWatchedValues));
+    }, [debouncedWatchedValues]);
 
     const jenisCoas = useWatch({
         control,
@@ -62,13 +82,22 @@ export default function MainPolisForm() {
     })
 
     useEffect(() => {
-        const currentValues = getValues();
         const newDefaultValues = getDefaultValues(jenisCoas);
-        reset({
-            ...newDefaultValues,
-            ...currentValues,
-        });
-    }, [jenisCoas, reset, getValues]);
+
+        // Ensure the 'shares' property is always an array to match the schema.
+        // For "non-coas", getDefaultValues might return a single object.
+        const isCoas = Array.isArray(newDefaultValues.shares);
+        const coasShares = Array.isArray(newDefaultValues.shares)
+            ? newDefaultValues.shares
+            : [newDefaultValues.shares];
+        
+        // Needed to handle non-coas fields
+        const newShares = isCoas ? coasShares : newDefaultValues.shares;
+
+        // Use setValue to update a field array. This is the recommended approach
+        // to avoid type conflicts that can occur with reset().
+        setValue('shares', newShares, { shouldValidate: true });
+    }, [jenisCoas]);
 
     type FieldName = keyof Polis;
 
@@ -106,6 +135,8 @@ export default function MainPolisForm() {
 
     const submit = (data: unknown) => {
         console.log("Form Data Submitted: ", data);
+        // Clear localStorage after successful submission
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
     }
 
     const goTo = (stepIndex: number) => {

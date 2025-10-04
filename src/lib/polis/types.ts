@@ -129,7 +129,7 @@ export const PolisSchema = z
         ctx.addIssue({
           code: "custom",
           message: `Total persentase share untuk coas harus = 100 (saat ini ${sumPercent})`,
-          path: ["shares"],
+          path: ["shares.persentase_share"],
         });
       }
     } else {

@@ -10,7 +10,10 @@ export default function Step2() {
             <h2 className="text-xl font-semibold text-gray-900">Detail Polis</h2>
             <div className="space-y-8">
                 <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
-                    <FormTextField<Polis> name='nomor_polis' label="Nomor Polis" />
+                    <FormTextField<Polis>
+                        name='nomor_polis'
+                        label="Nomor Polis"
+                    />
                     <RadioField<Polis>
                         name='jenis_coas'
                         label="Jenis Polis"

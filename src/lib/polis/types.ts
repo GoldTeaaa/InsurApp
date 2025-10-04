@@ -32,7 +32,6 @@ export const DetailKomisiSchema = z.object({
 
 // SHARE SCHEMA
 export const PolisShareSchema = z.object({
-  nomor_polis: noPolis,
   persentase_share: z.coerce
     .number()
     .min(1, "Persentase share wajib diisi")
@@ -44,7 +43,7 @@ export const PolisShareSchema = z.object({
 });
 
 // BASE POLIS
-const basePolisSchema = z.object({
+const basePolisObjectSchema = z.object({
   nomor_polis: noPolis,
   bisnis: JENIS_BISNIS,
   id_nasabah: uuid,
@@ -70,14 +69,37 @@ const basePolisSchema = z.object({
   detail_bisnis: z.record(z.any()).optional(),
 });
 
+const basePolisSchema = basePolisObjectSchema.superRefine((data, ctx) => {
+  // 1) periode checks
+  if (!data.periode_mulai) {
+    // This is already handled by required_error, but good for completeness
+  } else if (data.periode_akhir <= data.periode_mulai) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Periode akhir harus setelah periode mulai",
+      path: ["periode_akhir"],
+    });
+  }
+
+  // 2) total_premi should not exceed total_sum_insured
+  // We add a small tolerance for floating point inaccuracies
+  if (data.total_premi > data.total_sum_insured + 1e-9) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Total premi tidak boleh melebihi Total Sum Insured.",
+      path: ["total_premi"],
+    });
+  }
+});
+
 // NON-COAS: single share object
-const nonCoasSchema = basePolisSchema.extend({
+const nonCoasSchema = basePolisObjectSchema.extend({
   jenis_coas: z.literal("non-coas"),
   shares: PolisShareSchema,
 });
 
 // COAS: array of share objects, min 2
-const coasSchema = basePolisSchema.extend({
+const coasSchema = basePolisObjectSchema.extend({
   jenis_coas: z.literal("coas"),
   shares: z
     .array(PolisShareSchema)
@@ -88,31 +110,8 @@ export type PolisCoas = z.infer<typeof coasSchema>;
 
 export const PolisSchema = z
   .discriminatedUnion("jenis_coas", [coasSchema, nonCoasSchema])
+  .and(basePolisSchema) // Re-apply the base refinements after extending
   .superRefine((data, ctx) => {
-    // 1) periode checks
-    if (!data.periode_mulai) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Periode mulai wajib diisi.",
-        path: ["periode_mulai"],
-      });
-    } else if (data.periode_akhir <= data.periode_mulai) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Periode akhir harus setelah periode mulai",
-        path: ["periode_akhir"],
-      });
-    }
-
-    // 2) total_premi should not exceed total_sum_insured
-    // We add a small tolerance for floating point inaccuracies
-    if (data.total_premi > data.total_sum_insured + 1e-9) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Total premi tidak boleh melebihi Total Sum Insured.",
-        path: ["total_premi"],
-      });
-    }
     // Helper to sum premi_net from shares (handles single object or array)
     const getSharesArray = () =>
       data.jenis_coas === "coas" ? data.shares : [data.shares];

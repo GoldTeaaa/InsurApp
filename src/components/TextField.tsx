@@ -6,9 +6,12 @@ type Props<T extends FieldValues> = {
     type?: string;
     defaultValue?: string;
     step?: string;
+    min?: string;
+    max?: string;
+    readOnly?: boolean;
 }
 
-export default function FormTextField<T extends FieldValues>({ name, label, defaultValue, type, step, ...props }: Props<T>) {
+export default function FormTextField<T extends FieldValues>({ name, label, defaultValue, type, step, readOnly, ...props }: Props<T>) {
     const { control } = useFormContext();
 
     return (
@@ -18,6 +21,7 @@ export default function FormTextField<T extends FieldValues>({ name, label, defa
             render={({field, fieldState: { error }}) => (
                 <div>
                     <label>{label}</label>
+                    {readOnly && <p className="text-blue-600 text-sm mt-1">Tidak bisa diubah</p>}
                     <input
                         {...field}
                         {...props}
@@ -33,6 +37,9 @@ export default function FormTextField<T extends FieldValues>({ name, label, defa
                         aria-invalid={!!error}
                         type={type}
                         step={step}
+                        min={props.min}
+                        max={props.max}
+                        readOnly={readOnly}
                         className={[
                             "block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none",
                             "focus:border-blue-600 focus:ring-1 focus:ring-blue-600",

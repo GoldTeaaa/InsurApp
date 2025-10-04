@@ -1,8 +1,8 @@
 import { PlusIcon } from "lucide-react";
-import PremiInputBox from "./PremiInputBox";
+import PremiKomisiBox from "./PremiKomisiBox";
 import { getDefaultValues, PolisCoas } from "@/lib/polis/types";
 import { useEffect } from "react";
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { ListPerusahaanType } from "@/lib/polis/step3";
 
 export default function CoasFields({ perusahaanList }: { perusahaanList: ListPerusahaanType[] }) {
@@ -16,7 +16,7 @@ export default function CoasFields({ perusahaanList }: { perusahaanList: ListPer
         name: 'shares',
     });
 
-    // Automatically set the coas_role based on the index.
+    // Automatically set the coas_role based on the index.  
     useEffect(() => {
         fields.forEach((_field, index) => {
             setValue(`shares.${index}.coas_role`, index === 0 ? 'leader' : 'member');
@@ -31,7 +31,7 @@ export default function CoasFields({ perusahaanList }: { perusahaanList: ListPer
     return (
         <div className="space-y-4 animate-in fade-in-0">
             {fields.map((field, index) => (
-                <PremiInputBox
+                <PremiKomisiBox
                     key={field.id}
                     baseName={`shares.${index}`}
                     perusahaanList={perusahaanList}

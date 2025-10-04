@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { Polis } from "@/lib/polis/types";
 import TextField from "@/components/TextField";
+import UncontrolledTextField from "@/components/UncontrolledTextField";
 import { convertIDR } from "@/lib/utils/convertIDR";
 
 type Props = {
@@ -50,26 +51,29 @@ export default function DiscountInputGroup({ baseName }: Props) {
         }
     };
 
-    return ( // Wrapped in a div for better grouping and spacing
-        <div className="space-y-4">
-            <div>
-                <label htmlFor={`${baseName}-discount-percentage`}>Discount (%)</label>
-                <input
+    return (
+        <div className="grid grid-cols-5 items-start gap-x-4 rounded-md border border-gray-200 p-3">
+            {/* Percentage Input */}
+            <div className="col-span-2">
+                <UncontrolledTextField
                     id={`${baseName}-discount-percentage`}
+                    label="Discount (%)"
                     type="number"
                     value={percentage}
+                    onChange={handlePercentageChange}
+                    placeholder="e.g., 10"
                     min="0"
                     max="100"
-                    onChange={handlePercentageChange}
-                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                 />
             </div>
-            <div>
+            {/* Amount Input */}
+            <div className="col-span-3">
                 <TextField<Polis> name={amountFieldName} label="Discount (Amount)" type="number" />
-                <p className="mt-1 text-xs text-gray-500">
-                    {convertIDR(discountAmount)}
+                <p className="mt-1 text-s text-gray-500">
+                    {convertIDR(discountAmount || 0)}
                 </p>
             </div>
+
         </div>
     );
 }

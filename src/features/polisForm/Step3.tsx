@@ -1,22 +1,22 @@
 import { Polis } from "@/lib/polis/types";
 import { useFormContext, useWatch } from "react-hook-form";
-import PremiInputBox from "./PremiInputBox";
 import TotalPremiDisplay from "./TotalPremiDisplay";
 import TotalSharePercentage from "./TotalSharePercentage";
 import { useEffect, useState } from "react";
 import getPerusahaanList from "../polis/actions/get-perusahaan-list";
 import type { ListPerusahaanType } from "@/lib/polis/step3";
 import CoasFields from "./CoasField";
+import PremiKomisiBox from "./PremiKomisiBox";
 
 export default function Step3() {
-    const { control, setValue } = useFormContext<Polis>();
+    const { control } = useFormContext<Polis>();
 
     const [perusahaanList, setPerusahaanList] = useState<ListPerusahaanType[]>([]);
     const [loading, setLoading] = useState(true);
 
     const jenisCoas = useWatch({
         control,
-        name: "jenis_coas"
+        name: "jenis_coas",
     });
 
     useEffect(() => {
@@ -61,7 +61,10 @@ export default function Step3() {
                         <CoasFields perusahaanList={perusahaanList} />
                     </div>
                 ) : (
-                    <PremiInputBox baseName="shares" perusahaanList={perusahaanList} />
+                    <PremiKomisiBox 
+                        baseName="shares" 
+                        perusahaanList={perusahaanList} 
+                    />
                 )}
             </div>
         </section>

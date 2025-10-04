@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, Resolver, useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/button";
 import Step1 from "./Step1";
@@ -9,6 +9,7 @@ import { motion } from 'framer-motion'
 import ReviewPolis from "./ReviewPolis";
 import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import FormErrors from "@/components/FormErrors";
 
 const steps = [
     {
@@ -27,7 +28,7 @@ const steps = [
         id: 'Step 3',
         name: 'Premi & Share',
         component: <Step3 />,
-        fields: ['shares.detail_premi'] // Also validate the shares array itself
+        fields: ['shares'] // Also validate the shares array itself
     },
     {
         id: 'Step 4',
@@ -43,7 +44,7 @@ export default function MainPolisForm() {
 
     const methods = useForm<Polis>({
         mode: 'all',
-        resolver: zodResolver(PolisSchema) as unknown as Resolver<Polis>,
+        resolver: zodResolver(PolisSchema) as Resolver<Polis>,
         defaultValues: getDefaultValues("non-coas"),
     });
 
@@ -51,7 +52,7 @@ export default function MainPolisForm() {
         control,
         reset,
         getValues,
-        formState: { isSubmitting, errors },
+        formState: { isSubmitting },
         trigger
     } = methods
 
@@ -65,23 +66,15 @@ export default function MainPolisForm() {
         const newDefaultValues = getDefaultValues(jenisCoas);
         reset({
             ...newDefaultValues,
-            id_nasabah: currentValues.id_nasabah,
-            bisnis: currentValues.bisnis,
-            nomor_polis: currentValues.nomor_polis,
-            total_premi: currentValues.total_premi,
-            periode_mulai: currentValues.periode_mulai,
-            periode_akhir: currentValues.periode_akhir,
-            total_sum_insured: currentValues.total_sum_insured,
-            nilai_rate: currentValues.nilai_rate,
-            jenis_rate: currentValues.jenis_rate
+            ...currentValues,
         });
     }, [jenisCoas, reset, getValues]);
 
     type FieldName = keyof Polis;
 
     const next = async () => {
-        const fieldTemplates = steps[currentStep].fields;
-        if (!fieldTemplates) {
+        const field = steps[currentStep].fields;
+        if (!field) {
             // For steps without validation, like the final review
             if (currentStep < steps.length - 1) {
                 setPreviousStep(currentStep);
@@ -90,14 +83,7 @@ export default function MainPolisForm() {
             return;
         }
 
-        const allShares = getValues('shares');
-        const isCoas = getValues('jenis_coas') === 'coas';
-
-        const fieldsToValidate = isCoas
-            ? (allShares as unknown[]).flatMap((_, index) => fieldTemplates.map(template => template.replace('shares', `shares.${index}`)))
-            : fieldTemplates;
-
-        const output = await trigger(fieldsToValidate as FieldName[], { shouldFocus: true })
+        const output = await trigger(field as FieldName[], { shouldFocus: true })
         console.log("output: ", output)
 
         if (!output) return
@@ -171,7 +157,6 @@ export default function MainPolisForm() {
                                     <span className="flex items-center gap-2">Submitting...</span>
                                 ) : 'Submit Polis'}
                             </Button>
-                            {errors && <div className='text-sm text-red-500 flex justify-end'>Form has errors</div>}
                         </div>
                     )}
                 </motion.div>
@@ -221,6 +206,9 @@ export default function MainPolisForm() {
                         </svg>
                     </button>
                 </div>
+            </div>
+            <div className="mt-4"> {/* HELPER UI, REMOVE WHEN FINISH*/}
+                <FormErrors />
             </div>
         </FormProvider>
     );

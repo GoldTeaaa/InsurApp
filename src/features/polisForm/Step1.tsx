@@ -7,7 +7,6 @@ import type { ListNasabahType, NasabahDetailsType } from "@/lib/polis/step1";
 import { useFormContext, useWatch } from "react-hook-form";
 import getNasabahCardDetails from "../polis/actions/get-nasabah-card";
 import {
-    BuildingOffice2Icon,
     CakeIcon,
     MapPinIcon,
     PhoneIcon,

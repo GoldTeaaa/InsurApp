@@ -2,10 +2,10 @@ import SelectSearchField from "@/components/SelectSearchField";
 import { Polis } from "@/lib/polis/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card";
 import { useEffect, useState } from "react";
-import getListNasabah from "../polis/actions/get-nasabah-list";
+import getListNasabah from "@/features/polis/actions/get-nasabah-list";
 import type { ListNasabahType, NasabahDetailsType } from "@/lib/polis/step1";
 import { useFormContext, useWatch } from "react-hook-form";
-import getNasabahCardDetails from "../polis/actions/get-nasabah-card";
+import getNasabahCardDetails from "@/features/polis/actions/get-nasabah-card";
 import {
     CakeIcon,
     MapPinIcon,
@@ -56,6 +56,7 @@ export default function Step1() {
 
     const {
         control,
+        setValue
     } = useFormContext<Polis>();
 
     //List for nasabah SelectSearchField

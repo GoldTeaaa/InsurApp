@@ -1,4 +1,4 @@
-import MainPolisForm from "@/features/polisForm/MainPolisForm";
+import MainPolisForm from "@/features/polis/polisForm/MainPolisForm";
 
 export default function CreatePolisForm(){
     return (

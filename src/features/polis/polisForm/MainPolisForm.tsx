@@ -11,6 +11,7 @@ import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "./useDebounce";
 import FormErrors from "@/components/FormErrors";
+import CoasPolisAction from "../actions/coas-polis-action";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
 
@@ -94,7 +95,7 @@ export default function MainPolisForm() {
 
     useEffect(() => {
         // Prevent this from running on initial load to keep localStorage values
-        if (isFirstRender) return;
+        // if (isFirstRender) return;
 
         const newDefaultValues = getDefaultValues(jenisCoas);
 
@@ -139,10 +140,15 @@ export default function MainPolisForm() {
         }
     }
 
-    const submit = (data: unknown) => {
+    const submit = async (data: Polis) => {
         console.log("Form Data Submitted: ", data);
+        const res = await CoasPolisAction(data);
+        if(res.success){
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+        }else{
+            alert(res.message);
+        }
         // Clear localStorage after successful submission
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
     }
 
     const goTo = (stepIndex: number) => {

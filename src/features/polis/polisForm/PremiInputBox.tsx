@@ -17,13 +17,17 @@ export default function PremiInputBox({ fieldName, isCoas, baseName }: PremiInpu
 
     const { control } = useFormContext<Polis>();
 
-    const [premiNet, biayaAdminMaterai] = useWatch({
+    const [premiGross, premiNet, biayaAdminMaterai] = useWatch({
         control,
-        name: [fieldName('detail_premi.premi_net'), fieldName('detail_premi.biaya_admin_materai')]
+        name: [
+            fieldName('detail_premi.premi_gross'),
+            fieldName('detail_premi.premi_net'),
+            fieldName('detail_premi.biaya_admin_materai')
+        ]
     });
 
     return (
-        <div>
+        <div className="space-y-4 rounded-md border border-gray-200 p-3">
             <h3 className="text-base font-semibold text-gray-700">Detail Premi</h3>
             <TextField<Polis>
                 name={fieldName('detail_premi.premi_gross')}
@@ -31,6 +35,7 @@ export default function PremiInputBox({ fieldName, isCoas, baseName }: PremiInpu
                 type="number"
                 readOnly={!isCoas}
             />
+            <p className="mt-2 text-xs text-gray-500">Premi Gross: <span>{convertIDR(Number(premiGross))}</span></p>
             <DiscountInputGroup
                 baseName={baseName}
             />

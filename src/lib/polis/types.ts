@@ -12,22 +12,21 @@ export const JENIS_COAS = z.enum(["coas", "non-coas"]);
 const COAS_ROLE = z.enum(["leader", "member"]);
 const JENIS_RATE = z.enum(["mille", "percent"]);
 
-const uuid = z.string().uuid();
 const noPolis = z.string().min(1, "Nomor polis wajib diisi");
 const nonNegative = z.coerce.number().min(1, "Nominal wajib diisi");
 
 // DETAIL SCHEMAS
 export const DetailPremiSchema = z.object({
-  premi_gross: nonNegative,
+  premi_gross: z.coerce.number().min(0, "Premi wajib diisi"),
   discount: z.coerce.number().nonnegative(),
   biaya_admin_materai: nonNegative,
-  premi_net: z.number().nonnegative("Premi tidak bisa negatif"),
+  premi_net: z.coerce.number().nonnegative("Premi tidak bisa negatif"),
 });
 
 export const DetailKomisiSchema = z.object({
   komisi_gross: nonNegative,
   pph_komisi: nonNegative,
-  komisi_net: nonNegative,
+  komisi_net: z.coerce.number().min(0, "Komisi wajib diisi"),
 });
 
 // SHARE SCHEMA
@@ -37,7 +36,7 @@ export const PolisShareSchema = z.object({
     .min(1, "Persentase share wajib diisi")
     .max(100, "Persentase share tidak boleh lebih dari 100"),
   coas_role: COAS_ROLE,
-  id_perusahaan_asuransi: uuid,
+  id_perusahaan_asuransi: z.string().uuid('Asuransi Penanggung Belum Dipilih'),
   detail_premi: DetailPremiSchema,
   detail_komisi: DetailKomisiSchema,
 });
@@ -46,7 +45,7 @@ export const PolisShareSchema = z.object({
 const basePolisObjectSchema = z.object({
   nomor_polis: noPolis,
   bisnis: JENIS_BISNIS,
-  id_nasabah: uuid,
+  id_nasabah: z.string().uuid('Nasabah Belum Dipilih'),
   total_sum_insured: nonNegative,
   nilai_rate: z.coerce.number().positive("Rate harus lebih dari 0"),
   jenis_rate: JENIS_RATE,
@@ -202,7 +201,6 @@ const emptyDetailKomisi = {
 };
 
 const emptyShare = {
-  nomor_polis: "",
   persentase_share: 100,
   coas_role: "leader" as const, // for non-coas can be fixed/ignored
   id_perusahaan_asuransi: "",

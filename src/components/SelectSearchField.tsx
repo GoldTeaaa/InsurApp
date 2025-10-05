@@ -131,7 +131,7 @@ export default function SelectSearchField<T extends FieldValues>({
               )}
             </div>
 
-            {error && <span className="text-sm text-red-600">{error.message}</span>}
+            {error && <span className="my-1 text-s text-red-600">{error.message}</span>}
           </div>
         );
       }}

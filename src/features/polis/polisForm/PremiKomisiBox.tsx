@@ -84,7 +84,7 @@ export default function PremiKomisiBox({ baseName, onRemove, perusahaanList }: P
             )}
             <SelectSearchField<Polis>
                 name={fieldName('id_perusahaan_asuransi')}
-                label={isCoas ? "Perusahaan Share" : "Perusahaan Asuransi"}
+                label={"Asuransi Penanggung"}
                 options={perusahaanList}
             />
             {isCoas && (
@@ -95,7 +95,6 @@ export default function PremiKomisiBox({ baseName, onRemove, perusahaanList }: P
                 />
             )}
             <div className="space-y-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                {/* Left Block: Premi Details */}
                 <div className="space-y-4">
                     <PremiInputBox
                         fieldName={fieldName}
@@ -104,7 +103,6 @@ export default function PremiKomisiBox({ baseName, onRemove, perusahaanList }: P
                         baseName={baseName}
                     />
                 </div>
-                {/* Right Block: Komisi Details (Placeholder) */}
                 <div className="space-y-4">
                     <KomisiInputBox
                         fieldName={fieldName}

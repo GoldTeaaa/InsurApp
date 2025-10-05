@@ -37,7 +37,7 @@ export default function TotalSharePercentage({ perusahaanList }: { perusahaanLis
             <p className={`text-2xl font-bold ${isError ? 'text-red-600' : 'text-green-600'}`}>
                 {totalPercentage.toFixed(2)} %
             </p>
-            {Array.isArray(shares) && shares.length > 0 && ( // Only show if there are shares
+            {Array.isArray(shares) && shares.length > 0 && (
                 <div className="mt-2 space-y-1 text-sm text-gray-600">
                     {shares.map((share, index) => {
                         const perusahaan = perusahaanList.find(searchId => searchId.id === share.id_perusahaan_asuransi);

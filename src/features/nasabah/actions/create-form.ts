@@ -45,5 +45,6 @@ export default async function createNasabahAction(formData: NasabahForm): Promis
     return ({
         success: true,
         message: `Berhasil menyimpan nasabah ${formData.nama}`,
+        data: formData
     });
 }

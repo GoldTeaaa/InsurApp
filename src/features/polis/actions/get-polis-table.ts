@@ -21,7 +21,7 @@ export default async function getPolisTableData({search, page, size}: PolisTable
   const { data, error } = await supabase.rpc("polis_table",{
     p_search: search,
     p_page: page,
-    p_page_size: size
+    p_size: size
   });
 
   if (error) {
@@ -29,6 +29,5 @@ export default async function getPolisTableData({search, page, size}: PolisTable
     return { success: false, message: "Failed to fetch polis table data." };
   }
 
-  console.log("data: ", data);
   return { success: true, message: "Success", data: data as PolisTableRow[] };
 }

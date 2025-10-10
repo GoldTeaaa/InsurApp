@@ -136,11 +136,11 @@ export type NasabahSort =
 
 export type NasabahRow = {
   id: string;
-  tipe: "pribadi" | "perusahaan";
   nama: string | null;
+  tipe: "pribadi" | "perusahaan";
+  email: string | null;
   contact_1: string | null;
   contact_2: string | null;
-  email: string | null;
   alamat: string | null;
   created_at: string;
   updated_at: string | null;

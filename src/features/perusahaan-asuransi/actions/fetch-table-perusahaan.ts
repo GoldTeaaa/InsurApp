@@ -11,17 +11,17 @@ const PAGE_SIZE = 5;
 
 /** Fetch one page via RPC with Zod-verified params + results */
 export async function fetchPerusahaanPage({
-  q,
+  search,
   page,
   sort,
 }: {
-  q: string;
+  search: string;
   page: number;
   sort: PerusahaanSort;
   pageSize?: number;
 }): Promise<{ rows: PerusahaanRow[]; total: number; pageCount: number }> {
   const params = perusahaanListParamsSchema.parse({
-    p_search: q.trim(),
+    p_search: search.trim(),
     p_page: Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1,
     p_page_size: PAGE_SIZE,
     p_sort: sort,

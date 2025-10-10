@@ -1,9 +1,7 @@
-import { fetchNasabahPage } from '@/features/nasabah/actions/fetch-table-page';
-import { type NasabahSort } from '@/lib/nasabah/types';
-import Pagination from './pagination';
+import { NasabahRow } from '@/lib/nasabah/types';
 import { UpdateInvoice, DeleteNasabah } from './buttons';
 import { DeleteButton } from '@/components/DeleteButton';
-import {deleteNasabahAction} from '@/features/nasabah/actions';
+import { deleteNasabahAction } from '@/features/nasabah/actions';
 
 function fmt(iso?: string | null) {
     if (!iso) return '—';
@@ -14,8 +12,7 @@ function fmt(iso?: string | null) {
     }
 }
 
-export default async function Table({ search, page, sort }: { search: string; page: number; sort: NasabahSort }) {
-    const { rows, total, pageCount } = await fetchNasabahPage({ search, page, sort });
+export default async function Table({ rows, total }: { rows: NasabahRow[]; total: number; pageCount: number }) {
 
     if (rows.length === 0) {
         return (
@@ -24,7 +21,6 @@ export default async function Table({ search, page, sort }: { search: string; pa
             </div>
         );
     }
-    // console.log(rows);
 
     return (
         <div className="mt-6 flow-root">
@@ -58,45 +54,42 @@ export default async function Table({ search, page, sort }: { search: string; pa
                     </div>
 
                     {/* Desktop table */}
-                    <table className="hidden min-w-full text-gray-900 md:table">
-                        <thead className="text-left text-sm font-normal text-gray-500">
-                            <tr>
-                                <th className="px-4 py-4 font-medium sm:pl-6">Nama</th>
-                                <th className="px-3 py-4 font-medium">Tipe</th>
-                                <th className="px-3 py-4 font-medium">Email</th>
-                                <th className="px-3 py-4 font-medium">Kontak 1</th>
-                                <th className="px-3 py-4 font-medium">Kontak 2</th>
-                                <th className="px-3 py-4 font-medium">Alamat</th>
-                                <th className="px-3 py-4 font-medium">Dibuat</th>
-                                <th className="px-3 py-4 font-medium">Diubah</th>
-                                <th className="relative py-3 pl-6 pr-3"><span className="sr-only">Edit</span></th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white text-sm">
-                            {rows.map((r) => (
-                                <tr key={r.id} className="border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors">
-                                    <td className="whitespace-nowrap py-4 pl-6 pr-3 font-medium text-gray-800">{r.nama ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-4">{r.tipe}</td>
-                                    <td className="whitespace-nowrap px-3 py-4">{r.email ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-4">{r.contact_1 ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-4">{r.contact_2 ?? '—'}</td>
-                                    <td className="px-3 py-4 max-w-xs truncate">{r.alamat ?? '—'}</td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.created_at)}</td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.updated_at)}</td>
-                                    <td className="whitespace-nowrap py-4 pl-6 pr-3">
-                                        <div className="flex justify-end gap-3">
-                                            <UpdateInvoice id={r.id} />
-                                            {/* <DeleteNasabah id={r.id} /> */}
-                                            <DeleteButton id={r.id} action={deleteNasabahAction} entityName="nasabah" />
-                                        </div>
-                                    </td>
+                    <div>
+                        <table className="hidden min-w-full text-gray-900 md:table">
+                            <thead className="text-left text-sm font-normal text-gray-500">
+                                <tr>
+                                    <th className="px-4 py-4 font-medium sm:pl-6">Nama</th>
+                                    <th className="px-3 py-4 font-medium">Tipe</th>
+                                    <th className="px-3 py-4 font-medium">Email</th>
+                                    <th className="px-3 py-4 font-medium">Kontak 1</th>
+                                    <th className="px-3 py-4 font-medium">Kontak 2</th>
+                                    <th className="px-3 py-4 font-medium">Alamat</th>
+                                    <th className="px-3 py-4 font-medium">Dibuat</th>
+                                    <th className="px-3 py-4 font-medium">Diubah</th>
+                                    <th className="relative py-3 pl-6 pr-3"><span className="sr-only">Edit</span></th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-
-                    <div className="hidden md:flex items-center justify-between px-4 py-3 text-xs text-gray-500 border-t border-gray-200 mt-2">
-                        <Pagination page={page} pageCount={pageCount} />
+                            </thead>
+                            <tbody className="bg-white text-sm">
+                                {rows.map((r) => (
+                                    <tr key={r.id} className="border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors">
+                                        <td className="whitespace-nowrap py-4 pl-6 pr-3 font-medium text-gray-800">{r.nama ?? '—'}</td>
+                                        <td className="whitespace-nowrap px-3 py-4">{r.tipe}</td>
+                                        <td className="whitespace-nowrap px-3 py-4">{r.email ?? '—'}</td>
+                                        <td className="whitespace-nowrap px-3 py-4">{r.contact_1 ?? '—'}</td>
+                                        <td className="whitespace-nowrap px-3 py-4">{r.contact_2 ?? '—'}</td>
+                                        <td className="px-3 py-4 max-w-xs truncate">{r.alamat ?? '—'}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.created_at)}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-gray-500">{fmt(r.updated_at)}</td>
+                                        <td className="whitespace-nowrap py-4 pl-6 pr-3">
+                                            <div className="flex justify-end gap-3">
+                                                <UpdateInvoice id={r.id} />
+                                                <DeleteButton id={r.id} action={deleteNasabahAction} entityName="nasabah" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                         <div className="px-2 text-xs text-gray-600">Total: {total}</div>
                     </div>
                 </div>

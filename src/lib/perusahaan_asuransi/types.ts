@@ -15,7 +15,7 @@ export const sortEnum = z.enum([
 export type PerusahaanSort = z.infer<typeof sortEnum>;
 
 // URL -> clean query
-export const perusahaanQuerySchema = z.object({
+export const tableQuerySchema = z.object({
   q: z
     .union([z.string(), z.array(z.string()), z.undefined()])
     .transform((v) => (Array.isArray(v) ? v[0] : v ?? ""))
@@ -32,7 +32,7 @@ export const perusahaanQuerySchema = z.object({
     .transform((v) => (Array.isArray(v) ? v[0] : v ?? "created_desc"))
     .pipe(sortEnum),
 });
-export type PerusahaanQuery = z.infer<typeof perusahaanQuerySchema>;
+export type tableQuery = z.infer<typeof tableQuerySchema>;
 
 // List RPC params
 export const perusahaanListParamsSchema = z.object({

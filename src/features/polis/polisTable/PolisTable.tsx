@@ -1,7 +1,6 @@
 "use client"
 
 import {
-	ColumnDef,
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
@@ -15,10 +14,10 @@ import {
 	TableRow,
 } from "@/components/table"
 
-import getPolisTableData from "../actions/polis-table"
+import getPolisTableData from "../actions/get-polis-table"
 import { PolisTableQuery } from "@/lib/polis/table-types"
 import { useEffect, useState } from "react"
-import { columns } from "./columns"
+import { columns } from "@/features/polis/polisTable/columns"
 
 type PolisTableRow = {
 	id: string
@@ -32,7 +31,7 @@ type PolisTableRow = {
 	full_count: number
 }
 
-export default function PolisTable({search, page, size}: PolisTableQuery) {
+export default function PolisTable({ search, page, size }: PolisTableQuery) {
 	const [data, setData] = useState<PolisTableRow[]>([])
 	const [rowCount, setRowCount] = useState(0)
 
@@ -63,47 +62,45 @@ export default function PolisTable({search, page, size}: PolisTableQuery) {
 	})
 
 	return (
-		<div className="rounded-md border">
-			<Table>
-				<TableHeader>
-					{table.getHeaderGroups().map(headerGroup => (
-						<TableRow key={headerGroup.id}>
-							{headerGroup.headers.map(header => (
-								<TableHead key={header.id}>
-									{header.isPlaceholder
-										? null
-										: flexRender(
-												header.column.columnDef.header,
-												header.getContext()
-										  )}
-								</TableHead>
+		<Table>
+			<TableHeader>
+				{table.getHeaderGroups().map(headerGroup => (
+					<TableRow key={headerGroup.id}>
+						{headerGroup.headers.map(header => (
+							<TableHead key={header.id}>
+								{header.isPlaceholder
+									? null
+									: flexRender(
+										header.column.columnDef.header,
+										header.getContext()
+									)}
+							</TableHead>
+						))}
+					</TableRow>
+				))}
+			</TableHeader>
+			<TableBody>
+				{table.getRowModel().rows?.length ? (
+					table.getRowModel().rows.map(row => (
+						<TableRow
+							key={row.id}
+							data-state={row.getIsSelected() && "selected"}
+						>
+							{row.getVisibleCells().map(cell => (
+								<TableCell key={cell.id}>
+									{flexRender(cell.column.columnDef.cell, cell.getContext())}
+								</TableCell>
 							))}
 						</TableRow>
-					))}
-				</TableHeader>
-				<TableBody>
-					{table.getRowModel().rows?.length ? (
-						table.getRowModel().rows.map(row => (
-							<TableRow
-								key={row.id}
-								data-state={row.getIsSelected() && "selected"}
-							>
-								{row.getVisibleCells().map(cell => (
-									<TableCell key={cell.id}>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</TableCell>
-								))}
-							</TableRow>
-						))
-					) : (
-						<TableRow>
-							<TableCell colSpan={columns.length} className="h-24 text-center">
-								No results.
-							</TableCell>
-						</TableRow>
-					)}
-				</TableBody>
-			</Table>
-		</div>
+					))
+				) : (
+					<TableRow>
+						<TableCell colSpan={columns.length} className="h-24 text-center">
+							No results.
+						</TableCell>
+					</TableRow>
+				)}
+			</TableBody>
+		</Table>
 	)
 }

@@ -17,6 +17,7 @@ export default function PolisDropdown({ id }: { id: string }) {
         console.log("Deleting polis with ID:", id)
         alert(`Delete action for Polis ID: ${id}`)
     }
+    console.log("id from PolisDropdown: ", id)
 
     return (
         <div >

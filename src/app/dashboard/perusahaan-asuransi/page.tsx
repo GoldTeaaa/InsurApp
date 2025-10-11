@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { tableQuerySchema, type PerusahaanSort } from "@/lib/perusahaan_asuransi/types";
-import Search from "@/components/search";
+import Search from "@/components/Search";
 import Table from "@/features/perusahaan-asuransi/table-view";
 import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/fetch-table-perusahaan";
 import Pagination from "@/components/pagination";

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { Polis } from "@/lib/polis/types";
-import FormTextField from "@/components/TextField";
+import { Polis } from "@/lib/polis/create-types";
+import TextField from "@/components/TextField";
 import { SelectField } from "@/components/SelectField";
 import { convertIDR } from "@/lib/utils/convertIDR";
 import CalculatedTextField from "@/components/CalculatedTextField";
@@ -31,7 +31,7 @@ export default function PremiCalculationGroup() {
     return (
         <div className="space-y-4 rounded-md border border-gray-200 p-4">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Perhitungan Premi</h3>
-            <FormTextField<Polis>
+            <TextField<Polis>
                 name='total_sum_insured'
                 label="Total Sum Insured"
                 type="number"
@@ -40,7 +40,7 @@ export default function PremiCalculationGroup() {
                 {convertIDR(totalSumInsured)}
             </p>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <FormTextField<Polis>
+                <TextField<Polis>
                     name='nilai_rate'
                     label="Nilai Rate"
                     type="number"

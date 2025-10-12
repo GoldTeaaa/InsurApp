@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { FormProvider, Resolver, useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/button";
 import Step1 from "./Step1";
@@ -7,7 +8,7 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import { motion } from 'framer-motion'
 import ReviewPolis from "./ReviewPolis";
-import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/types";
+import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/create-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/lib/utils/useDebounce";
 import FormErrors from "@/components/FormErrors";
@@ -51,6 +52,7 @@ const useIsFirstRender = () => {
 }
 
 export default function MainPolisForm() {
+    const router = useRouter();
     const [previousStep, setPreviousStep] = useState<number>(0);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const delta = currentStep - previousStep
@@ -143,12 +145,14 @@ export default function MainPolisForm() {
     const submit = async (data: Polis) => {
         console.log("Form Data Submitted: ", data);
         const res = await CoasPolisAction(data);
-        if(res.success){
+        if (res.success) {
+            // Clear form data from localStorage
             localStorage.removeItem(LOCAL_STORAGE_KEY);
-        }else{
-            alert(res.message);
+            // Redirect to the polis dashboard
+            router.push('/dashboard/polis');
+        } else {
+            alert(`Submission failed: ${res.message}`);
         }
-        // Clear localStorage after successful submission
     }
 
     const goTo = (stepIndex: number) => {
@@ -195,7 +199,9 @@ export default function MainPolisForm() {
                     {steps[currentStep].component}
                     {currentStep === steps.length - 1 && (
                         <div className="mt-8 flex justify-end">
-                            <Button type="submit" disabled={isSubmitting}>
+                            <Button
+                                type="submit" disabled={isSubmitting}
+                            >
                                 {isSubmitting ? (
                                     <span className="flex items-center gap-2">Submitting...</span>
                                 ) : 'Submit Polis'}

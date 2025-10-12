@@ -1,5 +1,5 @@
 import { Path, useFormContext, useWatch } from "react-hook-form";
-import { Polis, PolisShare } from "@/lib/polis/types";
+import { Polis, PolisShare } from "@/lib/polis/create-types";
 import { ListPerusahaanType } from "@/lib/polis/step3";
 import TextField from "@/components/TextField";
 import CalculatedTextField from "@/components/CalculatedTextField";
@@ -35,7 +35,9 @@ export default function PremiInputBox({ fieldName, isCoas, baseName }: PremiInpu
                 type="number"
                 readOnly={!isCoas}
             />
-            <p className="mt-2 text-xs text-gray-500">Premi Gross: <span>{convertIDR(Number(premiGross))}</span></p>
+            <p className="mt-2 text-xs text-gray-500">
+                Premi Gross: <span>{convertIDR(Number(premiGross))}</span>
+            </p>
             <DiscountInputGroup
                 baseName={baseName}
             />

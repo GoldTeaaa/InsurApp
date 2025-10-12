@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from "react-hook-form";
-import { Polis } from "@/lib/polis/types";
+import { Polis } from "@/lib/polis/create-types";
 import { convertIDR } from "@/lib/utils/convertIDR";
 
 export default function TotalPremiDisplay() {

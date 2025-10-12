@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch, Path } from "react-hook-form";
-import { Polis } from "@/lib/polis/types";
+import { Polis } from "@/lib/polis/create-types";
 import TextField from "@/components/TextField";
 import UncontrolledTextField from "@/components/UncontrolledTextField";
 import { convertIDR } from "@/lib/utils/convertIDR";
@@ -64,7 +64,10 @@ export default function PercentageAmountGroup({
         setPercentage(rawValue);
 
         if (rawValue === "" || isNaN(parseFloat(rawValue))) {
-            setValue(amountFieldName, 0, { shouldValidate: true, shouldDirty: true });
+            setValue(amountFieldName, 0, { 
+                shouldValidate: true, 
+                shouldDirty: true }
+            );
             return;
         }
 
@@ -74,7 +77,8 @@ export default function PercentageAmountGroup({
 
         const gross = Number(baseValue) || 0;
         const newAmount = (gross * newPercentage) / 100;
-        setValue(amountFieldName, newAmount, { shouldValidate: true, shouldDirty: true });
+        const value = newAmount.toFixed(percentagePrecision || 0);
+        setValue(amountFieldName, value, { shouldValidate: true, shouldDirty: true });
     };
 
     return (

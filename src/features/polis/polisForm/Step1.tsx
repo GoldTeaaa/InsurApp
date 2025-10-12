@@ -1,5 +1,5 @@
 import SelectSearchField from "@/components/SelectSearchField";
-import { Polis } from "@/lib/polis/types";
+import { Polis } from "@/lib/polis/create-types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card";
 import { useEffect, useState } from "react";
 import getListNasabah from "@/features/polis/actions/get-nasabah-list";
@@ -56,7 +56,6 @@ export default function Step1() {
 
     const {
         control,
-        setValue
     } = useFormContext<Polis>();
 
     //List for nasabah SelectSearchField

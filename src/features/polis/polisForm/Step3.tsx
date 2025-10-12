@@ -1,4 +1,4 @@
-import { Polis } from "@/lib/polis/types";
+import { Polis } from "@/lib/polis/create-types";
 import { useFormContext, useWatch } from "react-hook-form";
 import TotalPremiDisplay from "./TotalPremiDisplay";
 import TotalSharePercentage from "./TotalSharePercentage";

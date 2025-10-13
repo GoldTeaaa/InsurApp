@@ -49,7 +49,13 @@ export default function PercentageAmountGroup({
     useEffect(() => {
         const gross = Number(baseValue) || 0;
         const amount = Number(amountValue) || 0;
-        const newPercentage = gross > 0 ? (amount / gross) * 100 : 0;
+
+        if (amount === 0 || gross === 0) {
+            setPercentage("");
+            return;
+        }
+
+        const newPercentage = (amount / gross) * 100;
 
         if (percentagePrecision !== undefined) {
             setPercentage(newPercentage > 0 ? newPercentage.toFixed(percentagePrecision) : "");

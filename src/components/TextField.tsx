@@ -50,7 +50,6 @@ export default function FormTextField<T extends FieldValues>({
                             "disabled:cursor-not-allowed disabled:opacity-50",
                         ].join(" ")}
                     />
-                    <p>{typeof field.value}</p>
                     {error && <p className="text-red-600">{error.message}</p>}
                 </div>
             )}

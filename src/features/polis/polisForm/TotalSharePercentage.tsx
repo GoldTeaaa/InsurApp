@@ -29,7 +29,9 @@ export default function TotalSharePercentage({ perusahaanList }: { perusahaanLis
     }, [shares, setValue]);
 
     const isError = totalPercentage !== 100;
-    const errorMessage = errors.shares?.message || (errors.shares)?.root?.message;
+    // The root error for a field array is often where superRefine places its message.
+    // The type from RHF is `DeepMap<T, FieldError> | FieldError[]`, so we need to check for `root`.
+    const errorMessage = errors.shares?.root?.message;
 
     return (
         <div className="mt-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
@@ -52,7 +54,7 @@ export default function TotalSharePercentage({ perusahaanList }: { perusahaanLis
                     
                 </div>
             )}
-            {isError && errorMessage && <p className="mt-1 text-sm text-red-600">{errorMessage}</p>}
+            {errorMessage && <p className="mt-1 text-sm text-red-600">{errorMessage}</p>}
         </div>
     );
 }

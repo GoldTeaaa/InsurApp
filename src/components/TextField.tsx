@@ -9,16 +9,18 @@ type Props<T extends FieldValues> = {
     min?: string;
     max?: string;
     readOnly?: boolean;
+    disabled?: boolean;
 }
 
-export default function FormTextField<T extends FieldValues>({ name, label, defaultValue, type, step, readOnly, ...props }: Props<T>) {
+export default function FormTextField<T extends FieldValues>({
+    name, label, defaultValue, type, step, readOnly, disabled, ...props }: Props<T>) {
     const { control } = useFormContext();
 
     return (
         <Controller
             name={name}
             control={control}
-            render={({field, fieldState: { error }}) => (
+            render={({ field, fieldState: { error } }) => (
                 <div>
                     <label>{label}</label>
                     {readOnly && <p className="text-blue-600 text-sm mt-1">Tidak bisa diubah</p>}
@@ -27,10 +29,11 @@ export default function FormTextField<T extends FieldValues>({ name, label, defa
                         {...props}
                         value={field.value ? field.value : ""}
                         onChange={(e) => {
+                            //Wrap to number for 
                             if (type === 'number') {
-                                field.onChange(e.target.value);
+                                field.onChange(Number(e.target.value));
                             } else {
-                                field.onChange(e);
+                                field.onChange(e.target.value);
                             }
                         }}
                         defaultValue={defaultValue}
@@ -40,6 +43,7 @@ export default function FormTextField<T extends FieldValues>({ name, label, defa
                         min={props.min}
                         max={props.max}
                         readOnly={readOnly}
+                        disabled={disabled}
                         className={[
                             "block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none",
                             "focus:border-blue-600 focus:ring-1 focus:ring-blue-600",

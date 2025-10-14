@@ -12,6 +12,7 @@ import {
 } from "@/components/dropdown-menu"
 import { Button } from "@/components/button"
 import PolisDropdown from "@/components/dropdown"
+import AsuransiPenanggungCell from "./AsuransiPenanggungCell"
 
 type PolisTableRow = {
 	id: string
@@ -42,6 +43,10 @@ export const columns: ColumnDef<PolisTableRow>[] = [
 	{
 		accessorKey: "nomor_polis",
 		header: "Nomor Polis",
+	},
+	{
+		accessorKey: "jenis_coas",
+		header: "Jenis Coas",
 	},
 	{
 		accessorKey: "bisnis",
@@ -89,6 +94,12 @@ export const columns: ColumnDef<PolisTableRow>[] = [
 	{
 		accessorKey: "nama_perusahaan_asuransi",
 		header: "Asuransi Penanggung",
+		cell: ({ row }) => {
+			const insurers = row.getValue<string | null>("nama_perusahaan_asuransi")
+			return (
+				<AsuransiPenanggungCell insurers={insurers} />
+			)
+		},
 	},
 	{
 		id: "actions",

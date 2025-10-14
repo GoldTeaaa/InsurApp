@@ -1,21 +1,22 @@
 "use client"
 import { useEffect, useState, useRef } from "react";
-import { FormProvider, Resolver, useForm, useWatch } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { FormProvider, Resolver, useForm, useWatch, FieldErrors } from "react-hook-form";
 import { Button } from "@/components/button";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import { motion } from 'framer-motion'
 import ReviewPolis from "./ReviewPolis";
-import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/types";
+import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/create-types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDebounce } from "@/lib/utils/useDebounce";
-import FormErrors from "@/components/FormErrors";
+import { useDebounce } from "@/lib/utils/useDebounce"; 
+import ErrorToast from "@/features/polis/polisForm/ErrorToast";
 import CoasPolisAction from "../actions/coas-polis-action";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
 
-const steps = [
+const  steps = [
     {
         id: 'Step 1',
         name: 'Data Nasabah',
@@ -51,9 +52,11 @@ const useIsFirstRender = () => {
 }
 
 export default function MainPolisForm() {
+    const router = useRouter();
     const [previousStep, setPreviousStep] = useState<number>(0);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const delta = currentStep - previousStep
+    const [toastErrors, setToastErrors] = useState<FieldErrors<Polis> | null>(null);
 
     const getInitialValues = () => {
         try {
@@ -74,7 +77,7 @@ export default function MainPolisForm() {
     const {
         control,
         setValue,
-        formState: { isSubmitting },
+        formState: { isSubmitting, errors },
         trigger
     } = methods
 
@@ -122,12 +125,12 @@ export default function MainPolisForm() {
         const output = await trigger(field as FieldName[], { shouldFocus: true })
         console.log("output: ", output)
 
-        if (!output) return
+        if (!output) {
+            setToastErrors(errors);
+            return;
+        }
 
         if (currentStep < steps.length - 1) {
-            // if (currentStep === steps.length - 2) {
-            //     await handleSubmit(processForm)()
-            // }
             setPreviousStep(currentStep)
             setCurrentStep(step => step + 1)
         }
@@ -143,12 +146,12 @@ export default function MainPolisForm() {
     const submit = async (data: Polis) => {
         console.log("Form Data Submitted: ", data);
         const res = await CoasPolisAction(data);
-        if(res.success){
+        if (res.success) {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
-        }else{
-            alert(res.message);
+            router.push('/dashboard/polis');
+        } else {
+            alert(`Submission failed: ${res.message}`);
         }
-        // Clear localStorage after successful submission
     }
 
     const goTo = (stepIndex: number) => {
@@ -158,6 +161,7 @@ export default function MainPolisForm() {
 
     return (
         <FormProvider {...methods} >
+            <ErrorToast errors={toastErrors} onClose={() => setToastErrors(null)} />
             <nav aria-label='Progress'>
                 <ol role='list' className='space-y-4 md:flex md:space-x-8 md:space-y-0'>
                     {steps.map((step, index) => (
@@ -195,7 +199,9 @@ export default function MainPolisForm() {
                     {steps[currentStep].component}
                     {currentStep === steps.length - 1 && (
                         <div className="mt-8 flex justify-end">
-                            <Button type="submit" disabled={isSubmitting}>
+                            <Button
+                                type="submit" disabled={isSubmitting}
+                            >
                                 {isSubmitting ? (
                                     <span className="flex items-center gap-2">Submitting...</span>
                                 ) : 'Submit Polis'}
@@ -249,9 +255,6 @@ export default function MainPolisForm() {
                         </svg>
                     </button>
                 </div>
-            </div>
-            <div className="mt-4"> {/* HELPER UI, REMOVE WHEN FINISH*/}
-                <FormErrors />
             </div>
         </FormProvider>
     );

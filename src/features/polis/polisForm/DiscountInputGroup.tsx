@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from "react-hook-form";
-import { Polis } from "@/lib/polis/types";
+import { Polis } from "@/lib/polis/create-types";
 import PercentageAmountGroup from "@/components/PercentageAmountGroup";
 
 type Props = {
@@ -27,6 +27,7 @@ export default function DiscountInputGroup({ baseName }: Props) {
             percentagePlaceholder="e.g., 10"
             minPercentage={0}
             maxPercentage={100}
+            // percentagePrecision={3}
         />
     );
 }

@@ -1,5 +1,5 @@
 import { Path, useFormContext, useWatch } from "react-hook-form";
-import { Polis, PolisShare } from "@/lib/polis/types";
+import { Polis, PolisShare } from "@/lib/polis/create-types";
 import { useCallback, useEffect, useState } from "react";
 import { ListPerusahaanType } from "@/lib/polis/step3";
 import { TrashIcon } from "@heroicons/react/24/solid";
@@ -12,9 +12,15 @@ type PremiInputBoxProps = {
     baseName: `shares` | `shares.${number}`;
     onRemove?: () => void;
     perusahaanList: ListPerusahaanType[];
+    editMode?: boolean
 };
 
-export default function PremiKomisiBox({ baseName, onRemove, perusahaanList }: PremiInputBoxProps) {
+export default function PremiKomisiBox({ 
+    baseName, 
+    onRemove, 
+    perusahaanList ,
+    editMode
+}: PremiInputBoxProps) {
     const [_premiNetExceeded, setPremiNetExceeded] = useState(false);
     const { control, setValue } = useFormContext<Polis>();
     const isCoas = baseName.includes('.');
@@ -72,7 +78,7 @@ export default function PremiKomisiBox({ baseName, onRemove, perusahaanList }: P
                     <h2 className="mb-3 text-base font-semibold text-gray-900">Input Detail Premi</h2>
                 )
             }
-            {onRemove && currentIndex > 1 && (
+            {editMode && onRemove && currentIndex > 1 && (
                 <button
                     type="button"
                     onClick={onRemove}

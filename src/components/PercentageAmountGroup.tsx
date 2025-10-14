@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch, Path } from "react-hook-form";
-import { Polis } from "@/lib/polis/types";
+import { Polis } from "@/lib/polis/create-types";
 import TextField from "@/components/TextField";
 import UncontrolledTextField from "@/components/UncontrolledTextField";
 import { convertIDR } from "@/lib/utils/convertIDR";
@@ -49,7 +49,13 @@ export default function PercentageAmountGroup({
     useEffect(() => {
         const gross = Number(baseValue) || 0;
         const amount = Number(amountValue) || 0;
-        const newPercentage = gross > 0 ? (amount / gross) * 100 : 0;
+
+        if (amount === 0 || gross === 0) {
+            setPercentage("");
+            return;
+        }
+
+        const newPercentage = (amount / gross) * 100;
 
         if (percentagePrecision !== undefined) {
             setPercentage(newPercentage > 0 ? newPercentage.toFixed(percentagePrecision) : "");
@@ -64,7 +70,10 @@ export default function PercentageAmountGroup({
         setPercentage(rawValue);
 
         if (rawValue === "" || isNaN(parseFloat(rawValue))) {
-            setValue(amountFieldName, 0, { shouldValidate: true, shouldDirty: true });
+            setValue(amountFieldName, 0, { 
+                shouldValidate: true, 
+                shouldDirty: true }
+            );
             return;
         }
 
@@ -74,7 +83,8 @@ export default function PercentageAmountGroup({
 
         const gross = Number(baseValue) || 0;
         const newAmount = (gross * newPercentage) / 100;
-        setValue(amountFieldName, newAmount, { shouldValidate: true, shouldDirty: true });
+        const value = newAmount.toFixed(percentagePrecision || 0);
+        setValue(amountFieldName, value, { shouldValidate: true, shouldDirty: true });
     };
 
     return (
@@ -89,6 +99,7 @@ export default function PercentageAmountGroup({
                     placeholder={percentagePlaceholder}
                     min={minPercentage}
                     max={maxPercentage}
+                    step="any"
                 />
             </div>
             <div className="col-span-3">

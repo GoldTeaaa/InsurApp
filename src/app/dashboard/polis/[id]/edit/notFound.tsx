@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-export default function PolisNotFound() {
+export default function PolisNotFound({message}:{message?:string}) {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white px-6">
       <div className="max-w-xl w-full text-center p-8 rounded-2xl shadow-xl ring-1 ring-gray-100">
@@ -34,7 +34,7 @@ export default function PolisNotFound() {
           </a>
         </div>
 
-        <div className="mt-6 text-sm text-gray-500">Tip: check the policy number or try searching from the dashboard.</div>
+        <div className="mt-6 text-sm text-gray-500">Message: {message}</div>
       </div>
 
       <style jsx>{` 

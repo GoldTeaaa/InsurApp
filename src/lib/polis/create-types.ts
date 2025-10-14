@@ -42,14 +42,14 @@ export const PolisShareSchema = z.object({
 });
 
 // BASE POLIS
-const basePolisObjectSchema = z.object({
+export const basePolisObjectSchema = z.object({
   nomor_polis: noPolis,
   bisnis: JENIS_BISNIS,
   id_nasabah: z.string().uuid('Nasabah Belum Dipilih'),
   total_sum_insured: nonNegative,
   nilai_rate: z.coerce.number().positive("Rate harus lebih dari 0"),
   jenis_rate: JENIS_RATE,
-  total_premi: nonNegative,
+  total_premi: z.coerce.number().min(0, "Total Premi Wajib Diisi"),
   jenis_coas: JENIS_COAS,
   periode_mulai: z.preprocess(
     (arg) => (typeof arg === "string" && arg.trim() === "" ? undefined : arg),
@@ -92,13 +92,13 @@ const basePolisSchema = basePolisObjectSchema.superRefine((data, ctx) => {
 });
 
 // NON-COAS: single share object
-const nonCoasSchema = basePolisObjectSchema.extend({
+export const nonCoasSchema = basePolisObjectSchema.extend({
   jenis_coas: z.literal("non-coas"),
   shares: PolisShareSchema,
 });
 
 // COAS: array of share objects, min 2
-const coasSchema = basePolisObjectSchema.extend({
+export const coasSchema = basePolisObjectSchema.extend({
   jenis_coas: z.literal("coas"),
   shares: z
     .array(PolisShareSchema)

@@ -99,6 +99,7 @@ export default function PercentageAmountGroup({
                     placeholder={percentagePlaceholder}
                     min={minPercentage}
                     max={maxPercentage}
+                    step="any"
                 />
             </div>
             <div className="col-span-3">

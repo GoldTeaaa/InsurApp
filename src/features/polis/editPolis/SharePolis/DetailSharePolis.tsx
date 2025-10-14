@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import PremiKomisiBox from "../../polisForm/PremiKomisiBox";
 import getPerusahaanList from "../../actions/get-perusahaan-list";
 import { ListPerusahaanType } from "@/lib/polis/step3";
+import TotalSharePercentage from "../../polisForm/TotalSharePercentage";
 // import { PlusIcon } from "lucide-react";
 
 export default function DetailSharePolis() {
@@ -51,7 +52,16 @@ export default function DetailSharePolis() {
     // const canAddMoreShares = jenisCoas === 'coas' || fields.length === 0;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 rounded-lg border border-gray-200 p-6">
+            <div>
+                {fields.length > 1 && (
+                    <div>
+                        <TotalSharePercentage
+                            perusahaanList={perusahaanList}
+                        />
+                    </div>
+                )}
+            </div>
             {fields.map((field, index) => (
                 <div key={field.id} className="grid grid-cols-1 md:grid-cols-1 gap-4">
                     <PremiKomisiBox

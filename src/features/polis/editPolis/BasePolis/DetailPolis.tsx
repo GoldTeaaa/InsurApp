@@ -9,6 +9,7 @@ import getListNasabah from "@/features/polis/actions/get-nasabah-list";
 import PremiCalculationGroup from "../../polisForm/PremiCalculationGroup";
 import DateField from "@/components/DateField";
 import { SelectField } from "@/components/SelectField";
+import { Button } from "@/components/button";
 
 export default function DetailPolis() {
     const [loadingDetails, setLoadingDetails] = useState(false);
@@ -17,12 +18,14 @@ export default function DetailPolis() {
 
     const {
         control,
+        trigger
     } = useFormContext<Polis>();
 
-    const [selectedNasabahId, jenis_coas, nomor_polis] = useWatch({
+    const [nomor_polis] = useWatch({
         control,
-        name: ['id_nasabah', 'jenis_coas', 'nomor_polis'],
+        name: ['nomor_polis'],
     })
+
 
     useEffect(() => {
         async function fetchNasabahList() {
@@ -31,6 +34,8 @@ export default function DetailPolis() {
         }
         fetchNasabahList();
     }, []);
+
+    
 
     return (
         <div>

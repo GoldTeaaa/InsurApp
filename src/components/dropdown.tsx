@@ -8,16 +8,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/dropdown-menu"
 import { Button } from "@/components/button"
+import deletePolis from "@/features/polis/actions/delete_polis"
 
 
 export default function PolisDropdown({ id }: { id: string }) {
-    const handleDelete = () => {
-        // You can trigger a server action to delete the item here.
-        // For now, we'll just log it and show an alert.
-        console.log("Deleting polis with ID:", id)
-        alert(`Delete action for Polis ID: ${id}`)
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you want to delete this?")) {
+            const res = await deletePolis({ id });
+        }
     }
-    console.log("id from PolisDropdown: ", id)
 
     return (
         <div >

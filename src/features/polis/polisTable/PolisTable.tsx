@@ -14,22 +14,10 @@ import {
 	TableRow,
 } from "@/components/table"
 
-import getPolisTableData from "../actions/get-polis-table"
+import getPolisTableData, { PolisTableRow } from "../actions/get-polis-table"
 import { PolisTableQuery } from "@/lib/polis/table-types"
 import { useEffect, useState } from "react"
 import { columns } from "@/features/polis/polisTable/columns"
-
-type PolisTableRow = {
-	id: string
-	nomor_polis: string
-	bisnis: string
-	nama_nasabah: string | null
-	total_premi: number | null
-	periode_mulai: string
-	periode_akhir: string
-	nama_perusahaan_asuransi: string | null
-	full_count: number
-}
 
 export default function PolisTable({ search, page, size }: PolisTableQuery) {
 	const [data, setData] = useState<PolisTableRow[]>([])

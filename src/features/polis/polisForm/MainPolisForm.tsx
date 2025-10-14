@@ -16,7 +16,7 @@ import CoasPolisAction from "../actions/coas-polis-action";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
 
-const steps = [
+const  steps = [
     {
         id: 'Step 1',
         name: 'Data Nasabah',
@@ -131,9 +131,6 @@ export default function MainPolisForm() {
         }
 
         if (currentStep < steps.length - 1) {
-            // if (currentStep === steps.length - 2) {
-            //     await handleSubmit(processForm)()
-            // }
             setPreviousStep(currentStep)
             setCurrentStep(step => step + 1)
         }
@@ -150,9 +147,7 @@ export default function MainPolisForm() {
         console.log("Form Data Submitted: ", data);
         const res = await CoasPolisAction(data);
         if (res.success) {
-            // Clear form data from localStorage
             localStorage.removeItem(LOCAL_STORAGE_KEY);
-            // Redirect to the polis dashboard
             router.push('/dashboard/polis');
         } else {
             alert(`Submission failed: ${res.message}`);

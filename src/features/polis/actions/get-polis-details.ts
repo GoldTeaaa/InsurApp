@@ -2,8 +2,6 @@
 import { GetPolisSchema, ViewPolisSchema } from "@/lib/polis/get-types";
 import { supabase } from "@/lib/supabase";
 import { ActionReturnState } from "@/lib/types";
-import { form } from "framer-motion/client";
-import { z } from "zod";
 
 const formatDateForInput = (date: string | Date | null | undefined): string => {
   if (!date) return "";
@@ -23,6 +21,7 @@ export default async function getPolisDetails(
     p_polis_id: id,
   });
 
+  console.log("data before PARSE: ", data);
   const parsedData = ViewPolisSchema.safeParse(data);
   if (!parsedData.success) {
     console.error("Zod validation failed:", parsedData.error.flatten());

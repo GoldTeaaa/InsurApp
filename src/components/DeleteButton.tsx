@@ -4,6 +4,7 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 
 type DeleteButtonProps = {
     id: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     action: (formData: FormData) => Promise<any>; // server action
     entityName?: string;
 };

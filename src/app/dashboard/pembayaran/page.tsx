@@ -1,7 +1,13 @@
+import PembayaranTable from "@/features/pembayaran/PembayaranTable";
+
 export default function Page() {
+    
+
     return (
         <div>
-            <p>Dashboard Pembayaran</p>
+            <PembayaranTable
+            
+            />
         </div>
     );
 }

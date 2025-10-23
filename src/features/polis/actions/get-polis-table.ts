@@ -2,19 +2,7 @@
 import { ActionReturnState } from "@/lib/types";
 import { supabase } from "@/lib/supabase";
 import { PolisTableQuery } from "@/lib/polis/table-types";
-
-export type PolisTableRow = {
-  id: string;
-  jenis_coas: string;
-  nomor_polis: string;
-  bisnis: string;
-  nama_nasabah: string | null;
-  total_premi: number | null;
-  periode_mulai: string;
-  periode_akhir: string;
-  nama_perusahaan_asuransi: string | null;
-  full_count: number;
-};
+import { PolisTableRow } from "@/lib/polis/table-types";
 
 type ReturnState = ActionReturnState<PolisTableRow[]>;
 

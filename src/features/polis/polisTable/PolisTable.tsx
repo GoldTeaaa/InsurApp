@@ -13,8 +13,8 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/table"
-
-import getPolisTableData, { PolisTableRow } from "../actions/get-polis-table"
+import { PolisTableRow } from "@/lib/polis/table-types"
+import getPolisTableData from "../actions/get-polis-table"
 import { PolisTableQuery } from "@/lib/polis/table-types"
 import { useEffect, useState } from "react"
 import { columns } from "@/features/polis/polisTable/columns"

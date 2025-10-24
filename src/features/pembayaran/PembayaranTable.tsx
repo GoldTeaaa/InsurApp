@@ -3,6 +3,8 @@ import getPembayaranTableData, { PembayaranTableRow } from "@/features/pembayara
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { columns } from "@/features/pembayaran/columns";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
+import { header } from "framer-motion/client";
 
 type Props = {
     search?: string;
@@ -15,7 +17,7 @@ export default function PembayaranTable({
     page,
     size,
 }: Props) {
-    const[data, setData] = useState<PembayaranTableRow[]>([]);
+    const [data, setData] = useState<PembayaranTableRow[]>([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -28,7 +30,7 @@ export default function PembayaranTable({
             }
         }
         fetchData()
-    },[search, page, size])
+    }, [search, page, size])
 
     const table = useReactTable({
         data,
@@ -36,9 +38,33 @@ export default function PembayaranTable({
         getCoreRowModel: getCoreRowModel(),
     })
 
-    return(
-        <div>
-            
-        </div>
+    return (
+        <Table>
+            <TableHeader>
+                {table.getHeaderGroups().map(headerGroup => (
+                    <TableRow key={headerGroup.id}>
+                        {headerGroup.headers.map(header => (
+                            <TableHead key={header.id}>
+                                {header.isPlaceholder ?
+                                    null :
+                                    flexRender(header.column.columnDef.header, header.getContext())
+                                }
+                            </TableHead>
+                        ))}
+                    </TableRow>
+                ))}
+            </TableHeader>
+            <TableBody>
+                {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map(row => (
+                        <TableCell>
+                            
+                        </TableCell>
+                    )
+                ) : (
+
+                )}
+            </TableBody>
+        </Table>
     );
 }

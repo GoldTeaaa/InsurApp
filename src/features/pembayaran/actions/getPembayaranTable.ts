@@ -28,7 +28,6 @@ export default async function getPembayaranTableData(
     p_size: size,
     p_status: status,
   });
-  console.log('data: ', data);
 
   if (error) throw new Error(error.message);
 

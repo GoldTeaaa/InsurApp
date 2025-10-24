@@ -1,27 +1,22 @@
 'use client';
-import getPembayaranTableData, { PembayaranTableRow } from "@/features/pembayaran/actions/getPembayaranTable";
+import getPembayaranTableData from "@/features/pembayaran/actions/getPembayaranTable";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
-import { columns } from "@/features/pembayaran/columns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
-import { header } from "framer-motion/client";
-
-type Props = {
-    search?: string;
-    page?: number;
-    size?: number;
-}
+import { columns } from "@/features/pembayaran/columns";
+import { PembayaranPremiProps, PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
 
 export default function PembayaranTable({
     search,
     page,
     size,
-}: Props) {
+    status
+}: PembayaranPremiProps) {
     const [data, setData] = useState<PembayaranTableRow[]>([]);
 
     useEffect(() => {
         async function fetchData() {
-            const result = await getPembayaranTableData({ search, page, size })
+            const result = await getPembayaranTableData({ search, page, size, status })
             if (result.success && result.data) {
                 setData(result.data)
             } else {
@@ -30,13 +25,14 @@ export default function PembayaranTable({
             }
         }
         fetchData()
-    }, [search, page, size])
+    }, [search, page, size, status])
 
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
+    console.log('STATUS', status)
 
     return (
         <Table>
@@ -57,12 +53,26 @@ export default function PembayaranTable({
             <TableBody>
                 {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map(row => (
-                        <TableCell>
-                            
-                        </TableCell>
-                    )
+                        <TableRow
+                            key={row.id}
+                            data-state={row.getIsSelected() && 'selected'}
+                        >
+                            {row.getVisibleCells().map(cell => (
+                                <TableCell key={cell.id}>
+                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))
                 ) : (
-
+                    <TableRow>
+                        <TableCell
+                            colSpan={columns.length}
+                            className="h-24 text-center"
+                        >
+                            No results.
+                        </TableCell>
+                    </TableRow>
                 )}
             </TableBody>
         </Table>

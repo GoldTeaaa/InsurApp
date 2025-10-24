@@ -2,20 +2,14 @@
 
 import { supabase } from "@/lib/supabase";
 import { ActionReturnState } from "@/lib/types";
+import { PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
+
 type PembayaranTableParams = {
   search?: string;
   page?: number;
   size?: number;
   status?: string;
 };
-
-export type PembayaranTableRow = {
-  nomor_polis: string;
-  nama: string;
-  created_at: string;
-  premi_net: number;
-  status: string;
-}
 
 type ReturnState = ActionReturnState<PembayaranTableRow[]>;
 
@@ -30,6 +24,8 @@ export default async function getPembayaranTableData(
   });
 
   if (error) throw new Error(error.message);
+
+  console.log('data: ', data);
 
   return {
     success: true,

@@ -13,7 +13,7 @@ import deletePolis from "@/features/polis/actions/delete_polis"
 
 export default function PolisDropdown({ id }: { id: string }) {
     const handleDelete = async () => {
-        if (window.confirm("Are you sure you want to delete this?")) {
+        if (window.confirm(`Are you sure you want to delete this Polis?`)) {
             const res = await deletePolis({ id });
         }
     }

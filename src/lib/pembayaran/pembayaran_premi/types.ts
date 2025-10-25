@@ -12,6 +12,7 @@ export type PembayaranPremiProps = {
 }
 
 export type PembayaranTableRow = {
+  id: string;
   nomor_polis: string;
   nama_tertanggung: string;
   asuransi_penanggung: string;
@@ -20,4 +21,14 @@ export type PembayaranTableRow = {
   total_paid: number;
   remaining: number;
   status: string;
+  total_count: number;
+};
+
+export type PremiHistoryRow = {
+  nomor_polis: string;
+  amount_paid: number;
+  tanggal_bayar: string;
+  cara_bayar: string;
+  rekening_bank: string;
+  ref_no: string;
 };

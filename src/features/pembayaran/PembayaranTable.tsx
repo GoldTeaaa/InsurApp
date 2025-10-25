@@ -1,38 +1,15 @@
 'use client';
-import getPembayaranTableData from "@/features/pembayaran/actions/getPembayaranTable";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { columns } from "@/features/pembayaran/columns";
-import { PembayaranPremiProps, PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
+import { PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
 
-export default function PembayaranTable({
-    search,
-    page,
-    size,
-    status
-}: PembayaranPremiProps) {
-    const [data, setData] = useState<PembayaranTableRow[]>([]);
-
-    useEffect(() => {
-        async function fetchData() {
-            const result = await getPembayaranTableData({ search, page, size, status })
-            if (result.success && result.data) {
-                setData(result.data)
-            } else {
-                console.error(result.message)
-                setData([])
-            }
-        }
-        fetchData()
-    }, [search, page, size, status])
-
+export default function PembayaranTable({data}: {data: PembayaranTableRow[]}) {
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
-    console.log('STATUS', status)
 
     return (
         <Table>

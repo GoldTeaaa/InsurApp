@@ -3,7 +3,7 @@ import Link from "next/link"
 import PolisTable from "@/features/polis/polisTable/PolisTable"
 import { Button } from "@/components/button"
 import Search from "@/components/Search"
-import Pagination from "@/components/pagination"
+import Pagination from "@/components/Pagination"
 
 export const metadata = { title: "Polis" }
 

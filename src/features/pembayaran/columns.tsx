@@ -1,6 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { format, parseISO } from 'date-fns';
 import { PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
+import { pre } from 'framer-motion/client';
+import PembayaranPremiDropdown from './PembayaranPremiDropdown';
 
 export const columns: ColumnDef<PembayaranTableRow>[] = [
   {
@@ -83,12 +85,13 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
   },
   {
     id: 'actions',
-    header: 'Aksi',
-    cell: ({ row }) => (
-      <div className="flex gap-2">
-        <button className="text-blue-600 hover:underline">Edit</button>
-        <button className="text-red-600 hover:underline">Hapus</button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const pembayaran = row.original;
+      return(
+        <PembayaranPremiDropdown
+          id={pembayaran.id}
+        />
+      )
+    }
   },
 ];

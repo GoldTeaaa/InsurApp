@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import Table from '@/features/nasabah/table-view';
 import Link from "next/link";
 import Search from "@/components/Search";
-import Pagination from '@/components/pagination';
+import Pagination from '@/components/Pagination';
 import { fetchNasabahPage } from '@/features/nasabah/actions/fetch-table-page';
 import { tableQuerySchema } from '@/lib/types';
 import { NasabahSort } from '@/lib/nasabah/types';

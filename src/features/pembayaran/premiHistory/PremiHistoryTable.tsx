@@ -16,7 +16,7 @@ import {
     TableRow,
 } from "@/components/table";
 import { PremiHistoryRow } from "@/lib/pembayaran/pembayaran_premi/types";
-import { columns } from "@/features/pembayaran/premiHistory/premiColumns";
+import { columns } from "@/features/pembayaran/premiHistory/premiHistoryColumns";
 
 export default function PremiHistoryTable({ id }: { id: string }) {
     const [data, setData] = useState<PremiHistoryRow[]>([]);
@@ -42,8 +42,8 @@ export default function PremiHistoryTable({ id }: { id: string }) {
 
     return (
         <div>
-            <h1 className="text-xl text-white font-semibold mb-4">
-                {`Detail Premi Polis ${data[0]?.nomor_polis}`}
+            <h1 className="text-xl text-black font-semibold mb-4">
+                {`Polis ${data[0]?.nomor_polis}`}
             </h1>
             <Table>
                 <TableHeader>

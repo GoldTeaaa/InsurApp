@@ -4,13 +4,15 @@ import AddPembayaranPremiForm from "./addPembayaranPremiForm";
 type AddPremiDialogProps = {
     id: string,
     isOpen: boolean,
-    onOpenChange: (isOpen: boolean) => void
+    onOpenChange: (isOpen: boolean) => void,
+    onSuccess: () => void;
 }
 
 export default function AddPremiDialog({
     id,
     isOpen,
-    onOpenChange
+    onOpenChange,
+    onSuccess,
 }: AddPremiDialogProps) {
     return (
         <div>
@@ -21,7 +23,7 @@ export default function AddPremiDialog({
                             Tambah Premi
                         </DialogTitle>
                     </DialogHeader>
-                    <AddPembayaranPremiForm id={id} />
+                    <AddPembayaranPremiForm id={id} onSuccess={onSuccess} />
                 </DialogContent>
             </Dialog>
         </div>

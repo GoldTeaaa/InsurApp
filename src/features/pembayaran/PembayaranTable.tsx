@@ -20,8 +20,13 @@ export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }
     const handleOpenAddDialog = () => {
         if (selectedRowId) {
             setPembayaranPremiToId(selectedRowId);
-            setSelectedRowId(null);
+            setSelectedRowId(null); // Close history dialog to show the add dialog
         }
+    };
+
+    const handleAddSuccess = (id: string) => {
+        setPembayaranPremiToId(null); 
+        setSelectedRowId(id);
     };
 
     return (
@@ -81,8 +86,9 @@ export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }
             {AddPembayaranPremiToId && (
                 <AddPremiDialog
                     id={AddPembayaranPremiToId}
-                    isOpen={AddPembayaranPremiToId ? true : false}
+                    isOpen={!!AddPembayaranPremiToId}
                     onOpenChange={(isOpen) => !isOpen && setPembayaranPremiToId(null)}
+                    onSuccess={() => handleAddSuccess(AddPembayaranPremiToId)}
                 />
             )}
         </>

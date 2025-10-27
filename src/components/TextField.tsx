@@ -13,7 +13,8 @@ type Props<T extends FieldValues> = {
 }
 
 export default function FormTextField<T extends FieldValues>({
-    name, label, defaultValue, type, step, readOnly, disabled, ...props }: Props<T>) {
+    name, label, defaultValue, type, step, readOnly, disabled, ...props 
+}: Props<T>) {
     const { control } = useFormContext();
 
     return (

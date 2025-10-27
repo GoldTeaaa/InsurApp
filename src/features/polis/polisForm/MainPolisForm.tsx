@@ -144,7 +144,6 @@ export default function MainPolisForm() {
     }
 
     const submit = async (data: Polis) => {
-        console.log("Form Data Submitted: ", data);
         const res = await CoasPolisAction(data);
         if (res.success) {
             localStorage.removeItem(LOCAL_STORAGE_KEY);

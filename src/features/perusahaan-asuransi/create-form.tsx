@@ -19,7 +19,10 @@ export default function CreatePerusahaanForm() {
         defaultValues: defaultPerusahaanForm
     });
 
-    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(createPerusahaan, { success: false, message: "" });
+    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(
+        createPerusahaan, 
+        { success: false, message: "" }
+    );
 
     const handleReset = () => {
         method.reset(defaultPerusahaanForm);

@@ -1,3 +1,5 @@
+import z from "zod";
+
 enum status {
     paid = 'paid',
     unpaid = 'unpaid',
@@ -32,3 +34,31 @@ export type PremiHistoryRow = {
   rekening_bank: string;
   ref_no: string;
 };
+
+// ====================== ADD PEMBAYARAN PREMI SCHEMA ================
+
+export const cara_bayar = ["cash", "transfer", "virtual account"] as const;
+
+export const addPembayaranPremiPayloadSchema = z.object({
+    id: z.string().uuid(),
+    tanggal_bayar: z.coerce.date(),
+    nominal: z.coerce.number().min(1, "Nominal wajib diisi"),
+    cara_bayar: z.enum(cara_bayar),
+    ref_no: z.string().min(1, "Ref No wajib diisi"),
+    rekening_bank: z.string().nullable().optional(),
+});
+
+export const addPembayaranPremiFormSchema = addPembayaranPremiPayloadSchema.omit({
+    id: true,
+})
+
+export type AddPembayaranPremiPayload = z.infer<typeof addPembayaranPremiPayloadSchema>;
+export type AddPembayaranPremiForm = z.infer<typeof addPembayaranPremiFormSchema>;
+
+export const defaultAddPembayaranPremiForm: AddPembayaranPremiForm = {
+    tanggal_bayar: new Date(),
+    nominal: 0,
+    cara_bayar: "cash",
+    ref_no: "",
+    rekening_bank: null,
+}

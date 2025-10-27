@@ -21,12 +21,12 @@ export function SelectField<T extends FieldValues>({
         <div className="flex flex-col space-y-1">
           <label>{label}</label>
           <select
+            name={field.name}
             value={field.value ?? ""}
             onChange={field.onChange}
             onBlur={field.onBlur}
-            className={`rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              error ? "border-red-500 focus:ring-red-500" : "border-gray-300"
-            }`}
+            className={`rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+              }`}
           >
             <option value="" disabled>
               -- Pilih {label} --

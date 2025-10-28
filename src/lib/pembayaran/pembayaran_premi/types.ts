@@ -1,3 +1,4 @@
+import { add } from "date-fns";
 import z from "zod";
 
 enum status {
@@ -69,3 +70,14 @@ export const defaultAddPembayaranPremiForm: AddPembayaranPremiForm = {
   ref_no: "",
   rekening_bank: null,
 };
+
+
+// ======================== UPDATE PEMBAYARAN PREMI SCHEMA ================
+
+export const updatePembayaranFormSchema = addPembayaranPremiFormSchema;
+
+export const updatePembayaranPremiPayloadSchema = updatePembayaranFormSchema.extend({
+  pembayaran_id: z.string().uuid(),
+})
+
+export type UpdatePembayaranPremiPayload = z.infer<typeof updatePembayaranPremiPayloadSchema>;

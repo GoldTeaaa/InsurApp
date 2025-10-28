@@ -44,10 +44,9 @@ export default function PremiHistoryDialog({ id, isOpen, onOpenChange, onAddNew,
                 </p>
                 <p className="flex items-center">
                   <span className="font-semibold">Sisa Harus Dibayar:</span>
-                  <span className={`ml-2 font-bold text-base ${
-                    rowData.remaining === 0 ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {rowData.remaining === 0 ? 
+                  <span className={`ml-2 font-bold text-base ${rowData.remaining === 0 ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                    {rowData.remaining === 0 ?
                       "Sudah Lunas" : formatCurrencyIDR(rowData.remaining)}
                   </span>
                 </p>
@@ -61,7 +60,10 @@ export default function PremiHistoryDialog({ id, isOpen, onOpenChange, onAddNew,
         </DialogHeader>
 
         <div className="py-4">
-          <PremiHistoryTable detailPremiId={id} onEditSuccess={onEditSuccess} />
+          <PremiHistoryTable
+            detailPremiId={id}
+            onEditSuccess={onEditSuccess}
+          />
         </div>
 
         <DialogFooter className="flex-row justify-between items-center">

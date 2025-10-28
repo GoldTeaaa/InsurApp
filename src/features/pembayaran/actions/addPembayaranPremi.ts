@@ -15,7 +15,6 @@ export async function addPembayaranAction(
     prevState: State,
     formData: FormData
 ): Promise<State> {
-    console.log("formData: ", Object.fromEntries(formData.entries()));
     const validatedFields = addPembayaranPremiFormSchema.safeParse(
         Object.fromEntries(formData.entries())
     );
@@ -28,7 +27,7 @@ export async function addPembayaranAction(
     }
 
     const payload = addPembayaranPremiPayloadSchema.parse({
-        id: id,
+        detail_premi_id: id,
         ...validatedFields.data,
     });
 

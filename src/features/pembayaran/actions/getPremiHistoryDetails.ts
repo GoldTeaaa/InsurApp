@@ -13,7 +13,7 @@ export default async function getPremiHistoryDetails({
   const { data, error } = await supabase
     .from("pembayaran_history_view")
     .select(
-      "nomor_polis, amount_paid, tanggal_bayar, cara_bayar, rekening_bank, ref_no"
+      "detail_premi_id, nomor_polis, amount_paid, tanggal_bayar, cara_bayar, rekening_bank, ref_no, pembayaran_id"
     )
     .eq("detail_premi_id", detailPremiId)
     .order("tanggal_bayar", { ascending: false });

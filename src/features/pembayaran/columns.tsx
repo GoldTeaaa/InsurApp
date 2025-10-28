@@ -1,8 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { format, parseISO } from 'date-fns';
 import { PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
-import { pre } from 'framer-motion/client';
 import PembayaranPremiDropdown from './PembayaranPremiDropdown';
+import { getStatusClass } from '@/lib/utils/getStatusBadge';
+import { formatCurrencyIDR } from '@/lib/utils/formatCurrencyIDR';
 
 export const columns: ColumnDef<PembayaranTableRow>[] = [
   {
@@ -33,12 +34,7 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
     header: 'Premi Net',
     cell: ({ getValue }) => {
       const amount = getValue<number>();
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0, // Adjust as needed
-        maximumFractionDigits: 2, // Adjust as needed
-      }).format(amount);
+      return formatCurrencyIDR(amount);
     },
   },
   {
@@ -46,12 +42,7 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
     header: 'Total Pembayaran',
     cell: ({ getValue }) => {
       const amount = getValue<number>();
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0, // Adjust as needed
-        maximumFractionDigits: 2, // Adjust as needed
-      }).format(amount);
+      return formatCurrencyIDR(amount);
     },
   },
   {
@@ -59,12 +50,7 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
     header: 'Sisa Pembayaran',
     cell: ({ getValue }) => {
       const amount = getValue<number>();
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0, // Adjust as needed
-        maximumFractionDigits: 2, // Adjust as needed
-      }).format(amount);
+      return formatCurrencyIDR(amount);
     }
   },
   {
@@ -73,21 +59,15 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
     // You could add conditional styling here based on the status value
     cell: ({ getValue }) => {
       const status = getValue<string>();
-      let color = '';
-      switch (status) {
-        case 'paid': color = 'text-green-500'; break;
-        case 'unpaid': color = 'text-red-500'; break;
-        case 'partially_paid': color = 'text-yellow-500'; break;
-        default: color = 'text-gray-500';
-      }
-      return <span className={color}>{status}</span>;
+
+      return <span className={getStatusClass(status)}>{status.replace('_', ' ')}</span>;
     },
   },
   {
     id: 'actions',
     cell: ({ row }) => {
       const pembayaran = row.original;
-      return(
+      return (
         <PembayaranPremiDropdown
           id={pembayaran.id}
         />

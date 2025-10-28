@@ -3,6 +3,7 @@ import {
     addPembayaranPremiFormSchema, 
     addPembayaranPremiPayloadSchema 
 } from "@/lib/pembayaran/pembayaran_premi/types";
+import { supabase } from "@/lib/supabase";
 
 type State = {
     success: boolean;
@@ -34,8 +35,21 @@ export async function addPembayaranAction(
     console.log("FROM SERVER PAYLOAD:", payload);
     // Here you would add your database logic, e.g., await db.insert(...)
 
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const {data, error} = await supabase.rpc('pembayaran_premi',{
+        p_detail_premi_id : payload.detail_premi_id,
+        p_amount_paid : payload.amount_paid,
+        p_tanggal_bayar : payload.tanggal_bayar,
+        p_cara_bayar : payload.cara_bayar,
+        p_ref_no : payload.ref_no,
+        p_rekening_bank : payload.rekening_bank
+    })
+
+    if(error){
+        return {
+            success: false,
+            message: error.message,
+        }
+    }
 
     return {
         success: true,

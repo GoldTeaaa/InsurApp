@@ -5,7 +5,7 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import getPremiHistoryDetails from "../actions/getPremiHistoryDetails";
 import {
     Table,
@@ -15,36 +15,70 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/table";
-import { PremiHistoryRow } from "@/lib/pembayaran/pembayaran_premi/types";
-import { columns } from "@/features/pembayaran/premiHistory/premiHistoryColumns";
+import { AddPembayaranPremiForm, addPembayaranPremiFormSchema, PremiHistoryRow } from "@/lib/pembayaran/pembayaran_premi/types";
+import { columns } from "@/features/pembayaran/premiHistory/PremiHistoryColumns";
+import PremiFormDialog from "../PremiFormDialog";
+import { set } from "date-fns";
 
-export default function PremiHistoryTable({ id }: { id: string }) {
+type PremiHistoryTableProps = {
+    detailPremiId: string;
+    onEditSuccess: () => void;
+};
+
+export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: PremiHistoryTableProps) {
     const [data, setData] = useState<PremiHistoryRow[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [editingPremiId, setEditingPremiId] = useState<string | null>(null);
+    const [pembayaranPremiToEdit, setPembayaranPremiToEdit] = useState<AddPembayaranPremiForm | undefined>(undefined);
 
     useEffect(() => {
         async function fetchData() {
             setIsLoading(true);
-            const result = await getPremiHistoryDetails({ detailPremiId: id });
+            const result = await getPremiHistoryDetails({ detailPremiId });
             if (result.success && result.data) {
                 setData(result.data);
             }
             setIsLoading(false);
         }
         fetchData();
-    }, [id]);
+    }, [detailPremiId]);
+
+    const handleOpenEditDialog = useCallback((premiId: string) => {
+        const premi = data.find(p => p.pembayaran_id === premiId);
+        if (premi) {
+            const parseResult = addPembayaranPremiFormSchema.safeParse(premi);
+            if (parseResult.success) {
+                setPembayaranPremiToEdit(parseResult.data);
+                setEditingPremiId(premiId);
+            }
+        }
+    }, [data]);
+
+    const handleEditSuccess = () => {
+        async function refetch() {
+            const result = await getPremiHistoryDetails({ detailPremiId });
+            if (result.success && result.data) {
+                setData(result.data);
+            }
+        }
+        refetch();
+        onEditSuccess(); // Propagate success to parent to refresh its data
+        setEditingPremiId(null);
+        setPembayaranPremiToEdit(undefined);
+    }
+
+    const tableColumns = useMemo(() => columns({
+        onEdit: handleOpenEditDialog
+    }), [handleOpenEditDialog]);
 
     const table = useReactTable({
         data,
-        columns,
+        columns: tableColumns,
         getCoreRowModel: getCoreRowModel(),
     });
 
     return (
-        <div>
-            <h1 className="text-xl text-black font-semibold mb-4">
-                {`Polis ${data[0]?.nomor_polis}`}
-            </h1>
+        <>
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -65,7 +99,7 @@ export default function PremiHistoryTable({ id }: { id: string }) {
                 <TableBody>
                     {isLoading ? (
                         <TableRow>
-                            <TableCell colSpan={columns.length} className="h-24 text-center">
+                            <TableCell colSpan={tableColumns.length} className="h-24 text-center">
                                 Loading...
                             </TableCell>
                         </TableRow>
@@ -88,7 +122,7 @@ export default function PremiHistoryTable({ id }: { id: string }) {
                     ) : (
                         <TableRow>
                             <TableCell
-                                colSpan={columns.length}
+                                colSpan={tableColumns.length}
                                 className="h-24 text-center"
                             >
                                 No history found.
@@ -97,6 +131,20 @@ export default function PremiHistoryTable({ id }: { id: string }) {
                     )}
                 </TableBody>
             </Table>
-        </div>
+            {editingPremiId && (
+                <PremiFormDialog
+                    id={editingPremiId}
+                    isOpen={!!editingPremiId}
+                    onOpenChange={(isOpen) => {
+                        if (!isOpen) {
+                            setEditingPremiId(null);
+                            setPembayaranPremiToEdit(undefined);
+                        }
+                    }}
+                    onSuccess={handleEditSuccess}
+                    updateValues={pembayaranPremiToEdit}
+                />
+            )}
+        </>
     );
 }

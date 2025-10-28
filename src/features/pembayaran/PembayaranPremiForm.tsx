@@ -14,19 +14,35 @@ import {
     cara_bayar,
     type AddPembayaranPremiForm
 } from "@/lib/pembayaran/pembayaran_premi/types";
+import updatePembayaranAction from "./actions/updatePembayaranAction";
 
-export default function AddPembayaranPremiForm({
+type PembayaranPremiFormProps = {
+    id: string;
+    onSuccess: () => void;
+    updateValues?: AddPembayaranPremiForm;
+};
+
+export default function PembayaranPremiForm({
     id,
-    onSuccess 
-}: { id: string, onSuccess: () => void }) {
+    onSuccess,
+    updateValues
+}: PembayaranPremiFormProps) {
 
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [state, formAction, isPending] = useActionState(addPembayaranAction.bind(null, id), { success: false, message: "" });
+    const [state, formAction, isPending] = useActionState(
+        updateValues ?
+            updatePembayaranAction.bind(null, id) :
+            addPembayaranAction.bind(null, id),
+        {
+            success: false,
+            message: ""
+        }
+    );
 
     const methods = useForm<AddPembayaranPremiForm>({
         mode: 'all',
         resolver: zodResolver(addPembayaranPremiFormSchema),
-        defaultValues: defaultAddPembayaranPremiForm,
+        defaultValues: updateValues || defaultAddPembayaranPremiForm,
     });
 
     useEffect(() => {
@@ -34,6 +50,12 @@ export default function AddPembayaranPremiForm({
             onSuccess();
         }
     }, [state, onSuccess]);
+
+    useEffect(() => {
+        if (updateValues) {
+            methods.reset(updateValues);
+        }
+    }, [updateValues, methods]);
 
     const handleReview = async () => {
         const isValid = await methods.trigger();
@@ -56,7 +78,7 @@ export default function AddPembayaranPremiForm({
                     <div className="flex justify-between">
                         <span className="text-gray-600">Nominal:</span>
                         <span className="font-medium">
-                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(formData.nominal)}
+                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(formData.amount_paid)}
                         </span>
                     </div>
                     <div className="flex justify-between">
@@ -78,7 +100,7 @@ export default function AddPembayaranPremiForm({
                 <form action={formAction} className="mt-6 space-y-4">
                     {/* Hidden inputs to pass data to server action */}
                     <input type="hidden" {...methods.register('tanggal_bayar')} />
-                    <input type="hidden" {...methods.register('nominal')} />
+                    <input type="hidden" {...methods.register('amount_paid')} />
                     <input type="hidden" {...methods.register('cara_bayar')} />
                     <input type="hidden" {...methods.register('ref_no')} />
                     <input type="hidden" {...methods.register('rekening_bank')} />
@@ -115,8 +137,8 @@ export default function AddPembayaranPremiForm({
                     label="Tanggal Bayar"
                 />
                 <FormTextField<AddPembayaranPremiForm>
-                    name='nominal'
-                    label="Nominal"
+                    name='amount_paid'
+                    label="amount_paid"
                     type="number"
                 />
                 <SelectField<AddPembayaranPremiForm>
@@ -140,7 +162,6 @@ export default function AddPembayaranPremiForm({
                     Tambah Pembayaran
                 </Button>
 
-                {/* Display validation errors from RHF if any */}
                 {!methods.formState.isValid && methods.formState.isSubmitted && (
                     <p className="mt-2 text-sm text-red-600">Harap periksa kembali data yang Anda masukkan.</p>
                 )}

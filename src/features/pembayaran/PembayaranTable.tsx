@@ -1,15 +1,17 @@
 'use client';
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { columns } from "@/features/pembayaran/columns";
 import { PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
 import PremiHistoryDialog from "./premiHistory/PremiHistoryDialog";
-import AddPremiDialog from "./AddPremiDialog";
+import AddPremiDialog from "./PremiFormDialog";
 
 export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }) {
     const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
     const [AddPembayaranPremiToId, setPembayaranPremiToId] = useState<string | null>(null);
+    const router = useRouter();
 
     const table = useReactTable({
         data,
@@ -20,12 +22,13 @@ export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }
     const handleOpenAddDialog = () => {
         if (selectedRowId) {
             setPembayaranPremiToId(selectedRowId);
-            setSelectedRowId(null); // Close history dialog to show the add dialog
+            setSelectedRowId(null);
         }
     };
 
-    const handleAddSuccess = (id: string) => {
-        setPembayaranPremiToId(null); 
+    const handleOnSuccess = (id: string) => {
+        router.refresh();
+        setPembayaranPremiToId(null);
         setSelectedRowId(id);
     };
 
@@ -80,6 +83,8 @@ export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }
                     isOpen={!!selectedRowId}
                     onOpenChange={(isOpen) => !isOpen && setSelectedRowId(null)}
                     onAddNew={handleOpenAddDialog}
+                    onEditSuccess={() => router.refresh()}
+                    data={data.filter((row) => row.id === selectedRowId)}
                 />
             )}
 
@@ -88,7 +93,7 @@ export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }
                     id={AddPembayaranPremiToId}
                     isOpen={!!AddPembayaranPremiToId}
                     onOpenChange={(isOpen) => !isOpen && setPembayaranPremiToId(null)}
-                    onSuccess={() => handleAddSuccess(AddPembayaranPremiToId)}
+                    onSuccess={() => handleOnSuccess(AddPembayaranPremiToId)}
                 />
             )}
         </>

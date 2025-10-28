@@ -1,17 +1,17 @@
 import z from "zod";
 
 enum status {
-    paid = 'paid',
-    unpaid = 'unpaid',
-    partially_paid = 'partially_paid'
+  paid = "paid",
+  unpaid = "unpaid",
+  partially_paid = "partially_paid",
 }
 
 export type PembayaranPremiProps = {
-    search?: string;
-    page?: number;
-    size?: number;
-    status?: string
-}
+  search?: string;
+  page?: number;
+  size?: number;
+  status?: string;
+};
 
 export type PembayaranTableRow = {
   id: string;
@@ -27,6 +27,8 @@ export type PembayaranTableRow = {
 };
 
 export type PremiHistoryRow = {
+  detail_premi_id: string;
+  pembayaran_id: string;
   nomor_polis: string;
   amount_paid: number;
   tanggal_bayar: string;
@@ -40,25 +42,30 @@ export type PremiHistoryRow = {
 export const cara_bayar = ["cash", "transfer", "virtual account"] as const;
 
 export const addPembayaranPremiPayloadSchema = z.object({
-    id: z.string().uuid(),
-    tanggal_bayar: z.coerce.date(),
-    nominal: z.coerce.number().min(1, "Nominal wajib diisi"),
-    cara_bayar: z.enum(cara_bayar),
-    ref_no: z.string().min(1, "Ref No wajib diisi"),
-    rekening_bank: z.string().nullable().optional(),
+  detail_premi_id: z.string().uuid(),
+  tanggal_bayar: z.coerce.date(),
+  amount_paid: z.coerce.number().min(1, "Nominal wajib diisi"),
+  cara_bayar: z.enum(cara_bayar),
+  ref_no: z.string().min(1, "Ref No wajib diisi"),
+  rekening_bank: z.string().nullable().optional(),
 });
 
-export const addPembayaranPremiFormSchema = addPembayaranPremiPayloadSchema.omit({
-    id: true,
-})
+export const addPembayaranPremiFormSchema =
+  addPembayaranPremiPayloadSchema.omit({
+    detail_premi_id: true,
+  });
 
-export type AddPembayaranPremiPayload = z.infer<typeof addPembayaranPremiPayloadSchema>;
-export type AddPembayaranPremiForm = z.infer<typeof addPembayaranPremiFormSchema>;
+export type AddPembayaranPremiPayload = z.infer<
+  typeof addPembayaranPremiPayloadSchema
+>;
+export type AddPembayaranPremiForm = z.infer<
+  typeof addPembayaranPremiFormSchema
+>;
 
 export const defaultAddPembayaranPremiForm: AddPembayaranPremiForm = {
-    tanggal_bayar: new Date(),
-    nominal: 0,
-    cara_bayar: "cash",
-    ref_no: "",
-    rekening_bank: null,
-}
+  tanggal_bayar: new Date(),
+  amount_paid: 0,
+  cara_bayar: "cash",
+  ref_no: "",
+  rekening_bank: null,
+};

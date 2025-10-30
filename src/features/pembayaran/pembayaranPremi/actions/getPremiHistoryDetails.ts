@@ -5,11 +5,9 @@ import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<PremiHistoryRow[]>;
 
-export default async function getPremiHistoryDetails({
-  detailPremiId,
-}: {
-  detailPremiId: string;
-}): Promise<ReturnState> {
+export default async function getPremiHistoryDetails(
+  detailPremiId: string
+): Promise<ReturnState> {
   const { data, error } = await supabase
     .from("pembayaran_history_view")
     .select(

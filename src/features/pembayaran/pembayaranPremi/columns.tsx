@@ -5,11 +5,28 @@ import PembayaranPremiDropdown from './PembayaranPremiDropdown';
 import { getStatusClass } from '@/lib/utils/getStatusBadge';
 import { formatCurrencyIDR } from '@/lib/utils/formatCurrencyIDR';
 
+export type PembayaranTableMeta = {
+  onRowClick: (id: string) => void;
+}
+
 export const columns: ColumnDef<PembayaranTableRow>[] = [
   {
     accessorKey: 'nomor_polis',
     header: 'Nomor Polis',
-    // You can add a cell renderer here if you want to make it a link or add an icon
+    cell: ({ row, table }) => {
+      const nomor_polis = row.getValue<string>('nomor_polis');
+      const { onRowClick } = table.options.meta as PembayaranTableMeta;
+
+      return (
+        <button
+          // variant="link"
+          className="p-0 text-center hover:underline "
+          onClick={() => onRowClick(row.original.id)}
+        >
+          {nomor_polis}
+        </button>
+      );
+    }
   },
   {
     accessorKey: 'nama_tertanggung',
@@ -65,11 +82,13 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const pembayaran = row.original;
+      const { onRowClick } = table.options.meta as PembayaranTableMeta;
       return (
         <PembayaranPremiDropdown
-          id={pembayaran.id}
+          pembayaranPremiId={pembayaran.id}
+          onRowClick={onRowClick}
         />
       )
     }

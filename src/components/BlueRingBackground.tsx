@@ -25,9 +25,9 @@ export default function BlueRingBackground() {
     const CENTER = { x: w / 2, y: h / 2 };
 
     // Particle ring params (tuned for desktop + mobile)
-    const particles = 900; // increase for denser ring (cost: fill calls)
-    const baseRadius = Math.min(w, h) * 0.27; // ring radius
-    const thickness = Math.min(w, h) * 0.11; // ring thickness
+    const particles = 5000; // increase for denser ring (cost: fill calls)
+    const baseRadius = Math.min(w, h) * 0.5; // ring radius
+    const thickness = Math.min(w, h) * 0.18; // ring thickness
 
     // Precompute angles for the ring points
     const pts = new Array(particles).fill(0).map((_, i) => {
@@ -112,9 +112,7 @@ export default function BlueRingBackground() {
       ctx.scale(DPR, DPR);
       CENTER.x = w / 2; // TS will complain: CENTER is const
       CENTER.y = h / 2; // but we’re mutating fields; suppress with //@ts-ignore
-      // @ts-ignore
       CENTER.x = w / 2;
-      // @ts-ignore
       CENTER.y = h / 2;
     }
 
@@ -129,7 +127,7 @@ export default function BlueRingBackground() {
   return (
     <canvas
       ref={ref}
-      className="pointer-events-none fixed inset-0 -z-10 h-full w-full [contain:layout_paint_size]"
+      className="pointer-events-none absolute inset-0 h-full w-full [contain:layout_paint_size]"
     />
   );
 }

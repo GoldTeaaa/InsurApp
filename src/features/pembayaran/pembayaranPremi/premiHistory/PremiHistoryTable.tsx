@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import getPremiHistoryDetails from "../actions/getPremiHistoryDetails";
+import deletePembayaranPremi from "../actions/deletePembayaranPremi";
 import {
     Table,
     TableBody,
@@ -16,9 +17,8 @@ import {
     TableRow,
 } from "@/components/table";
 import { AddPembayaranPremiForm, addPembayaranPremiFormSchema, PremiHistoryRow } from "@/lib/pembayaran/pembayaran_premi/types";
-import { columns } from "@/features/pembayaran/premiHistory/PremiHistoryColumns";
+import { columns } from "@/features/pembayaran/pembayaranPremi/premiHistory/PremiHistoryColumns";
 import PremiFormDialog from "../PremiFormDialog";
-import { set } from "date-fns";
 
 type PremiHistoryTableProps = {
     detailPremiId: string;
@@ -28,20 +28,21 @@ type PremiHistoryTableProps = {
 export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: PremiHistoryTableProps) {
     const [data, setData] = useState<PremiHistoryRow[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [editingPremiId, setEditingPremiId] = useState<string | null>(null);
     const [pembayaranPremiToEdit, setPembayaranPremiToEdit] = useState<AddPembayaranPremiForm | undefined>(undefined);
 
-    useEffect(() => {
-        async function fetchData() {
-            setIsLoading(true);
-            const result = await getPremiHistoryDetails({ detailPremiId });
-            if (result.success && result.data) {
-                setData(result.data);
-            }
-            setIsLoading(false);
+    const refetchData = useCallback(async () => {
+        const result = await getPremiHistoryDetails(detailPremiId);
+        if (result.success && result.data) {
+            setData(result.data);
         }
-        fetchData();
     }, [detailPremiId]);
+
+    useEffect(() => {
+        setIsLoading(true);
+        refetchData().finally(() => setIsLoading(false));
+    }, [refetchData]);
 
     const handleOpenEditDialog = useCallback((premiId: string) => {
         const premi = data.find(p => p.pembayaran_id === premiId);
@@ -54,22 +55,31 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: Prem
         }
     }, [data]);
 
-    const handleEditSuccess = () => {
-        async function refetch() {
-            const result = await getPremiHistoryDetails({ detailPremiId });
-            if (result.success && result.data) {
-                setData(result.data);
-            }
-        }
-        refetch();
+    const handleEditSuccess = async () => {
+        await refetchData();
         onEditSuccess(); // Propagate success to parent to refresh its data
         setEditingPremiId(null);
         setPembayaranPremiToEdit(undefined);
     }
 
+    const handleDelete = useCallback(async (pembayaranPremiId: string) => {
+        if (window.confirm("Apakah Anda yakin ingin menghapus pembayaran premi ini?")) {
+            setIsDeleting(true);
+            const result = await deletePembayaranPremi(pembayaranPremiId);
+            if (result.success) {
+                await refetchData();
+                onEditSuccess();
+            } else {
+                alert(result.message || "Gagal menghapus pembayaran.");
+            }
+            setIsDeleting(false);
+        }
+    }, [refetchData, onEditSuccess]);
+
     const tableColumns = useMemo(() => columns({
-        onEdit: handleOpenEditDialog
-    }), [handleOpenEditDialog]);
+        onEdit: handleOpenEditDialog,
+        onDelete: handleDelete
+    }), [handleOpenEditDialog, handleDelete]);
 
     const table = useReactTable({
         data,
@@ -97,7 +107,7 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: Prem
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {isLoading ? (
+                    {isLoading || isDeleting ? (
                         <TableRow>
                             <TableCell colSpan={tableColumns.length} className="h-24 text-center">
                                 Loading...

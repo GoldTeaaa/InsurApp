@@ -1,9 +1,9 @@
 'use client';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, useReactTable, TableMeta } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
-import { columns } from "@/features/pembayaran/columns";
+import { columns } from "@/features/pembayaran/pembayaranPremi/columns";
 import { PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
 import PremiHistoryDialog from "./premiHistory/PremiHistoryDialog";
 import AddPremiDialog from "./PremiFormDialog";
@@ -13,10 +13,17 @@ export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }
     const [AddPembayaranPremiToId, setPembayaranPremiToId] = useState<string | null>(null);
     const router = useRouter();
 
+    const handleRowClick = (id: string) => {
+        setSelectedRowId(id);
+    };
+
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        meta: {
+            onRowClick: handleRowClick,
+        }
     })
 
     const handleOpenAddDialog = () => {
@@ -55,8 +62,6 @@ export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }
                             <TableRow
                                 key={row.id}
                                 data-state={row.getIsSelected() && 'selected'}
-                                onClick={() => setSelectedRowId(row.original.id)}
-                                className="cursor-pointer"
                             >
                                 {row.getVisibleCells().map(cell => (
                                     <TableCell key={cell.id}>

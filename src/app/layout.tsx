@@ -1,7 +1,6 @@
+import ClientProviders from "@/providers/ClientProvider";
 import "../style/globals.css";
 import { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
-
 
 export const metadata: Metadata = { 
   title: "InsureCo", description: "Internal CRM" 
@@ -9,11 +8,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="id" suppressHydrationWarning className="h-full">
       <body>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        <ClientProviders>
           {children}
-        </ThemeProvider>
+        </ClientProviders>
       </body>
     </html>
   );

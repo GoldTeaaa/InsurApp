@@ -1,5 +1,3 @@
-"use client";
-import { useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,13 +9,11 @@ import { EllipsisVerticalIcon } from "lucide-react";
 import { Button } from "@/components/button";
 
 type Props = {
-    pembayaran_id: string
-    onEdit: (id: string) => void;
+    pembayaranKomisiId: string
 }
 
-export default function EditOrDeletePremiDropdown({ 
-    pembayaran_id,
-    onEdit
+export default function PembayaranKomisiDropdown({
+    pembayaranKomisiId,
 }: Props) {
     return (
         <>
@@ -30,11 +26,11 @@ export default function EditOrDeletePremiDropdown({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => onEdit(pembayaran_id)}>
-                        Edit
+                    <DropdownMenuItem>
+                        Detail Pembayaran
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        Delete
+                        Update Pembayaran
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

@@ -23,3 +23,10 @@ export const tableQuerySchema = z.object({
     // .pipe(sortEnum),
 });
 export type tableQuery = z.infer<typeof tableQuerySchema>;
+
+export type TableParams = {
+  search?: string;
+  page?: number;
+  size?: number;
+  status?: string;
+};

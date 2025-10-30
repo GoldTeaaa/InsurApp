@@ -1,15 +1,8 @@
 "use server";
 
 import { supabase } from "@/lib/supabase";
-import { ActionReturnState } from "@/lib/types";
+import { ActionReturnState, TableParams } from "@/lib/types";
 import { PembayaranTableRow } from "@/lib/pembayaran/pembayaran_premi/types";
-
-type PembayaranTableParams = {
-  search?: string;
-  page?: number;
-  size?: number;
-  status?: string;
-};
 
 type ReturnState = ActionReturnState<PembayaranTableRow[]>;
 
@@ -18,15 +11,20 @@ export default async function getPembayaranTableData({
   page,
   size,
   status,
-}: PembayaranTableParams): Promise<ReturnState> {
-  const { data, error } = await supabase.rpc("pembayaran_table", {
+}: TableParams): Promise<ReturnState> {
+  const { data, error } = await supabase.rpc("premi_pembayaran_table", {
     p_search: search,
     p_page: page,
     p_size: size,
     p_status: status,
   });
 
-  if (error) throw new Error(error.message);
+  console.log("Table data: ", data);
+
+  if (error) return {
+    success: false,
+    message: error.message,
+  };
 
   return {
     success: true,

@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +8,13 @@ import {
 } from "@/components/dropdown-menu";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { Button } from "@/components/button";
-import PremiHistoryDialog from "./premiHistory/PremiHistoryDialog";
 
-export default function PembayaranPremiDropdown({ id }: { id: string }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+type PembayaranPremiDropdownProps = {
+  pembayaranPremiId: string;
+  onRowClick: (pembayaranPremiId: string) => void;
+};
 
+export default function PembayaranPremiDropdown({ pembayaranPremiId, onRowClick }: PembayaranPremiDropdownProps) {
   return (
     <>
       <DropdownMenu>
@@ -25,8 +26,11 @@ export default function PembayaranPremiDropdown({ id }: { id: string }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onSelect={() => setIsModalOpen(true)}>
+          <DropdownMenuItem onClick={() => onRowClick(pembayaranPremiId)}>
             Detail Pembayaran
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            Update Pembayaran
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

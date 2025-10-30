@@ -3,13 +3,17 @@
 import { PremiHistoryRow } from "@/lib/pembayaran/pembayaran_premi/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { format, parseISO } from "date-fns";
-import EditOrDeletePremiDropdown from "@/features/pembayaran/EditOrDeletePremiDropdown";
+import EditOrDeletePremiDropdown from "@/features/pembayaran/pembayaranPremi/premiHistory/EditOrDeletePremiDropdown";
 
 type PremiHistoryColumnsProps = {
-    onEdit: (premiId: string) => void;
+    onEdit: (pembayaranPremiId: string) => void;
+    onDelete: (pembayaranPremiId: string) => void;
 };
 
-export const columns = ({onEdit}: PremiHistoryColumnsProps): ColumnDef<PremiHistoryRow>[] => [
+export const columns = ({
+    onEdit, 
+    onDelete
+}: PremiHistoryColumnsProps): ColumnDef<PremiHistoryRow>[] => [
     {
         accessorKey: "tanggal_bayar",
         header: "Tanggal Bayar",
@@ -51,8 +55,9 @@ export const columns = ({onEdit}: PremiHistoryColumnsProps): ColumnDef<PremiHist
             const pembayaran = row.original;
             return (
                 <EditOrDeletePremiDropdown
-                    pembayaran_id={pembayaran.pembayaran_id}
+                    pembayaranPremiId={pembayaran.pembayaran_id}
                     onEdit={onEdit}
+                    onDelete={onDelete}
                 />
             )
         }

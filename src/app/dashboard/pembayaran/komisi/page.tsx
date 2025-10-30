@@ -2,6 +2,7 @@ import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import getPembayaranKomisiTableData from "@/features/pembayaran/pembayaranKomisi/actions/getPembayaranKomisiTableData";
 import KomisiPembayaranTable from "@/features/pembayaran/pembayaranKomisi/KomisiPembayaranTable";
+import StatusFilters from "@/features/pembayaran/pembayaranPremi/StatusFilters";
 import { komisiTableData, komisiTableRowData } from "@/lib/pembayaran/pembayaran_komisi/types";
 import { TableParams } from "@/lib/types";
 
@@ -26,11 +27,12 @@ export default async function Page({
 
     return (
         <div>
-            <Search 
+            <Search
                 placeholder="Cari nomor-polis / nama "
                 search={search}
             />
-            <KomisiPembayaranTable data={tableRowData}/>
+            <StatusFilters />
+            <KomisiPembayaranTable data={tableRowData} />
             <Pagination
                 page={page}
                 pageCount={Math.ceil(totalCount / size)}

@@ -26,6 +26,23 @@ export default function StatusFilters() {
         replace(`${pathname}?${params.toString()}`);
     };
 
+    const getButtonClass = (statusValue: string | undefined, isActive: boolean) => {
+        const baseClass = "px-4 py-2 rounded-lg text-sm font-medium transition-colors";
+        if (!isActive) {
+            return `${baseClass} bg-gray-200 text-gray-600 hover:bg-gray-300`;
+        }
+        switch (statusValue) {
+            case 'paid':
+                return `${baseClass} bg-blue-600 text-white`;
+            case 'unpaid':
+                return `${baseClass} bg-red-600 text-white`;
+            case 'partially_paid':
+                return `${baseClass} bg-orange-500 text-white`;
+            default: // For 'Semua' or undefined
+                return `${baseClass} bg-blue-600 text-white`;
+        }
+    };
+
     return (
         <div className="flex items-center gap-2 py-4">
             {statuses.map((status) => {
@@ -34,9 +51,7 @@ export default function StatusFilters() {
                     <button
                         key={status.label}
                         onClick={() => handleFilterChange(status.value)}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors 
-                            ${isActive ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`
-                        }
+                        className={getButtonClass(status.value, isActive)}
                     >
                         {status.label}
                     </button>

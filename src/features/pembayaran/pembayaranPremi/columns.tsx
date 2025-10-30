@@ -14,6 +14,7 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
     accessorKey: 'nomor_polis',
     header: 'Nomor Polis',
     cell: ({ row, table }) => {
+      const premiRowId = row.original.id;
       const nomor_polis = row.getValue<string>('nomor_polis');
       const { onRowClick } = table.options.meta as PembayaranTableMeta;
 
@@ -21,7 +22,7 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
         <button
           // variant="link"
           className="p-0 text-center hover:underline "
-          onClick={() => onRowClick(row.original.id)}
+          onClick={() => onRowClick(premiRowId)}
         >
           {nomor_polis}
         </button>
@@ -72,8 +73,7 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Status Pembayaran', // More descriptive header
-    // You could add conditional styling here based on the status value
+    header: 'Status Pembayaran',
     cell: ({ getValue }) => {
       const status = getValue<string>();
 

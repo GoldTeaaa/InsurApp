@@ -35,8 +35,6 @@ export default async function getHistoryPembayaranKomisi({
         }
     }
 
-    console.log("parsedData.data: ", parsedData.data)
-
     return {
         success: true,
         message: "Success",

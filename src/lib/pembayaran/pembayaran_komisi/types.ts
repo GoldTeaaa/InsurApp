@@ -1,6 +1,35 @@
 import z from "zod";
 import { cara_bayar } from "../pembayaran_premi/types";
 
+export const PembayaranKomisiFormSchema = z.object({
+  tanggal_bayar: z.coerce.date(
+    {
+      required_error: "Tanggal bayar wajib diisi",
+    }
+  ),
+  cara_bayar: z.enum(cara_bayar),
+  amount_paid: z.coerce.number().min(1, "Jumlah pembayaran wajib lebih dari 0"),
+  no_kwitansi: z.string().min(1, "No Kwitansi wajib diisi"),
+  rekening_bank: z.string().nullable().optional(),
+})
+
+export const PayloadPembayaranKomisiFormSchema = PembayaranKomisiFormSchema.extend({
+  detail_komisi_id: z.string().uuid()
+})
+
+export type PayloadPembayaranKomisiForm = z.infer<typeof PayloadPembayaranKomisiFormSchema>;
+export type PembayaranKomisiForm = z.infer<typeof PembayaranKomisiFormSchema>;
+
+export const defaultValuePembayaranKomisiForm: PembayaranKomisiForm = {
+  amount_paid: 0,
+  tanggal_bayar: new Date(),
+  cara_bayar: cara_bayar[0],
+  no_kwitansi: "",
+  rekening_bank: null,
+}
+
+// =============== HISTORY PEMBAYARAN TABLE SECTION ================
+
 export type komisiTableRowData = {
   polis_share_id: string;
   nomor_polis: string;

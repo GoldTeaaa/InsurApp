@@ -10,11 +10,13 @@ import { EllipsisVerticalIcon } from "lucide-react";
 import { Button } from "@/components/button";
 
 type Props = {
-    pembayaranKomisiId: string
+    pembayaranKomisiId: string,
+    openDetail: (pembayaranKomisiId: string) => void
 }
 
 export default function PembayaranKomisiDropdown({
-    pembayaranKomisiId
+    pembayaranKomisiId,
+    openDetail
 }: Props){
     return (
         <>
@@ -27,7 +29,7 @@ export default function PembayaranKomisiDropdown({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openDetail(pembayaranKomisiId)}>
                         Edit Pembayaran
                     </DropdownMenuItem>
                     <DropdownMenuItem>

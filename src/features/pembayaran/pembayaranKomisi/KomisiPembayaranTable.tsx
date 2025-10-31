@@ -2,21 +2,33 @@
 import { komisiTableRowData } from "@/lib/pembayaran/pembayaran_komisi/types";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { komisiColumnAttributes } from "./columnPembayaranKomisi";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table"; 
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { useState } from "react";
 import KomisiHistoryDialog from "./komisiHistory/KomisiHistoryDialog";
+import PembayaranKomisiDialog from "@/features/pembayaran/pembayaranKomisi/PembayaranKomisiDialog";
+import { useRouter } from "next/navigation";
 
 export default function KomisiPembayaranTable({ data }: { data: komisiTableRowData[] }) {
-    const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+    const [selectedKomisiId, setSelectedKomisiId] = useState<string | null>(null);
+    const [selectedDetailKomisiId, setSelectedDetailKomisiId] = useState<string | null>(null);
+    const [mode, setMode] = useState<"add" | "edit">("add");
+    const router = useRouter();
+
+    const handleRowClick = (detailKomisiId: string) => {
+        setSelectedKomisiId(detailKomisiId);
+    }
+
+    const handleAddPembayaran = (detailKomisiId: string) => {
+        setSelectedDetailKomisiId(detailKomisiId);
+        setMode("add");
+    }
 
     const table = useReactTable({
         data,
         columns: komisiColumnAttributes,
         getCoreRowModel: getCoreRowModel(),
         meta: {
-            onRowClick: (id: string) => {
-                setSelectedRowId(id);
-            }
+            onRowClick: handleRowClick,
         }
     })
 
@@ -62,15 +74,30 @@ export default function KomisiPembayaranTable({ data }: { data: komisiTableRowDa
                     )}
                 </TableBody>
             </Table>
-            {selectedRowId && (
+            {selectedKomisiId && (
                 <KomisiHistoryDialog
-                    detailKomisiId={selectedRowId}
-                    isOpen={!!selectedRowId}
+                    detailKomisiId={selectedKomisiId}
+                    isOpen={!!selectedKomisiId}
                     onOpenChange={(isOpen) => {
-                        if(!isOpen) setSelectedRowId(null)
+                        if (!isOpen) setSelectedKomisiId(null)
                     }}
+                    addPembayaranKomisi={() => handleAddPembayaran(selectedKomisiId)}
+                    onAddSuccess={() => router.refresh()}
                 />
             )}
+            {
+                selectedDetailKomisiId && (
+                    <PembayaranKomisiDialog
+                        detailPembayaranKomisiId={selectedDetailKomisiId}
+                        isOpen={!!selectedDetailKomisiId}
+                        onOpenChange={(isOpen) => {
+                            if (!isOpen) setSelectedDetailKomisiId(null)
+                        }}
+                        mode={mode}
+                        onAddSuccess={() => router.refresh()}
+                    />
+                )
+            }
         </div>
     );
 }

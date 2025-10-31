@@ -3,7 +3,7 @@ import { Controller, FieldValues, Path, useFormContext } from "react-hook-form";
 type Props<T extends FieldValues> = {
     name: Path<T>;
     label: string;
-    type?: string;
+    type?: "text" | "number";
     defaultValue?: string;
     step?: string;
     min?: string;

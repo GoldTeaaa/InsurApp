@@ -4,6 +4,7 @@ import { PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';
 import PembayaranPremiDropdown from './PembayaranPremiDropdown';
 import { getStatusClass } from '@/lib/utils/getStatusBadge';
 import { formatCurrencyIDR } from '@/lib/utils/formatCurrencyIDR';
+import convertDate from '@/lib/utils/convertDate';
 
 export type PembayaranTableMeta = {
   onRowClick: (id: string) => void;
@@ -42,9 +43,7 @@ export const columns: ColumnDef<PembayaranTableRow>[] = [
     header: 'Tanggal Dibuat',
     cell: ({ getValue }) => {
       const dateString = getValue<string>();
-      if (!dateString) return '-';
-      const date = parseISO(dateString);
-      return format(date, 'dd MMMM yyyy');
+      return convertDate(dateString);
     },
   },
   {

@@ -1,27 +1,32 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/dialog";
 import KomisiHistoryTable from "./KomisiHistoryTable";
 import { useQuery } from "@tanstack/react-query";
 import getHistoryPembayaranKomisi from "../actions/getHistoryPembayaranKomisi";
 import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/button";
 
 type Props = {
     detailKomisiId: string,
     isOpen: boolean,
-    onOpenChange: (isOpen: boolean) => void
+    onOpenChange: (isOpen: boolean) => void,
+    addPembayaranKomisi: () => void,
+    onAddSuccess: () => void
 }
 
 export default function KomisiHistoryDialog({
     detailKomisiId,
     isOpen,
-    onOpenChange
-}:Props){
+    onOpenChange,
+    addPembayaranKomisi,
+    onAddSuccess
+}: Props) {
 
     const { data, isLoading } = useQuery({
         queryKey: ["history-pembayaran-komisi", detailKomisiId],
-        queryFn: () => getHistoryPembayaranKomisi({detailKomisiId})
-    }) 
+        queryFn: () => getHistoryPembayaranKomisi({ detailKomisiId })
+    })
 
-    return(
+    return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-5xl">
                 <DialogHeader>
@@ -31,13 +36,21 @@ export default function KomisiHistoryDialog({
                 </DialogHeader>
                 {isLoading ? (
                     <div className="flex justify-center items-center h-24">
-                        <Spinner/>
+                        <Spinner />
                     </div>
                 ) : (
                     <KomisiHistoryTable
-                        data={data?.success ? (data.data ?? []) : []}
+                        komisiHistoryData={data?.success ? (data.data ?? []) : []}
+                        onAddSuccess={onAddSuccess}
                     />
                 )}
+                <DialogFooter>
+                    <Button
+                        onClick={addPembayaranKomisi}
+                    >
+                        Tambah Pembayaran
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

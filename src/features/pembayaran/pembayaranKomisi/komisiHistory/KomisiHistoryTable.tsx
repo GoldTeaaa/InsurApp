@@ -4,22 +4,34 @@ import { HistoryPembayaranKomisiTableData } from "@/lib/pembayaran/pembayaran_ko
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { komisiHistoryColumns } from "./KomisiHistoryColumns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
+import { useState } from "react";
+import PembayaranKomisiDialog from "../PembayaranKomisiDialog";
 
 type Props = {
-    data: HistoryPembayaranKomisiTableData
+    komisiHistoryData: HistoryPembayaranKomisiTableData,
+    onAddSuccess: () => void
 }
 
 export default function KomisiHistoryTable({
-    data
-}:Props){
+    komisiHistoryData,
+    onAddSuccess
+}: Props) {
+    const [selectedPembayaranKomisiId, setSelectedPembayaranKomisiId] = useState<string | null>(null);
+
+    const handleEditClick = (detailPembayaranKomisiId: string) => {
+        setSelectedPembayaranKomisiId(detailPembayaranKomisiId);
+    }
 
     const table = useReactTable({
-        data,
+        data: komisiHistoryData,
         columns: komisiHistoryColumns,
         getCoreRowModel: getCoreRowModel(),
+        meta: {
+            onEditPembayaranClick: handleEditClick
+        }
     })
 
-    return(
+    return (
         <div>
             <Table>
                 <TableHeader>
@@ -67,6 +79,17 @@ export default function KomisiHistoryTable({
                     )}
                 </TableBody>
             </Table>
+            {selectedPembayaranKomisiId && (
+                <PembayaranKomisiDialog
+                    detailPembayaranKomisiId={selectedPembayaranKomisiId}
+                    isOpen={!!selectedPembayaranKomisiId}
+                    onOpenChange={(isOpen) => {
+                        if(!isOpen) setSelectedPembayaranKomisiId(null)
+                    }}
+                    mode="edit"
+                    onAddSuccess={onAddSuccess}
+                />
+            )}
         </div>
     );
 }

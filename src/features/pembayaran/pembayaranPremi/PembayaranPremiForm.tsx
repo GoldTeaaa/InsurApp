@@ -42,8 +42,10 @@ export default function PembayaranPremiForm({
     const methods = useForm<AddPembayaranPremiForm>({
         mode: 'all',
         resolver: zodResolver(addPembayaranPremiFormSchema),
-        defaultValues: updateValues || defaultAddPembayaranPremiForm,
+        defaultValues: updateValues ?? defaultAddPembayaranPremiForm,
     });
+
+    const { formState: { isDirty } } = methods;
 
     useEffect(() => {
         if (state.success) {
@@ -107,7 +109,7 @@ export default function PembayaranPremiForm({
 
                     <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isPending || !isDirty}
                         className="w-full"
                     >
                         {isPending ? 'Menyimpan...' : 'Konfirmasi & Simpan'}
@@ -159,7 +161,7 @@ export default function PembayaranPremiForm({
                     onClick={handleReview}
                     className='mt-4 w-full'
                 >
-                    Tambah Pembayaran
+                    {updateValues ? "Ubah Pembayaran" : "Tambah Pembayaran"}
                 </Button>
 
                 {!methods.formState.isValid && methods.formState.isSubmitted && (

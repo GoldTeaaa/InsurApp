@@ -1,4 +1,10 @@
-import { defaultValuePembayaranKomisiForm, PembayaranKomisiFormSchema, type PembayaranKomisiForm } from "@/lib/pembayaran/pembayaran_komisi/types";
+'use client';
+import { 
+    defaultValuePembayaranKomisiForm, 
+    HistoryPembayaranKomisiTableRow, 
+    PembayaranKomisiFormSchema,  
+    type PembayaranKomisiForm 
+} from "@/lib/pembayaran/pembayaran_komisi/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import BasePembayaranKomisiForm from "./BasePembayaranKomisiForm";
@@ -6,28 +12,39 @@ import { Button } from "@/components/button";
 import { useActionState, useState, useEffect } from "react";
 import addPembayaranKomisi from "./actions/addPembayaranKomisi";
 import { useRouter } from "next/navigation";
+import updatePembayaranKomisi from "./actions/updatePembayaranKomisi";
 
 type PembayaranKomisiFormProps = {
     mode: "add" | "edit";
-    detailPembayaranKomisiId: string;
-    updateValues?: PembayaranKomisiForm;
+    pembayaranKomisiId?: string;
+    detailKomisiId?: string;
+    updateValues?: HistoryPembayaranKomisiTableRow;
     onAddSuccess: () => void;
 }
 
 export default function PembayaranKomisiForm({
     mode,
-    detailPembayaranKomisiId,
+    pembayaranKomisiId,
+    detailKomisiId,
     updateValues,
     onAddSuccess
 }: PembayaranKomisiFormProps) {
+    console.log("updateValues: ", updateValues);
 
     const router = useRouter();
     const [showConfirmation, setShowConfirmation] = useState(false);
 
+    const initialUpdateValues = PembayaranKomisiFormSchema.safeParse(updateValues);
+
+    // TODO: Update with more grace error handling
+    if(!initialUpdateValues.success) {
+        console.error(initialUpdateValues.error);
+    }
+
     const method = useForm<PembayaranKomisiForm>({
         mode: "all",
         resolver: zodResolver(PembayaranKomisiFormSchema),
-        defaultValues: updateValues ?? defaultValuePembayaranKomisiForm
+        defaultValues: initialUpdateValues.data ?? defaultValuePembayaranKomisiForm
     });
 
     const {
@@ -36,7 +53,9 @@ export default function PembayaranKomisiForm({
     } = method;
 
     const [state, formAction, isPending] = useActionState(
-        addPembayaranKomisi.bind(null, detailPembayaranKomisiId),
+        mode === "add" ? 
+        addPembayaranKomisi.bind(null, detailKomisiId ? detailKomisiId : "") 
+        : updatePembayaranKomisi.bind(null, pembayaranKomisiId ?? ""),
         {
             success: false,
             message: ""
@@ -59,7 +78,10 @@ export default function PembayaranKomisiForm({
     if (showConfirmation) {
         return (
             <div className="p-4 border rounded-lg bg-gray-50">
-                <h3 className="text-lg font-semibold mb-4">Konfirmasi Pembayaran</h3>
+                <h3 className="text-lg font-semibold mb-4">Konfirmasi
+                    <span className="text-blue-600">{mode === "edit" ? " Edit " : " Tambah "}</span>
+                     Pembayaran
+                </h3>
                 <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                         <span className="text-gray-600">Tanggal Bayar:</span>

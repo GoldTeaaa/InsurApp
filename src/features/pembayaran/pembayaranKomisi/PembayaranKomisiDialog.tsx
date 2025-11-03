@@ -1,22 +1,27 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/dialog";
 import PembayaranKomisiForm from "./PembayaranKomisiForm";
+import { HistoryPembayaranKomisiTableRow } from "@/lib/pembayaran/pembayaran_komisi/types";
 
 type PembayaranKomisiDialogProps = {
-    detailPembayaranKomisiId: string
+    detailKomisiId?: string,
+    pembayaranKomisiId?: string,
     isOpen: boolean,
     onOpenChange: (isOpen: boolean) => void,
     mode: "add" | "edit",
     onAddSuccess?: () => void;
+    updateValues?: HistoryPembayaranKomisiTableRow;
 }
 
 export default function PembayaranKomisiDialog({
-    detailPembayaranKomisiId,
+    detailKomisiId,
+    pembayaranKomisiId,
     isOpen,
     onOpenChange,
     mode,
-    onAddSuccess
-}:PembayaranKomisiDialogProps){
-    return(
+    onAddSuccess,
+    updateValues
+}: PembayaranKomisiDialogProps) {
+    return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
@@ -24,10 +29,16 @@ export default function PembayaranKomisiDialog({
                 </DialogHeader>
                 <PembayaranKomisiForm
                     mode={mode}
-                    detailPembayaranKomisiId={detailPembayaranKomisiId}
-                    onAddSuccess={() => { 
-                        onAddSuccess?.(); 
-                        onOpenChange(false); 
+                    {...mode === "edit" ?
+                        {
+                            pembayaranKomisiId: pembayaranKomisiId ?? "",
+                            updateValues: updateValues
+                        }
+                        : { detailKomisiId: detailKomisiId ?? "" }
+                    }
+                    onAddSuccess={() => {
+                        onAddSuccess?.();
+                        onOpenChange(false);
                     }}
                 />
             </DialogContent>

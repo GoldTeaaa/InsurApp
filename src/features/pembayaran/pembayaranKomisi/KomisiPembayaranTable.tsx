@@ -88,7 +88,7 @@ export default function KomisiPembayaranTable({ data }: { data: komisiTableRowDa
             {
                 selectedDetailKomisiId && (
                     <PembayaranKomisiDialog
-                        detailPembayaranKomisiId={selectedDetailKomisiId}
+                        detailKomisiId={selectedDetailKomisiId}
                         isOpen={!!selectedDetailKomisiId}
                         onOpenChange={(isOpen) => {
                             if (!isOpen) setSelectedDetailKomisiId(null)

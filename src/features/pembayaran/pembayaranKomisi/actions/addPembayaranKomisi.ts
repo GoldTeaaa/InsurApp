@@ -3,7 +3,8 @@ import { PayloadPembayaranKomisiFormSchema } from "@/lib/pembayaran/pembayaran_k
 import { supabase } from "@/lib/supabase";
 import { ActionReturnState } from "@/lib/types";
 
-type ReturnState = ActionReturnState<any>;
+// Set to correct return type if determined
+type ReturnState = ActionReturnState<unknown>;
 
 export default async function addPembayaranKomisi(
     detailKomisiId: string,

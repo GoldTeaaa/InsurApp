@@ -17,6 +17,11 @@ export const PayloadPembayaranKomisiFormSchema = PembayaranKomisiFormSchema.exte
   detail_komisi_id: z.string().uuid()
 })
 
+export const UpdatePembayaranKomisiFormSchema = PembayaranKomisiFormSchema.extend({
+  pembayaran_komisi_id: z.string().uuid(),
+})
+
+export type UpdatePembayaranKomisiForm = z.infer<typeof UpdatePembayaranKomisiFormSchema>;
 export type PayloadPembayaranKomisiForm = z.infer<typeof PayloadPembayaranKomisiFormSchema>;
 export type PembayaranKomisiForm = z.infer<typeof PembayaranKomisiFormSchema>;
 

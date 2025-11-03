@@ -11,12 +11,14 @@ import { Button } from "@/components/button";
 
 type Props = {
     pembayaranKomisiId: string,
-    openDetail: (pembayaranKomisiId: string) => void
+    openDetail: (pembayaranKomisiId: string) => void,
+    deletePembayaran: (pembayaranKomisiId: string) => void
 }
 
 export default function PembayaranKomisiDropdown({
     pembayaranKomisiId,
-    openDetail
+    openDetail,
+    deletePembayaran
 }: Props){
     return (
         <>
@@ -32,7 +34,7 @@ export default function PembayaranKomisiDropdown({
                     <DropdownMenuItem onClick={() => openDetail(pembayaranKomisiId)}>
                         Edit Pembayaran
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => deletePembayaran(pembayaranKomisiId)}>
                         Delete Pembayaran
                     </DropdownMenuItem>
                 </DropdownMenuContent>

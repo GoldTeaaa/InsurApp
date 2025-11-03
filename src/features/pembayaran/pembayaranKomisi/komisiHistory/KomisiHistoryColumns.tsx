@@ -5,7 +5,8 @@ import { convertIDR } from "@/lib/utils/convertIDR";
 import convertDate from "@/lib/utils/convertDate";
 
 type onEditPembayaranClick = {
-    onEditPembayaranClick: (id: string) => void
+    onEditPembayaranClick: (id: string) => void,
+    onDeletePembayaranClick: (id: string) => void
 }
 
 export const komisiHistoryColumns: ColumnDef<HistoryPembayaranKomisiTableRow>[] = [
@@ -45,11 +46,15 @@ export const komisiHistoryColumns: ColumnDef<HistoryPembayaranKomisiTableRow>[] 
         id: 'actions',
         cell: ({ row, table }) => {
             const pembayaranKomisiId = row.original.pembayaran_komisi_id
-            const { onEditPembayaranClick } = table.options.meta as onEditPembayaranClick;
+            const { 
+                onEditPembayaranClick,
+                onDeletePembayaranClick
+            } = table.options.meta as onEditPembayaranClick;
             return (
                 <PembayaranKomisiDropdown
                     pembayaranKomisiId={pembayaranKomisiId}
                     openDetail={onEditPembayaranClick}
+                    deletePembayaran={onDeletePembayaranClick}
                 />
             )
         }

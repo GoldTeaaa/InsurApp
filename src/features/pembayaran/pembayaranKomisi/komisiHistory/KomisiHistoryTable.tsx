@@ -6,6 +6,7 @@ import { komisiHistoryColumns } from "./KomisiHistoryColumns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { useState } from "react";
 import PembayaranKomisiDialog from "../PembayaranKomisiDialog";
+import DeleteKomisiAlertDialog from "@/features/pembayaran/pembayaranKomisi/komisiHistory/DeleteKomisiAlertDialog";
 
 type Props = {
     komisiHistoryData: HistoryPembayaranKomisiTableData,
@@ -17,9 +18,14 @@ export default function KomisiHistoryTable({
     onAddSuccess
 }: Props) {
     const [selectedPembayaranKomisiId, setSelectedPembayaranKomisiId] = useState<string | null>(null);
+    const [deletePembayaranKomisiId, setDeletePembayaranKomisiId] = useState<string | null>(null);
 
     const handleEditClick = (detailPembayaranKomisiId: string) => {
         setSelectedPembayaranKomisiId(detailPembayaranKomisiId);
+    }
+
+    const handleDeleteClick = (detailPembayaranKomisiId: string) => {
+        setDeletePembayaranKomisiId(detailPembayaranKomisiId);
     }
 
     const table = useReactTable({
@@ -27,7 +33,8 @@ export default function KomisiHistoryTable({
         columns: komisiHistoryColumns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
-            onEditPembayaranClick: handleEditClick
+            onEditPembayaranClick: handleEditClick,
+            onDeletePembayaranClick: handleDeleteClick
         }
     })
 
@@ -80,16 +87,36 @@ export default function KomisiHistoryTable({
                 </TableBody>
             </Table>
             {selectedPembayaranKomisiId && (
+                // UPDATE ROW
                 <PembayaranKomisiDialog
-                    detailPembayaranKomisiId={selectedPembayaranKomisiId}
+                    pembayaranKomisiId={selectedPembayaranKomisiId}
                     isOpen={!!selectedPembayaranKomisiId}
                     onOpenChange={(isOpen) => {
-                        if(!isOpen) setSelectedPembayaranKomisiId(null)
+                        if (!isOpen) setSelectedPembayaranKomisiId(null)
                     }}
                     mode="edit"
                     onAddSuccess={onAddSuccess}
+                    updateValues={komisiHistoryData.find(
+                        row => row.pembayaran_komisi_id === selectedPembayaranKomisiId
+                    )}
+                // TODO: Add update values
                 />
             )}
+            {
+                deletePembayaranKomisiId && (
+                    <DeleteKomisiAlertDialog
+                        isOpen={!!deletePembayaranKomisiId}
+                        onOpenChange={(isOpen) => {
+                            if (!isOpen) setDeletePembayaranKomisiId(null)
+                        }}
+                        deletePembayaranKomisiId={deletePembayaranKomisiId}
+                        onDeleteSuccess={() => {
+                            setDeletePembayaranKomisiId(null);
+                            onAddSuccess(); // This will trigger a re-fetch in the parent
+                        }}
+                    />
+                )
+            }
         </div>
     );
 }

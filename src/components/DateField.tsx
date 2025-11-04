@@ -21,6 +21,7 @@ export default function DateField<T extends FieldValues>({
             <label className="text-sm font-medium text-gray-700">{label}</label>
             <input
               type="date"
+              name={field.name}
               value={
                 (field.value as unknown) instanceof Date ? field.value.toISOString().split("T")[0]
                   : typeof field.value === "string"
@@ -31,7 +32,7 @@ export default function DateField<T extends FieldValues>({
               onBlur={field.onBlur}
               className={`rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300"
                 }`}
-            />  
+            />
           </div>
           <div>
             {error && <span className="text-sm text-red-600">{error.message}</span>}

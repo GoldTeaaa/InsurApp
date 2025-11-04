@@ -17,15 +17,10 @@ export default function DetailPolis() {
     const [nasabahList, setNasabahList] = useState<ListNasabahType[]>([]);
 
     const {
-        control,
-        trigger
+        getValues
     } = useFormContext<Polis>();
 
-    const [nomor_polis] = useWatch({
-        control,
-        name: ['nomor_polis'],
-    })
-
+    const [nomor_polis] = useState(getValues('nomor_polis'));
 
     useEffect(() => {
         async function fetchNasabahList() {

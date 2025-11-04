@@ -1,17 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import Link from "next/link"
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline"
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger,
-} from "@/components/dropdown-menu"
-import { Button } from "@/components/button"
-import PolisDropdown from "@/components/dropdown"
+import PolisDropdown from "@/features/polis/polisTable/dropdown"
 import AsuransiPenanggungCell from "./AsuransiPenanggungCell"
 
 type PolisTableRow = {

@@ -1,4 +1,5 @@
 import React from "react";
+import { Input } from "@/components/ui/input"
 
 type Props = {
     label: string;
@@ -7,8 +8,15 @@ type Props = {
 export default function UncontrolledTextField({ label, id, ...props }: Props) {
     return (
         <div>
-            <label htmlFor={id}>{label}</label>
-            <input
+            {/* <label htmlFor={id}>{label}</label> */}
+            <Input
+                id={id}
+                placeholder={label}
+                {...props}
+            >
+            
+            </Input>
+            {/* <input
                 id={id}
                 {...props}
                 className={[
@@ -16,7 +24,7 @@ export default function UncontrolledTextField({ label, id, ...props }: Props) {
                     "focus:border-blue-600 focus:ring-1 focus:ring-blue-600",
                     "disabled:cursor-not-allowed disabled:opacity-50",
                 ].join(" ")}
-            />
+            /> */}
             {/* Note: This component does not display validation errors from react-hook-form */}
         </div>
     );

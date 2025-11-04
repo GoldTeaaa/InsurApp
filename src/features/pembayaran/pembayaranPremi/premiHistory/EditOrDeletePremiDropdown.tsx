@@ -1,25 +1,28 @@
-import Link from "next/link"
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline"
+"use client";
+import { useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuTrigger,
-} from "@/components/dropdown-menu"
-import { Button } from "@/components/button"
-import deletePolis from "@/features/polis/actions/delete_polis"
+} from "@/components/dropdown-menu";
+import { EllipsisVerticalIcon } from "lucide-react";
+import { Button } from "@/components/button";
 
+type Props = {
+    pembayaranPremiId: string
+    onEdit: (pembayaranPremiId: string) => void;
+    onDelete: (pembayaranPremiId: string) => void;
+}
 
-export default function PolisDropdown({ id }: { id: string }) {
-    const handleDelete = async () => {
-        if (window.confirm("Are you sure you want to delete this?")) {
-            const res = await deletePolis({ id });
-        }
-    }
-
+export default function EditOrDeletePremiDropdown({ 
+    pembayaranPremiId,
+    onEdit,
+    onDelete
+}: Props) {
     return (
-        <div >
+        <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
@@ -29,16 +32,14 @@ export default function PolisDropdown({ id }: { id: string }) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/polis/${id}/edit`}>
-                            Edit
-                        </Link>
+                    <DropdownMenuItem onClick={() => onEdit(pembayaranPremiId)}>
+                        Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleDelete}>
+                    <DropdownMenuItem onClick={() => onDelete(pembayaranPremiId)}>
                         Delete
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-        </div>
-    )
+        </>
+    );
 }

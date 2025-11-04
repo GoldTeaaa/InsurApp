@@ -4,7 +4,7 @@ import { tableQuerySchema, type PerusahaanSort } from "@/lib/perusahaan_asuransi
 import Search from "@/components/Search";
 import Table from "@/features/perusahaan-asuransi/table-view";
 import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/fetch-table-perusahaan";
-import Pagination from "@/components/pagination";
+import Pagination from "@/components/Pagination";
 
 type RawSearchParams = {
     q?: string;

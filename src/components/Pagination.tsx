@@ -24,8 +24,8 @@ export default function Pagination({
 
   const pages = useMemo(() => rangeWindow(page, pageCount), [page, pageCount]);
 
-  // nothing to paginate
-  if (!pageCount || pageCount <= 1) return null;
+  // nothing to paginate (Optional, user may want to ensure that the data is only one page)
+  if (!pageCount /*|| pageCount <= 1*/) return null;
 
   const go = (next: number) => {
     const params = new URLSearchParams(searchParams.toString());

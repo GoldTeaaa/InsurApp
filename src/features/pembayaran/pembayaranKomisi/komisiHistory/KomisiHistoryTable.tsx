@@ -1,21 +1,21 @@
 'use client';
 
-import { HistoryPembayaranKomisiTableData } from "@/lib/pembayaran/pembayaran_komisi/types";
+import { HistoryPembayaranKomisiTableData, PembayaranKomisiFormSchema } from "@/lib/pembayaran/pembayaran_komisi/types";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { komisiHistoryColumns } from "./KomisiHistoryColumns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PembayaranKomisiDialog from "../PembayaranKomisiDialog";
 import DeleteKomisiAlertDialog from "@/features/pembayaran/pembayaranKomisi/komisiHistory/DeleteKomisiAlertDialog";
 
 type Props = {
     komisiHistoryData: HistoryPembayaranKomisiTableData,
-    onAddSuccess: () => void
+    onAddOrDeleteSuccess: () => void
 }
 
 export default function KomisiHistoryTable({
     komisiHistoryData,
-    onAddSuccess
+    onAddOrDeleteSuccess
 }: Props) {
     const [selectedPembayaranKomisiId, setSelectedPembayaranKomisiId] = useState<string | null>(null);
     const [deletePembayaranKomisiId, setDeletePembayaranKomisiId] = useState<string | null>(null);
@@ -37,6 +37,23 @@ export default function KomisiHistoryTable({
             onDeletePembayaranClick: handleDeleteClick
         }
     })
+
+    const selectedRowForEdit = useMemo(() => {
+        if (!selectedPembayaranKomisiId) return undefined;
+
+        const rowToEdit = komisiHistoryData.find(
+            row => row.pembayaran_komisi_id === selectedPembayaranKomisiId
+        );
+
+        const validatedRow = PembayaranKomisiFormSchema.safeParse(rowToEdit);
+
+        if (!validatedRow.success) {
+            console.error("Invalid row data:", validatedRow.error);
+            return undefined;
+        }
+        return validatedRow.data;
+
+    }, [komisiHistoryData, selectedPembayaranKomisiId]);
 
     return (
         <div>
@@ -86,8 +103,8 @@ export default function KomisiHistoryTable({
                     )}
                 </TableBody>
             </Table>
+            {/* UPDATE PEMBAYARAN KOMISI ACTION */}
             {selectedPembayaranKomisiId && (
-                // UPDATE ROW
                 <PembayaranKomisiDialog
                     pembayaranKomisiId={selectedPembayaranKomisiId}
                     isOpen={!!selectedPembayaranKomisiId}
@@ -95,28 +112,24 @@ export default function KomisiHistoryTable({
                         if (!isOpen) setSelectedPembayaranKomisiId(null)
                     }}
                     mode="edit"
-                    onAddSuccess={onAddSuccess}
-                    updateValues={komisiHistoryData.find(
-                        row => row.pembayaran_komisi_id === selectedPembayaranKomisiId
-                    )}
-                // TODO: Add update values
+                    onAddOrDeleteSuccess={onAddOrDeleteSuccess}
+                    updateValues={selectedRowForEdit}
                 />
             )}
-            {
-                deletePembayaranKomisiId && (
-                    <DeleteKomisiAlertDialog
-                        isOpen={!!deletePembayaranKomisiId}
-                        onOpenChange={(isOpen) => {
-                            if (!isOpen) setDeletePembayaranKomisiId(null)
-                        }}
-                        deletePembayaranKomisiId={deletePembayaranKomisiId}
-                        onDeleteSuccess={() => {
-                            setDeletePembayaranKomisiId(null);
-                            onAddSuccess(); // This will trigger a re-fetch in the parent
-                        }}
-                    />
-                )
-            }
+            {/* DELETE PEMBAYARAN KOMISI ACTION */}
+            {deletePembayaranKomisiId && (
+                <DeleteKomisiAlertDialog
+                    isOpen={!!deletePembayaranKomisiId}
+                    onOpenChange={(isOpen) => {
+                        if (!isOpen) setDeletePembayaranKomisiId(null)
+                    }}
+                    deletePembayaranKomisiId={deletePembayaranKomisiId}
+                    onDeleteSuccess={() => {
+                        setDeletePembayaranKomisiId(null);
+                        onAddOrDeleteSuccess(); // This will trigger a re-fetch in the parent
+                    }}
+                />
+            )}
         </div>
     );
 }

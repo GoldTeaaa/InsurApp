@@ -7,6 +7,7 @@ import { useState } from "react";
 import KomisiHistoryDialog from "./komisiHistory/KomisiHistoryDialog";
 import PembayaranKomisiDialog from "@/features/pembayaran/pembayaranKomisi/PembayaranKomisiDialog";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function KomisiPembayaranTable({ data }: { data: komisiTableRowData[] }) {
     const [selectedKomisiId, setSelectedKomisiId] = useState<string | null>(null);
@@ -22,6 +23,20 @@ export default function KomisiPembayaranTable({ data }: { data: komisiTableRowDa
         setSelectedDetailKomisiId(detailKomisiId);
         setMode("add");
     }
+
+    const queryClient = useQueryClient();
+    const handleAddEditOrDeleteSuccess = (detailKomisiId: string) => {
+        router.refresh();
+        queryClient.invalidateQueries({
+            queryKey: ["history-pembayaran-komisi", detailKomisiId]
+        });
+        setSelectedDetailKomisiId(null);
+    }
+
+    const selectedKomisiData = selectedKomisiId
+        ? data.find((item) => item.polis_share_id === selectedKomisiId)
+        : undefined;
+
 
     const table = useReactTable({
         data,
@@ -74,29 +89,30 @@ export default function KomisiPembayaranTable({ data }: { data: komisiTableRowDa
                     )}
                 </TableBody>
             </Table>
-            {selectedKomisiId && (
+            {selectedKomisiId && selectedKomisiData && (
                 <KomisiHistoryDialog
                     detailKomisiId={selectedKomisiId}
+                    detailKomisiData={selectedKomisiData}
                     isOpen={!!selectedKomisiId}
                     onOpenChange={(isOpen) => {
                         if (!isOpen) setSelectedKomisiId(null)
                     }}
                     addPembayaranKomisi={() => handleAddPembayaran(selectedKomisiId)}
-                    onAddSuccess={() => router.refresh()}
+                    onAddOrDeleteSuccess={() => handleAddEditOrDeleteSuccess(selectedKomisiId)}
                 />
             )}
-            {
-                selectedDetailKomisiId && (
-                    <PembayaranKomisiDialog
-                        detailKomisiId={selectedDetailKomisiId}
-                        isOpen={!!selectedDetailKomisiId}
-                        onOpenChange={(isOpen) => {
-                            if (!isOpen) setSelectedDetailKomisiId(null)
-                        }}
-                        mode={mode}
-                        onAddSuccess={() => router.refresh()}
-                    />
-                )
+            {/* ADD PEMBAYARAN KOMISI */}
+            {selectedDetailKomisiId && (
+                <PembayaranKomisiDialog
+                    detailKomisiId={selectedDetailKomisiId}
+                    isOpen={!!selectedDetailKomisiId}
+                    onOpenChange={(isOpen) => {
+                        if (!isOpen) setSelectedDetailKomisiId(null)
+                    }}
+                    mode={mode}
+                    onAddOrDeleteSuccess={() => handleAddEditOrDeleteSuccess(selectedDetailKomisiId)}
+                />
+            )
             }
         </div>
     );

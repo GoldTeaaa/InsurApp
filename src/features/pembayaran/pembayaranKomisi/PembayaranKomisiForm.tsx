@@ -1,9 +1,8 @@
 'use client';
 import { 
     defaultValuePembayaranKomisiForm, 
-    HistoryPembayaranKomisiTableRow, 
     PembayaranKomisiFormSchema,  
-    type PembayaranKomisiForm 
+    type PembayaranKomisiInputForm 
 } from "@/lib/pembayaran/pembayaran_komisi/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -18,11 +17,11 @@ type PembayaranKomisiFormProps = {
     mode: "add" | "edit";
     pembayaranKomisiId?: string;
     detailKomisiId?: string;
-    updateValues?: HistoryPembayaranKomisiTableRow;
+    updateValues?: PembayaranKomisiInputForm;
     onAddSuccess: () => void;
 }
 
-export default function PembayaranKomisiForm({
+export default function PembayaranKomisiInputForm({
     mode,
     pembayaranKomisiId,
     detailKomisiId,
@@ -31,20 +30,12 @@ export default function PembayaranKomisiForm({
 }: PembayaranKomisiFormProps) {
     console.log("updateValues: ", updateValues);
 
-    const router = useRouter();
     const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const initialUpdateValues = PembayaranKomisiFormSchema.safeParse(updateValues);
-
-    // TODO: Update with more grace error handling
-    if(!initialUpdateValues.success) {
-        console.error(initialUpdateValues.error);
-    }
-
-    const method = useForm<PembayaranKomisiForm>({
+    const method = useForm<PembayaranKomisiInputForm>({
         mode: "all",
         resolver: zodResolver(PembayaranKomisiFormSchema),
-        defaultValues: initialUpdateValues.data ?? defaultValuePembayaranKomisiForm
+        defaultValues: updateValues ?? defaultValuePembayaranKomisiForm
     });
 
     const {
@@ -64,7 +55,7 @@ export default function PembayaranKomisiForm({
 
     useEffect(() => {
         if (state.success) onAddSuccess();
-    }, [state.success, onAddSuccess, router]);
+    }, [state.success, onAddSuccess]);
 
     const handleReview = async () => {
         const isValid = await trigger();

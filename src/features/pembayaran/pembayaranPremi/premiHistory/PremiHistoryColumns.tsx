@@ -5,15 +5,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { format, parseISO } from "date-fns";
 import EditOrDeletePremiDropdown from "@/features/pembayaran/pembayaranPremi/premiHistory/EditOrDeletePremiDropdown";
 
-type PremiHistoryColumnsProps = {
-    onEdit: (pembayaranPremiId: string) => void;
-    onDelete: (pembayaranPremiId: string) => void;
-};
+type ActionProps = {
+    onEdit: (id: string) => void;
+    onDelete: (id: string) => void;
+}
 
-export const columns = ({
-    onEdit, 
-    onDelete
-}: PremiHistoryColumnsProps): ColumnDef<PremiHistoryRow>[] => [
+export const columns : ColumnDef<PremiHistoryRow>[] = [
     {
         accessorKey: "tanggal_bayar",
         header: "Tanggal Bayar",
@@ -51,8 +48,12 @@ export const columns = ({
     },{
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const pembayaran = row.original;
+            const {
+                onEdit,
+                onDelete
+            } = table.options.meta as ActionProps
             return (
                 <EditOrDeletePremiDropdown
                     pembayaranPremiId={pembayaran.pembayaran_id}

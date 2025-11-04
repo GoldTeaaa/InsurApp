@@ -19,10 +19,11 @@ type PremiHistoryDialogProps = {
   onOpenChange: (isOpen: boolean) => void;
   onAddNew: () => void;
   onEditSuccess: () => void;
+  onDeleteSuccess: () => void;
   data?: PembayaranTableRow[];
 };
 
-export default function PremiHistoryDialog({ id, isOpen, onOpenChange, onAddNew, onEditSuccess, data }: PremiHistoryDialogProps) {
+export default function PremiHistoryDialog({ id, isOpen, onOpenChange, onAddNew, onEditSuccess, onDeleteSuccess, data }: PremiHistoryDialogProps) {
   const rowData = data?.[0];
 
   return (
@@ -63,6 +64,7 @@ export default function PremiHistoryDialog({ id, isOpen, onOpenChange, onAddNew,
           <PremiHistoryTable
             detailPremiId={id}
             onEditSuccess={onEditSuccess}
+            onDeleteSuccess={onDeleteSuccess}
           />
         </div>
 

@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/dialog";
 import PembayaranKomisiForm from "./PembayaranKomisiForm";
-import { HistoryPembayaranKomisiTableRow } from "@/lib/pembayaran/pembayaran_komisi/types";
+import { type PembayaranKomisiInputForm} from "@/lib/pembayaran/pembayaran_komisi/types";
 
 type PembayaranKomisiDialogProps = {
     detailKomisiId?: string,
@@ -8,8 +8,8 @@ type PembayaranKomisiDialogProps = {
     isOpen: boolean,
     onOpenChange: (isOpen: boolean) => void,
     mode: "add" | "edit",
-    onAddSuccess?: () => void;
-    updateValues?: HistoryPembayaranKomisiTableRow;
+    onAddOrDeleteSuccess: () => void;
+    updateValues?: PembayaranKomisiInputForm;
 }
 
 export default function PembayaranKomisiDialog({
@@ -18,7 +18,7 @@ export default function PembayaranKomisiDialog({
     isOpen,
     onOpenChange,
     mode,
-    onAddSuccess,
+    onAddOrDeleteSuccess,
     updateValues
 }: PembayaranKomisiDialogProps) {
     return (
@@ -37,7 +37,7 @@ export default function PembayaranKomisiDialog({
                         : { detailKomisiId: detailKomisiId ?? "" }
                     }
                     onAddSuccess={() => {
-                        onAddSuccess?.();
+                        onAddOrDeleteSuccess();
                         onOpenChange(false);
                     }}
                 />

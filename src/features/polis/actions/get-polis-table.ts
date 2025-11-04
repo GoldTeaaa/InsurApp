@@ -1,4 +1,4 @@
-'use server';
+"use server";
 import { ActionReturnState } from "@/lib/types";
 import { supabase } from "@/lib/supabase";
 import { PolisTableQuery } from "@/lib/polis/table-types";
@@ -6,11 +6,15 @@ import { PolisTableRow } from "@/lib/polis/table-types";
 
 type ReturnState = ActionReturnState<PolisTableRow[]>;
 
-export default async function getPolisTableData({search, page, size}: PolisTableQuery): Promise<ReturnState> {
-  const { data, error } = await supabase.rpc("polis_table",{
+export default async function getPolisTableData({
+  search,
+  page,
+  size,
+}: PolisTableQuery): Promise<ReturnState> {
+  const { data, error } = await supabase.rpc("polis_table", {
     p_search: search,
     p_page: page,
-    p_size: size
+    p_size: size,
   });
 
   if (error) {
@@ -25,11 +29,16 @@ export default async function getPolisTableData({search, page, size}: PolisTable
   // Aggregate rows to handle co-insurance policies with multiple insurers
   const aggregatedData = new Map<string, PolisTableRow>();
 
-  (data as PolisTableRow[]).forEach(row => {
+  (data as PolisTableRow[]).forEach((row) => {
     const existingRow = aggregatedData.get(row.id);
     if (existingRow) {
       // If the insurer is not null and not already in the list, add it.
-      if (row.nama_perusahaan_asuransi && !existingRow.nama_perusahaan_asuransi?.includes(row.nama_perusahaan_asuransi)) {
+      if (
+        row.nama_perusahaan_asuransi &&
+        !existingRow.nama_perusahaan_asuransi?.includes(
+          row.nama_perusahaan_asuransi
+        )
+      ) {
         existingRow.nama_perusahaan_asuransi += `, ${row.nama_perusahaan_asuransi}`;
       }
     } else {
@@ -40,7 +49,9 @@ export default async function getPolisTableData({search, page, size}: PolisTable
 
   const processedData = Array.from(aggregatedData.values());
 
-  console.log("Processed data: ", processedData);
-
-  return { success: true, message: "Success", data: processedData };
+  return {
+    success: true,
+    message: "Success",
+    data: processedData,
+  };
 }

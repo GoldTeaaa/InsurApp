@@ -14,38 +14,14 @@ import {
 	TableRow,
 } from "@/components/table"
 import { PolisTableRow } from "@/lib/polis/table-types"
-import getPolisTableData from "../actions/get-polis-table"
-import { PolisTableQuery } from "@/lib/polis/table-types"
-import { useEffect, useState } from "react"
 import { columns } from "@/features/polis/polisTable/columns"
 
-export default function PolisTable({ search, page, size }: PolisTableQuery) {
-	const [data, setData] = useState<PolisTableRow[]>([])
-	const [rowCount, setRowCount] = useState(0)
-
-	useEffect(() => {
-		async function fetchData() {
-			const result = await getPolisTableData({ search, page, size })
-			if (result.success && result.data) {
-				setData(result.data)
-				if (result.data.length > 0) {
-					setRowCount(result.data[0].full_count)
-				}
-			} else {
-				// Handle error case, maybe show a toast notification
-				console.error(result.message)
-				setData([])
-				setRowCount(0)
-			}
-		}
-		fetchData()
-	}, [search, page, size])
+export default function PolisTable({ data }: { data: PolisTableRow[] }) {
 
 	const table = useReactTable({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
-		rowCount: rowCount,
 		manualPagination: true, // Since we are fetching data per page
 	})
 

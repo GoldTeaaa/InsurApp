@@ -23,9 +23,9 @@ export const UpdatePembayaranKomisiFormSchema = PembayaranKomisiFormSchema.exten
 
 export type UpdatePembayaranKomisiForm = z.infer<typeof UpdatePembayaranKomisiFormSchema>;
 export type PayloadPembayaranKomisiForm = z.infer<typeof PayloadPembayaranKomisiFormSchema>;
-export type PembayaranKomisiForm = z.infer<typeof PembayaranKomisiFormSchema>;
+export type PembayaranKomisiInputForm = z.infer<typeof PembayaranKomisiFormSchema>;
 
-export const defaultValuePembayaranKomisiForm: PembayaranKomisiForm = {
+export const defaultValuePembayaranKomisiForm: PembayaranKomisiInputForm = {
   amount_paid: 0,
   tanggal_bayar: new Date(),
   cara_bayar: cara_bayar[0],

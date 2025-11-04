@@ -88,7 +88,10 @@ export default function PembayaranTable({ data }: { data: PembayaranTableRow[] }
                     isOpen={!!selectedRowId}
                     onOpenChange={(isOpen) => !isOpen && setSelectedRowId(null)}
                     onAddNew={handleOpenAddDialog}
+
+                    // FOR EDIT & DELETE ACTIONS
                     onEditSuccess={() => router.refresh()}
+                    onDeleteSuccess={() => router.refresh()}
                     data={data.filter((row) => row.id === selectedRowId)}
                 />
             )}

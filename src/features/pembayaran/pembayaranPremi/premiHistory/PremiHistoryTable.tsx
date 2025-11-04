@@ -2,10 +2,9 @@
 
 import {
     flexRender,
-    getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import getPremiHistoryDetails from "../actions/getPremiHistoryDetails";
 import deletePembayaranPremi from "../actions/deletePembayaranPremi";
 import {
@@ -18,18 +17,22 @@ import {
 } from "@/components/table";
 import { AddPembayaranPremiForm, addPembayaranPremiFormSchema, PremiHistoryRow } from "@/lib/pembayaran/pembayaran_premi/types";
 import { columns } from "@/features/pembayaran/pembayaranPremi/premiHistory/PremiHistoryColumns";
+import { getCoreRowModel } from "@tanstack/react-table";
 import PremiFormDialog from "../PremiFormDialog";
+import DeletePembayaranPremiAlertDialog from "./DeletePembayaranPremiAlertDialog";
 
 type PremiHistoryTableProps = {
     detailPremiId: string;
     onEditSuccess: () => void;
+    onDeleteSuccess: () => void;
 };
 
-export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: PremiHistoryTableProps) {
+export default function PremiHistoryTable({ detailPremiId, onEditSuccess, onDeleteSuccess }: PremiHistoryTableProps) {
     const [data, setData] = useState<PremiHistoryRow[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
     const [editingPremiId, setEditingPremiId] = useState<string | null>(null);
+    const [deletingPremiId, setDeletingPremiId] = useState<string | null>(null);
     const [pembayaranPremiToEdit, setPembayaranPremiToEdit] = useState<AddPembayaranPremiForm | undefined>(undefined);
 
     const refetchData = useCallback(async () => {
@@ -62,29 +65,18 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: Prem
         setPembayaranPremiToEdit(undefined);
     }
 
-    const handleDelete = useCallback(async (pembayaranPremiId: string) => {
-        if (window.confirm("Apakah Anda yakin ingin menghapus pembayaran premi ini?")) {
-            setIsDeleting(true);
-            const result = await deletePembayaranPremi(pembayaranPremiId);
-            if (result.success) {
-                await refetchData();
-                onEditSuccess();
-            } else {
-                alert(result.message || "Gagal menghapus pembayaran.");
-            }
-            setIsDeleting(false);
-        }
-    }, [refetchData, onEditSuccess]);
-
-    const tableColumns = useMemo(() => columns({
-        onEdit: handleOpenEditDialog,
-        onDelete: handleDelete
-    }), [handleOpenEditDialog, handleDelete]);
+    const handleOpenDeleteDialog = (pembayaranPremiId: string) => {
+        setDeletingPremiId(pembayaranPremiId);
+    };
 
     const table = useReactTable({
         data,
-        columns: tableColumns,
+        columns: columns,
         getCoreRowModel: getCoreRowModel(),
+        meta: {
+            onEdit: handleOpenEditDialog,
+            onDelete: handleOpenDeleteDialog
+        }
     });
 
     return (
@@ -109,7 +101,7 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: Prem
                 <TableBody>
                     {isLoading || isDeleting ? (
                         <TableRow>
-                            <TableCell colSpan={tableColumns.length} className="h-24 text-center">
+                            <TableCell colSpan={columns.length} className="h-24 text-center">
                                 Loading...
                             </TableCell>
                         </TableRow>
@@ -132,7 +124,7 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: Prem
                     ) : (
                         <TableRow>
                             <TableCell
-                                colSpan={tableColumns.length}
+                                colSpan={columns.length}
                                 className="h-24 text-center"
                             >
                                 No history found.
@@ -153,6 +145,20 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess }: Prem
                     }}
                     onSuccess={handleEditSuccess}
                     updateValues={pembayaranPremiToEdit}
+                />
+            )}
+            {deletingPremiId && (
+                <DeletePembayaranPremiAlertDialog
+                deletePembayaranPremiId={deletingPremiId}
+                    isOpen={!!deletingPremiId}
+                    onOpenChange={(isOpen) => {
+                        if (!isOpen) setDeletingPremiId(null)
+                    }}
+                    onDeleteSuccess={async () => {
+                        setDeletingPremiId(null);
+                        await refetchData();
+                        onEditSuccess();
+                    }}
                 />
             )}
         </>

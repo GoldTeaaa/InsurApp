@@ -33,6 +33,7 @@ export default function KomisiPembayaranTable({ data }: { data: komisiTableRowDa
         setSelectedDetailKomisiId(null);
     }
 
+    // polis_share_id and 
     const selectedKomisiData = selectedKomisiId
         ? data.find((item) => item.polis_share_id === selectedKomisiId)
         : undefined;

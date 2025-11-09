@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const JENIS_BISNIS = z.enum([
+export const JENIS_BISNIS = z.enum([
   "kendaraan",
   "health",
   "life",

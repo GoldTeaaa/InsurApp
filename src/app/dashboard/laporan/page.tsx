@@ -1,7 +1,5 @@
-function Page(){
-    return (
-        <p>Dashboard Nasabah</p>
-    );
-}
+import { redirect } from "next/navigation";
 
-export default Page;
+export default function Page() {
+    redirect("/dashboard/laporan/produksi")
+}

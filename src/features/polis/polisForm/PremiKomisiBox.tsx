@@ -51,14 +51,14 @@ export default function PremiKomisiBox({
         const admin = Number(biayaAdmin) || 0;
         const discountAmount = Number(discount) || 0;
 
-        const net = gross - discountAmount - admin;
+        const net = gross - discountAmount + admin;
         if (net > totalPremi) {
             setPremiNetExceeded(true);
             setValue(fieldName('detail_premi.premi_net'), "Premi exceeded", { shouldValidate: true });
         } else {
             setValue(fieldName('detail_premi.premi_net'), net, { shouldValidate: true, shouldDirty: true });
         }
-    }, [premiGross, discount, biayaAdmin, setValue, fieldName]);
+    }, [premiGross, discount, biayaAdmin, setValue, fieldName, totalPremi]);
 
     useEffect(() => {
         const total = Number(totalPremi) || 0;

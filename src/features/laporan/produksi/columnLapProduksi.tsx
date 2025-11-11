@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { LaporanProduksiRow } from "@/lib/laporan/types";
+import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
 export const columnLaporanProduksi: ColumnDef<LaporanProduksiRow>[] = [
@@ -52,16 +52,13 @@ export const columnLaporanProduksi: ColumnDef<LaporanProduksiRow>[] = [
         cell: info => info.getValue<number>().toLocaleString(),
     },
     {
-        accessorKey: 'periode_mulai',
+        id: 'periode', // Use a unique ID for columns that don't have a single accessorKey
         header: 'Periode',
         cell: ({ row }) =>
             `${row.original.periode_mulai.toLocaleDateString()} - ${row.original.periode_akhir.toLocaleDateString()}`,
-    },
-    {
-        accessorKey: 'periode_akhir',
-        header: 'Periode',
-        cell: ({ row }) =>
-            `${row.original.periode_mulai.toLocaleDateString()} - ${row.original.periode_akhir.toLocaleDateString()}`,
+        // Optional: Define how sorting should work for this column
+        // This will sort by the start date when the user clicks the header.
+        sortingFn: (rowA, rowB) => rowA.original.periode_mulai.getTime() - rowB.original.periode_mulai.getTime(),
     },
     {
         accessorKey: 'jenis_coas',

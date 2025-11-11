@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { JENIS_BISNIS, JENIS_COAS } from "../polis/create-types";
+import { JENIS_BISNIS, JENIS_COAS } from "../../polis/create-types";
 
 export const laporanProduksiSchema = z.object({
     periode_mulai: z.coerce.date(),
@@ -30,3 +30,4 @@ export const laporanProduksiRPCSchema = z.object({
 
 export type RPCGetLaporanProduksi= z.infer<typeof laporanProduksiRPCSchema>;
 export type LaporanProduksiRow = z.infer<typeof laporanProduksiSchema>;
+

@@ -1,9 +1,9 @@
 'use client';
 
-import { LaporanProduksiRow } from "@/lib/laporan/types";
+import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
 import LaporanTable from "@/features/laporan/LaporanTable";
-import { columnLaporanProduksi } from "@/lib/laporan/report-list/column-lap-produksi";
-import DropdownLaporanRow from "./DropdownLaporanRow";
+import { columnLaporanProduksi } from "@/features/laporan/produksi/columnLapProduksi";
+import DropdownLaporanRow from "./DropdownLaporanProduksiRow";
 
 type laporanProduksiTableProps = {
     data: LaporanProduksiRow[]

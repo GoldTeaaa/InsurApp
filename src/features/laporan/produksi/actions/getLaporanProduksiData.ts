@@ -1,5 +1,5 @@
 'use server';
-import { laporanProduksiRPCSchema, RPCGetLaporanProduksi } from "@/lib/laporan/types";
+import { laporanProduksiRPCSchema, RPCGetLaporanProduksi } from "@/lib/laporan/laporan-produksi/types";
 import { supabase } from "@/lib/supabase";
 import { ActionReturnState } from "@/lib/types";
 

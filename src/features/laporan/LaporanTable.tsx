@@ -71,7 +71,7 @@ export default function LaporanTable<TData>({
                                         </td>
                                     ))}
                                 </tr>
-                                {row.getIsExpanded() && renderSubComponent && (
+                                {isExpandable && row.getIsExpanded() && renderSubComponent && (
                                     <tr className="border-b">
                                         <td colSpan={row.getVisibleCells().length}>
                                             {renderSubComponent({ row })}

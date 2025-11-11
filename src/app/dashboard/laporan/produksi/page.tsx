@@ -1,5 +1,5 @@
 import LaporanProduksiTable from "@/features/laporan/produksi/LaporanProduksiTable";
-import getLaporanProduksiData from "../actions.ts/getLaporanProduksiData";
+import getLaporanProduksiData from "../../../../features/laporan/produksi/actions/getLaporanProduksiData";
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 

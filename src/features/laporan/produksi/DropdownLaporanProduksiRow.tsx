@@ -1,4 +1,4 @@
-import { LaporanProduksiRow } from "@/lib/laporan/types";
+import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
 import { Row } from "@tanstack/react-table";
 
 type DropdownLaporanRowProps = {

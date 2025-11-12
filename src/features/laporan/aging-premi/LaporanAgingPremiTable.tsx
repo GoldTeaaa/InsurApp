@@ -1,4 +1,4 @@
-import { type LaporanAgingPremiTable } from "@/lib/laporan/laporan-aging/types";
+import { type LaporanAgingPremiTable } from "@/lib/laporan/laporan-aging-premi/types";
 import { columnLapAgingPremi } from "./columnLapAgingPremi";
 import LaporanTable from "../LaporanTable";
 
@@ -14,7 +14,7 @@ export default function LaporanAgingPremiTable({
     return (
         <div>
             <LaporanTable
-                // isExpandable={true}
+                isExpandable={true}
                 // renderSubComponent={DropdownLaporanRow}
                 data={data}
                 columns={columnLapAgingPremi}

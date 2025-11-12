@@ -1,6 +1,6 @@
-import getLapAgingPremiData from "@/features/laporan/aging_komisi/actions.ts/getLapAgingPremiData";
-import LaporanAgingPremiTable from "@/features/laporan/aging_komisi/LaporanAgingPremiTable";
-import { searchParamsProps } from "@/lib/laporan/laporan-aging/types";
+import getLapAgingPremiData from "@/features/laporan/aging-premi/actions/getLapAgingPremiData";
+import LaporanAgingPremiTable from "@/features/laporan/aging-premi/LaporanAgingPremiTable";
+import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 
 export default async function Page({
     searchParams

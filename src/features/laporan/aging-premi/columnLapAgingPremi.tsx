@@ -1,7 +1,7 @@
 "use client";
-import { LaporanAgingPremiRow } from "@/lib/laporan/laporan-aging/types";
+import { LaporanAgingPremiRow } from "@/lib/laporan/laporan-aging-premi/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { AGING_RANGE } from "@/lib/laporan/laporan-aging/types";
+import { AGING_RANGE } from "@/lib/laporan/laporan-aging-premi/types";
 
 // Dynamically create a column for each aging bucket
 const agingBucketColumns: ColumnDef<LaporanAgingPremiRow>[] = AGING_RANGE.map((range) => ({

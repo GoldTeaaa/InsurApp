@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { reports } from "./report-list/report-columns";
+import { reports } from "@/lib/laporan/laporan-options";
 
 export default function ReportNavBar() {
   const pathname = usePathname() ?? "/";
@@ -22,14 +22,14 @@ export default function ReportNavBar() {
         aria-label="Reports"
         className="mt-4 hidden sm:inline-flex items-center gap-2 rounded-md bg-slate-50 p-2"
       >
-        {reports.map((r) => {
-          const Icon = r.icon;
-          const active = activeId === r.id;
+        {reports.map((laporan) => {
+          const Icon = laporan.icon;
+          const active = activeId === laporan.id;
 
           return (
             <Link
-              key={r.id}
-              href={r.route}
+              key={laporan.id}
+              href={laporan.route}
               aria-current={active ? "page" : undefined}
               className={cn(
                 "inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-full transition",
@@ -48,7 +48,7 @@ export default function ReportNavBar() {
                 <Icon className={cn("h-4 w-4", active ? "text-blue-600" : "text-slate-400")} />
               </span>
 
-              <span className="text-sm font-medium">{r.name}</span>
+              <span className="text-sm font-medium">{laporan.name}</span>
             </Link>
           );
         })}
@@ -71,9 +71,9 @@ export default function ReportNavBar() {
           <option value="" disabled>
             Select report
           </option>
-          {reports.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.name}
+          {reports.map((laporan) => (
+            <option key={laporan.id} value={laporan.id}>
+              {laporan.name}
             </option>
           ))}
         </select>

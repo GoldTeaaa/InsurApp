@@ -1,13 +1,17 @@
 'use server';
-import { LaporanAgingPremiRPC, LaporanAgingPremiRPCSchema, searchParamsProps } from "@/lib/laporan/laporan-aging/types";
+import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import { 
+    type PelunasanPremiRPC, 
+    PelunasanPremiRPCSchema 
+} from "@/lib/laporan/laporan-pelunasan-premi/types";
 import { supabase } from "@/lib/supabase";
 import { ActionReturnState } from "@/lib/types";
 
-type ReturnState = ActionReturnState<LaporanAgingPremiRPC>;
+type ReturnState = ActionReturnState<PelunasanPremiRPC>   
 
-export default async function getLapAgingPremiData({
+export default async function getPelunasanPremiData({
     searchParams
-}: {searchParams: searchParamsProps}):Promise<ReturnState> {
+}: {searchParams: searchParamsProps}): Promise<ReturnState> {
 
     const params = await searchParams;
     const search = params?.search ?? "";
@@ -16,7 +20,7 @@ export default async function getLapAgingPremiData({
     const date_from = params?.date_from ? params.date_from : null;
     const date_to = params?.date_to ? params.date_to : null;
 
-    const {data, error} = await supabase.rpc("get_laporan_aging_premi", {
+    const {data, error} = await supabase.rpc("get_laporan_pelunasan_premi", {
         p_search: search,
         p_page: page,
         p_size: size,
@@ -28,17 +32,16 @@ export default async function getLapAgingPremiData({
         success: false,
         message: error.message
     }
-    console.log("data: ", data);
 
-    const parsedData = LaporanAgingPremiRPCSchema.safeParse(data);
+    const parsedData = PelunasanPremiRPCSchema.safeParse(data);
     if(!parsedData.success) return {
         success: false,
         message: parsedData.error.message,
     }
 
-    return {
+    return{
         success: true,
-        message: "success to fetch aging premi data",
+        message: "",
         data: parsedData.data
     }
 }

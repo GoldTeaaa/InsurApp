@@ -1,14 +1,6 @@
 import { z } from "zod";
+import { JENIS_BISNIS, JENIS_COAS } from "../types";
 
-export const JENIS_BISNIS = z.enum([
-  "kendaraan",
-  "health",
-  "life",
-  "property",
-  "marine",
-]);
-
-export const JENIS_COAS = z.enum(["coas", "non-coas"]);
 const COAS_ROLE = z.enum(["leader", "member"]);
 const JENIS_RATE = z.enum(["mille", "percent"]);
 

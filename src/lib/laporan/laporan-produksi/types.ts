@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { JENIS_BISNIS, JENIS_COAS } from "../../polis/create-types";
+import { JENIS_BISNIS, JENIS_COAS } from "@/lib/types";
 
 export const laporanProduksiSchema = z.object({
     periode_mulai: z.coerce.date(),

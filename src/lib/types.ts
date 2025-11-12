@@ -1,4 +1,27 @@
+// GLOBAL TYPES
 import z from "zod";
+
+export const JENIS_BISNIS = z.enum([
+  "kendaraan",
+  "health",
+  "life",
+  "property",
+  "marine",
+]);
+
+export const JENIS_COAS = z.enum(["coas", "non-coas"]);
+
+export const CARA_BAYAR = [
+  "cash", 
+  "transfer", 
+  "virtual account"
+] as const;
+
+export const STATUS_BAYAR = z.enum([
+  "unpaid", 
+  "partially_paid", 
+  "paid"
+]);
 
 export type ActionReturnState<TSuccessData = undefined> =
   | { success: true; message: string; data?: TSuccessData }

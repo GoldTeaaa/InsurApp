@@ -1,6 +1,6 @@
 'use client';
 import { LaporanAgingKomisiItem } from "@/lib/laporan/laporan-aging-komisi/types";
-import { AGING_RANGE } from "@/lib/laporan/laporan-aging-premi/types";
+import { AGING_RANGE } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 
 const agingBucketColumns: ColumnDef<LaporanAgingKomisiItem>[] = AGING_RANGE.map((range) => ({

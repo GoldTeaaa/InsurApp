@@ -1,35 +1,32 @@
 import DateField from "@/components/DateField";
 import { SelectField } from "@/components/SelectField";
 import FormTextField from "@/components/TextField";
-import { type PembayaranKomisiForm } from "@/lib/pembayaran/pembayaran_komisi/types";
-import { cara_bayar } from "@/lib/pembayaran/pembayaran_premi/types";
-import { useFormContext } from "react-hook-form"
+import { type PembayaranKomisiInputForm } from "@/lib/pembayaran/pembayaran_komisi/types";
+import { CARA_BAYAR } from "@/lib/types";
 
 export default function BasePembayaranKomisiForm() {
 
-    const method = useFormContext();
-
     return (
         <div>
-            <DateField<PembayaranKomisiForm>
+            <DateField<PembayaranKomisiInputForm>
                 name="tanggal_bayar"
                 label="Tanggal Bayar"
             />
-            <FormTextField<PembayaranKomisiForm>
+            <FormTextField<PembayaranKomisiInputForm>
                 name="no_kwitansi"
                 label="Nomor Kwitansi"
             />
-            <FormTextField<PembayaranKomisiForm>
+            <FormTextField<PembayaranKomisiInputForm>
                 name="amount_paid"
                 label="Jumlah Bayar"
                 type="number"
             />
-            <SelectField<PembayaranKomisiForm>
+            <SelectField<PembayaranKomisiInputForm>
                 name='cara_bayar'
                 label="Cara Bayar"
-                options={cara_bayar}
+                options={CARA_BAYAR}
             />
-            <FormTextField<PembayaranKomisiForm>
+            <FormTextField<PembayaranKomisiInputForm>
                 name='rekening_bank'
                 label="Rekening Bank (Opsional)"
             />

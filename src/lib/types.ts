@@ -1,6 +1,7 @@
 // GLOBAL TYPES
 import z from "zod";
 
+// =============== LAPORAN SECTION ==================
 export const JENIS_BISNIS = z.enum([
   "kendaraan",
   "health",
@@ -22,6 +23,15 @@ export const STATUS_BAYAR = z.enum([
   "partially_paid", 
   "paid"
 ]);
+
+export const AGING_RANGE = [
+    "0-30",
+    "31-60",
+    "61-90",
+    ">90",
+] as const;
+
+// ===================================================
 
 export type ActionReturnState<TSuccessData = undefined> =
   | { success: true; message: string; data?: TSuccessData }

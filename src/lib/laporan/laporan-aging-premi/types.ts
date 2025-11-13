@@ -1,3 +1,4 @@
+import { AGING_RANGE } from "@/lib/types";
 import { z } from "zod";
 
 export type searchParamsProps = {
@@ -7,13 +8,6 @@ export type searchParamsProps = {
     date_from: string;
     date_to: string;
 }
-
-export const AGING_RANGE = [
-    "0-30",
-    "31-60",
-    "61-90",
-    ">90",
-] as const;
 
 const LaporanAgingPremiRowSchema = z.object({
     nomor_polis: z.string(),

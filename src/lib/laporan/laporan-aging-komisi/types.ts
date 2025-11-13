@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AGING_RANGE } from '../laporan-aging-premi/types';
+import { AGING_RANGE } from '@/lib/types';
 
 export const AgingKomisiSearchParamsSchema = z.object({
 	search: z.string().optional(),

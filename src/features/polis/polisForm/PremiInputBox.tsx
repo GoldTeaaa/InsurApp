@@ -46,7 +46,9 @@ export default function PremiInputBox({ fieldName, isCoas, baseName }: PremiInpu
                 label="Biaya Admin & Materai"
                 type="number"
             />
-            <p className="mt-1 text-xs text-gray-500">Total Biaya: <span className="mt-1 text-xs text-gray-500">{convertIDR(Number(biayaAdminMaterai))}</span></p>
+            <p className="mt-1 text-xs text-gray-500">Total Biaya:
+                <span className="mt-1 text-xs text-gray-500">{convertIDR(Number(biayaAdminMaterai))}</span>
+            </p>
             <CalculatedTextField<Polis>
                 name={fieldName('detail_premi.premi_net')}
                 label="Premi Net (Calculated)"

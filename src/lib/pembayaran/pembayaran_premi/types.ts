@@ -1,11 +1,5 @@
-import { add } from "date-fns";
+import { CARA_BAYAR } from "@/lib/types";
 import z from "zod";
-
-enum status {
-  paid = "paid",
-  unpaid = "unpaid",
-  partially_paid = "partially_paid",
-}
 
 export type PembayaranPremiProps = {
   search?: string;
@@ -40,13 +34,11 @@ export type PremiHistoryRow = {
 
 // ====================== ADD PEMBAYARAN PREMI SCHEMA ================
 
-export const cara_bayar = ["cash", "transfer", "virtual account"] as const;
-
 export const addPembayaranPremiPayloadSchema = z.object({
   detail_premi_id: z.string().uuid(),
   tanggal_bayar: z.coerce.date(),
   amount_paid: z.coerce.number().min(1, "Nominal wajib diisi"),
-  cara_bayar: z.enum(cara_bayar),
+  cara_bayar: z.enum(CARA_BAYAR),
   ref_no: z.string().min(1, "Ref No wajib diisi"),
   rekening_bank: z.string().nullable().optional(),
 });

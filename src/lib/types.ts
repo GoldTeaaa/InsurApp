@@ -1,4 +1,37 @@
+// GLOBAL TYPES
 import z from "zod";
+
+// =============== LAPORAN SECTION ==================
+export const JENIS_BISNIS = z.enum([
+  "kendaraan",
+  "health",
+  "life",
+  "property",
+  "marine",
+]);
+
+export const JENIS_COAS = z.enum(["coas", "non-coas"]);
+
+export const CARA_BAYAR = [
+  "cash", 
+  "transfer", 
+  "virtual account"
+] as const;
+
+export const STATUS_BAYAR = z.enum([
+  "unpaid", 
+  "partially_paid", 
+  "paid"
+]);
+
+export const AGING_RANGE = [
+    "0-30",
+    "31-60",
+    "61-90",
+    ">90",
+] as const;
+
+// ===================================================
 
 export type ActionReturnState<TSuccessData = undefined> =
   | { success: true; message: string; data?: TSuccessData }

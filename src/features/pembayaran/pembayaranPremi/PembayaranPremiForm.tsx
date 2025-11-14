@@ -11,10 +11,10 @@ import { addPembayaranAction } from "./actions/addPembayaranPremi";
 import {
     addPembayaranPremiFormSchema,
     defaultAddPembayaranPremiForm,
-    cara_bayar,
     type AddPembayaranPremiForm
 } from "@/lib/pembayaran/pembayaran_premi/types";
 import updatePembayaranAction from "./actions/updatePembayaranAction";
+import { CARA_BAYAR } from "@/lib/types";
 
 type PembayaranPremiFormProps = {
     id: string;
@@ -146,7 +146,7 @@ export default function PembayaranPremiForm({
                 <SelectField<AddPembayaranPremiForm>
                     name='cara_bayar'
                     label="Cara Bayar"
-                    options={cara_bayar}
+                    options={CARA_BAYAR}
                 />
                 <FormTextField<AddPembayaranPremiForm>
                     name='ref_no'

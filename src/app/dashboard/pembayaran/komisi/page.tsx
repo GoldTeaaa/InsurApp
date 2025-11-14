@@ -27,16 +27,21 @@ export default async function Page({
 
     return (
         <div>
-            <Search
-                placeholder="Cari nomor-polis / nama "
-                search={search}
-            />
-            <StatusFilters />
-            <KomisiPembayaranTable data={tableRowData} />
-            <Pagination
-                page={page}
-                pageCount={Math.ceil(totalCount / size)}
-            />
+            <h1 className="text-2xl font-bold mb-4">Detail Komisi</h1>
+            <div>
+                <div className="flex justify-between items-center mb-4">
+                    <Search
+                        placeholder="Cari nomor-polis / nama "
+                        search={search}
+                    />
+                    <StatusFilters />
+                </div>
+                <KomisiPembayaranTable data={tableRowData} />
+                <Pagination
+                    page={page}
+                    pageCount={Math.ceil(totalCount / size)}
+                />
+            </div>
         </div>
     );
 }

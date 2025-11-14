@@ -54,8 +54,18 @@ export const columnLaporanProduksi: ColumnDef<LaporanProduksiRow>[] = [
     {
         id: 'periode', // Use a unique ID for columns that don't have a single accessorKey
         header: 'Periode',
-        cell: ({ row }) =>
-            `${row.original.periode_mulai.toLocaleDateString()} - ${row.original.periode_akhir.toLocaleDateString()}`,
+        cell: ({ row }) => {
+                const { periode_mulai, periode_akhir } = row.original;
+                if(!periode_mulai || !periode_akhir) return '-';
+                const options: Intl.DateTimeFormatOptions = {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                };
+                const startDate = new Date(periode_mulai).toLocaleDateString("id-ID", options);
+                const endDate = new Date(periode_akhir).toLocaleDateString("id-ID", options);
+                return `${startDate} - ${endDate}`;
+            },
         // Optional: Define how sorting should work for this column
         // This will sort by the start date when the user clicks the header.
         sortingFn: (rowA, rowB) => rowA.original.periode_mulai.getTime() - rowB.original.periode_mulai.getTime(),

@@ -7,10 +7,6 @@ import { useFormContext } from "react-hook-form";
 
 export default function PribadiForm() {
 
-    const {
-        control
-    } = useFormContext<NasabahForm>();
-
     return (
         <div className="space-y-6">
             {/* === Section: Identitas === */}

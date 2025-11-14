@@ -1,13 +1,14 @@
 'use client';
 import { LaporanAgingKomisiItem } from "@/lib/laporan/laporan-aging-komisi/types";
+import { formatDateRange } from "@/lib/utils/formatDate";
 import { AGING_RANGE } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 
 const agingBucketColumns: ColumnDef<LaporanAgingKomisiItem>[] = AGING_RANGE.map((range) => ({
     id: range,
     header: range,
-    cell: ({row}) => {
-        if(row.original.aging_bracket === range){
+    cell: ({ row }) => {
+        if (row.original.aging_bracket === range) {
             return row.original.amount_due.toLocaleString('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
@@ -36,8 +37,7 @@ export const columnLapAgingKomisi: ColumnDef<LaporanAgingKomisiItem>[] = [
         header: 'Periode Polis',
         cell: ({ row }) => {
             const { periode_mulai, periode_akhir } = row.original;
-            if (!periode_mulai || !periode_akhir) return null;
-            return `${new Date(periode_mulai).toLocaleDateString('id-ID')} - ${new Date(periode_akhir).toLocaleDateString('id-ID')}`;
+            return formatDateRange(periode_mulai, periode_akhir);
         },
     },
     {

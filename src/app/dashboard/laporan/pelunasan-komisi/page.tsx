@@ -1,3 +1,4 @@
+import DateFilter from "@/components/DateFilter";
 import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import getPelunasanKomisiData from "@/features/laporan/pelunasan-komisi/actions/getPelunasanKomisiData";
@@ -24,6 +25,7 @@ export default async function Page({
                 placeholder="Cari nomor-polis / nama / asuransi"
                 search={search}
             />
+            <DateFilter />
             <PelunasanKomisiTable
                 data={data.data ? data.data.rows : []}
             />

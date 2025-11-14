@@ -2,6 +2,7 @@
 import { LaporanAgingPremiRow } from "@/lib/laporan/laporan-aging-premi/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { AGING_RANGE } from "@/lib/types";
+import { formatDateRange } from "@/lib/utils/formatDate";
 
 // Dynamically create a column for each aging bucket
 const agingBucketColumns: ColumnDef<LaporanAgingPremiRow>[] = AGING_RANGE.map((range) => ({
@@ -38,7 +39,10 @@ export const columnLapAgingPremi: ColumnDef<LaporanAgingPremiRow>[] = [
     {
         id: 'periode_polis',
         header: 'Periode Polis',
-        cell: ({ row }) => `${row.original.periode_mulai.toLocaleDateString()} - ${row.original.periode_akhir.toLocaleDateString()}`,
+        cell: ({ row }) => {
+            const {periode_mulai, periode_akhir} = row.original;
+            return formatDateRange(periode_mulai, periode_akhir);
+        },
         sortingFn: (rowA, rowB) => rowA.original.periode_mulai.getTime() - rowB.original.periode_mulai.getTime(),
     },
     {

@@ -12,7 +12,6 @@ type ReturnState = ActionReturnState<LaporanAgingKomisiRPCPayload>;
 
 export default async function getLapAgingKomisiData(searchParams: AgingKomisiSearchParams): Promise<ReturnState> {
 	const params = await searchParams;
-	console.log('search params: ', params);
 	const parsedParams = AgingKomisiSearchParamsSchema.safeParse(params);
 	if (!parsedParams.success) {
 		return { 

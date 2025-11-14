@@ -1,5 +1,6 @@
 'use client';
 import { PelunasanPremiRow } from "@/lib/laporan/laporan-pelunasan-premi/types";
+import { formatDateRange } from "@/lib/utils/formatDate";
 import { getStatusClass } from "@/lib/utils/getStatusBadge";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -21,8 +22,7 @@ export const columnLapPelunasanPremi: ColumnDef<PelunasanPremiRow>[] = [
         header: 'Periode Polis',
         cell: ({ row }) => {
             const { periode_mulai, periode_akhir } = row.original;
-            if (!periode_mulai || !periode_akhir) return null;
-            return `${new Date(periode_mulai).toLocaleDateString('id-ID')} - ${new Date(periode_akhir).toLocaleDateString('id-ID')}`;
+            return formatDateRange(periode_mulai, periode_akhir);
         },
     },
     {

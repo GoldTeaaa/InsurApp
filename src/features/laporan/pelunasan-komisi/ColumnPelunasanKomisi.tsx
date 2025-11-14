@@ -1,5 +1,6 @@
 'use client';
 import { LaporanPelunasanKomisiRow } from "@/lib/laporan/laporan-pelunasan-komisi/types";
+import { formatDateRange } from "@/lib/utils/formatDate";
 import { formatCurrencyIDR } from "@/lib/utils/formatCurrencyIDR";
 import { getStatusClass } from "@/lib/utils/getStatusBadge";
 import { ColumnDef } from "@tanstack/react-table";
@@ -13,20 +14,9 @@ export const columnLapPelunasanKomisi: ColumnDef<LaporanPelunasanKomisiRow>[] =
             accessorKey: "periode",
             header: "Periode Polis",
             cell: ({ row }) => {
-                const { periode_mulai, periode_akhir } = row.original;
-                if(!periode_mulai || !periode_akhir) return '-';
-                return `${new Date(periode_mulai).toLocaleDateString(
-                    "id-ID"
-                )} - ${new Date(periode_akhir).toLocaleDateString("id-ID")}`;
-            },
+            const { periode_mulai, periode_akhir } = row.original;
+            return formatDateRange(periode_mulai, periode_akhir);
         },
-        {
-            accessorKey: "periode_akhir",
-            header: "Periode Akhir",
-            cell: ({ row }) => {
-                const value = row.original.periode_akhir;
-                return value ? new Date(value).toLocaleDateString("id-ID") : "-";
-            },
         },
         {
             accessorKey: "no_kwitansi",

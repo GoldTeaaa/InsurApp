@@ -3,10 +3,11 @@ import PelunasanPremiTable from "@/features/laporan/pelunasan-premi/PelunasanPre
 import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
+import DateFilter from "@/components/DateFilter";
 
-export default async  function Page({
+export default async function Page({
     searchParams
-}: {searchParams: searchParamsProps}) {
+}: { searchParams: searchParamsProps }) {
 
     const response = await getPelunasanPremiData({ searchParams });
     if (!response.success) {
@@ -23,8 +24,9 @@ export default async  function Page({
                 placeholder="Cari nomor-polis / nama / asuransi"
                 search={search ?? ""}
             />
-            <PelunasanPremiTable 
-                data = {response.data ? response.data.rows : []}
+            <DateFilter />
+            <PelunasanPremiTable
+                data={response.data ? response.data.rows : []}
             />
             <Pagination
                 page={page}

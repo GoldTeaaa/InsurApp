@@ -20,14 +20,14 @@ export const LaporanAgingKomisiItemSchema = z.object({
 	amount_paid: z.number(),
 	amount_due: z.number(),
 	aging_bracket: z.enum(AGING_RANGE),
-	nomor_kwitansi: z.string().nullable(),
+	nomor_kwitansi: z.string(),
 	komisi_gross: z.number(),
 	pph: z.number(),
 	komisi_net: z.number(),
-	periode_mulai: z.string().nullable(),
-	periode_akhir: z.string().nullable(),
+	periode_mulai: z.string(),
+	periode_akhir: z.string(),
 	nama_perusahaan_asuransi: z.string(),
-	jenis_coas: z.string().nullable(),
+	jenis_coas: z.string(),
 	detail_komisi_status: z.string()
 });
 

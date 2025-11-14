@@ -22,8 +22,7 @@ export async function fetchNasabahPage({
   if (error) throw new Error(`nasabah_pagination_v1: ${error.message}`);
 
   const rows= (data ?? []) as (NasabahRow & { total_count: number })[];
-  // console.log("rows: ", rows);
-  const total = rows[0]?.total_count ? Number(rows[0].total_count) : 0;
+  const total = rows[0]?.total_count ?? 0;
 
   return {
     rows,

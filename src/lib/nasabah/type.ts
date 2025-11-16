@@ -9,7 +9,7 @@ const optionalText = z
   .nullable()
   .optional();
 
-const optionalEmail = z.string().email().optional();
+const optionalEmail = z.string().email().nullable().optional();
 
 export const TIPE = ["pribadi", "perusahaan"] as const;
 
@@ -34,8 +34,11 @@ export const KEWARGANEGARAAN = ["WNI", "WNA"] as const;
 
 export const GENDER = ["Pria", "Wanita"] as const;
 
-// const emptyToNull = (value: unknown) =>
-//   typeof value === "string" && value.trim() === "" ? null : value;
+export type NasabahTableSearchParams = {
+  search?: string;
+  page?: number;
+  size?: number;
+};
 
 export const baseSchema = z.object({
   nama: nonEmpty,
@@ -44,8 +47,6 @@ export const baseSchema = z.object({
   email: optionalEmail,
   alamat: optionalText,
 });
-
-export type BaseForm = z.infer<typeof baseSchema>;
 
 export const perusahaanSchema = baseSchema.extend({
   tipe: z.literal("perusahaan"),
@@ -60,7 +61,7 @@ export const pribadiSchema = baseSchema.extend({
   nik: nonEmpty,
   tempat_lahir: nonEmpty,
   tanggal_lahir: z.string().trim().min(1, "Tanggal lahir wajib diisi"),
-  jenis_kelamin: z.enum(GENDER).nullable(),
+  jenis_kelamin: z.enum(GENDER),
   alamat_ktp: optionalText,
   rt: optionalText,
   rw: optionalText,
@@ -80,6 +81,7 @@ export const formSchema = z.discriminatedUnion("tipe", [
   pribadiSchema,
 ]);
 
+export type BaseForm = z.infer<typeof baseSchema>;
 export type NasabahForm = z.infer<typeof formSchema>;
 
 export const defaultPribadiFormValues: NasabahForm = {
@@ -93,7 +95,7 @@ export const defaultPribadiFormValues: NasabahForm = {
   nik: "",
   tempat_lahir: "",
   tanggal_lahir: "",
-  jenis_kelamin: null,
+  jenis_kelamin: "Pria",
   alamat_ktp: "",
   rt: "",
   rw: "",
@@ -151,12 +153,12 @@ export const toRpcCreatePribadi = z
   })
   .transform((v) => ({
     // the rpc function directly fill the tipe so no need to include in in the payload
-    nama: v.nama,
-    contact_1: v.contact_1,
-    contact_2: v.contact_2,
-    email: v.email,
-    alamat: v.alamat,
-    pribadi: {
+    p_nama: v.nama,
+    p_contact_1: v.contact_1,
+    p_contact_2: v.contact_2,
+    p_email: v.email,
+    p_alamat: v.alamat,
+    p_pribadi: {
       nik: v.nik,
       tempat_lahir: v.tempat_lahir,
       tanggal_lahir: v.tanggal_lahir,
@@ -169,7 +171,7 @@ export const toRpcCreatePribadi = z
       kota_kabupaten: v.kota_kabupaten,
       provinsi: v.provinsi,
       kode_pos: v.kode_pos,
-      agama: v.agama,
+      agama: v.agama, 
       status_perkawinan: v.status_perkawinan,
       pekerjaan: v.pekerjaan,
       kewarganegaraan: v.kewarganegaraan,
@@ -192,16 +194,16 @@ export const toRpcCreatePerusahaan = z
   })
   .transform((v) => ({
     // the rpc function directly fill the tipe so no need to include in in the payload
-    nama: v.nama,
-    contact_1: v.contact_1,
-    contact_2: v.contact_2,
-    email: v.email,
-    alamat: v.alamat,
-    perusahaan: {
+    p_nama: v.nama,
+    p_contact_1: v.contact_1,
+    p_contact_2: v.contact_2,
+    p_email: v.email,
+    p_alamat: v.alamat,
+    p_perusahaan: {
+      nama_perusahaan: v.nama,
       npwp_perusahaan: v.npwp_perusahaan,
       nama_pic: v.nama_pic,
       jabatan_pic: v.jabatan_pic,
       email_pic: v.email_pic,
     },
   }));
-

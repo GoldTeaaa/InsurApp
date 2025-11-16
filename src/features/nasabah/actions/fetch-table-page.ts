@@ -1,34 +1,40 @@
-import { NasabahRow, NasabahSort } from "@/lib/nasabah/types";
+import { NasabahTableRPC, NasabahTableRPCSchema } from "@/lib/nasabah/tableType";
+import { NasabahTableSearchParams } from "@/lib/nasabah/type";
 import { supabase } from "@/lib/supabase";
+import { ActionReturnState } from "@/lib/types";
 
-const ITEMS_PER_PAGE = 5 as const;
+type ReturnState = ActionReturnState<NasabahTableRPC>
 
-export async function fetchNasabahPage({
-  search = "",
-  page = 1,
-  sort = "created_asc",
-}: {
-  search?: string;
-  page?: number;
-  sort?: NasabahSort;
-}) {
-  const { data, error } = await supabase.rpc("nasabah_pagination_v1", {
-    p_q: search.trim(),
+export default async function fetchNasabahPage({
+  searchParams
+}: {searchParams: NasabahTableSearchParams}):Promise<ReturnState> {
+
+  const params = await searchParams;
+  const page = Number(params?.page ?? 1);
+  const size = Number(params?.size ?? 10);
+  const search = params?.search ?? "";
+
+
+  const { data, error } = await supabase.rpc("get_nasabah_table", {
+    p_search: search,
     p_page: page,
-    p_page_size: ITEMS_PER_PAGE,
-    p_sort: sort,
+    p_size: size
   });
+  
+  if(error) return {
+    success: false,
+    message: error.message,
+  }
 
-  if (error) throw new Error(`nasabah_pagination_v1: ${error.message}`);
-
-  const rows= (data ?? []) as (NasabahRow & { total_count: number })[];
-  const total = rows[0]?.total_count ?? 0;
+  const parsedData = NasabahTableRPCSchema.safeParse(data);
+  if(!parsedData.success) return {
+    success: false,
+    message: parsedData.error.message,
+  }
 
   return {
-    rows,
-    total,
-    page,
-    pageSize: ITEMS_PER_PAGE,
-    pageCount: Math.max(1, Math.ceil(total / ITEMS_PER_PAGE)),
+    success: true,
+    message: "Success",
+    data: parsedData.data
   };
 }

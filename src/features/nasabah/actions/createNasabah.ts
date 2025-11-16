@@ -22,12 +22,12 @@ export default async function createNasabahAction(
         errors: args.error.flatten().fieldErrors,
       };
     }
-    console.log("args: ", args.data);
 
     const { data, error } = await supabase.rpc(
       "nasabah_create_perusahaan_v1",
       args.data
     );
+    
     if (error) {
       return {
         success: false,
@@ -35,20 +35,19 @@ export default async function createNasabahAction(
       };
     }
   } else {
-    const args = toRpcCreatePribadi.safeParse(formData);
+    const parsedPribadiData = toRpcCreatePribadi.safeParse(formData);
 
-    if (!args.success) {
+    if (!parsedPribadiData.success) {
       return {
         success: false,
         message: "Input tidak valid.",
-        errors: args.error.flatten().fieldErrors,
+        errors: parsedPribadiData.error.flatten().fieldErrors,
       };
     }
-    console.log("args: ", args.data);
 
     const { data, error } = await supabase.rpc(
       "nasabah_create_pribadi_v1",
-      args.data
+      parsedPribadiData.data
     );
     if (error) {
       return {
@@ -61,6 +60,5 @@ export default async function createNasabahAction(
   return {
     success: true,
     message: `Berhasil menyimpan nasabah ${formData.nama}`,
-    data: formData,
   };
 }

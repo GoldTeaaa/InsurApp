@@ -3,7 +3,6 @@ import { SelectField } from "@/components/SelectField";
 import TextField from "@/components/TextField";
 import { AGAMA, GENDER, NasabahForm, STATUS_PERKAWINAN } from "@/lib/nasabah/type";
 import { KEWARGANEGARAAN } from "@/lib/nasabah/types";
-import { useFormContext } from "react-hook-form";
 
 export default function PribadiForm() {
 

@@ -5,11 +5,15 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 type DeleteButtonProps = {
     id: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    action: (formData: FormData) => Promise<any>; // server action
+    action: (formData: FormData) => Promise<any>;
     entityName?: string;
 };
 
-export function DeleteButton({ id, action, entityName = "item" }: DeleteButtonProps) {
+export function DeleteButton({ 
+    id, 
+    action, 
+    entityName = "item" 
+}: DeleteButtonProps) {
     const formRef = useRef<HTMLFormElement | null>(null);
     const [open, setOpen] = useState(false);
 
@@ -25,7 +29,7 @@ export function DeleteButton({ id, action, entityName = "item" }: DeleteButtonPr
                     className="rounded-md border p-2 border-red-600 hover:bg-gray-100"
                 >
                     <span className="sr-only">Delete</span>
-                    <TrashIcon className="w-5" color="red"/>
+                    <TrashIcon className="w-5" color="red" />
                 </button>
             </form>
 
@@ -39,7 +43,10 @@ export function DeleteButton({ id, action, entityName = "item" }: DeleteButtonPr
                         <p>This action cannot be undone.</p>
 
                         <div className="mt-4 flex gap-3 justify-end">
-                            <button onClick={() => setOpen(false)} className="rounded-md border px-3 py-2 hover:bg-gray-100">
+                            <button
+                                onClick={() => setOpen(false)}
+                                className="rounded-md border px-3 py-2 hover:bg-gray-100"
+                            >
                                 Cancel
                             </button>
 

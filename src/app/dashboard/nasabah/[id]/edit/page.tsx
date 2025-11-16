@@ -1,18 +1,26 @@
-import { fetchNasabahById } from '@/features/nasabah/actions';
-import EditNasabahForm from '@/features/nasabah/update-form';
+import getNasabahDetails from '@/features/nasabah/actions/getNasabahDetails';
+import NasabahForm from '@/features/nasabah/form/NasabahForm';
+import { type NasabahForm as NasabahFormType } from '@/lib/nasabah/type';
 import { notFound } from 'next/navigation';
 
-type Params = { id: string };
+type Params = { 
+  id: string 
+};
 
 export default async function EditPage({ params }: { params: Params }) {
   const { id } = await params;
-  const detail = await fetchNasabahById(id);
-  if (!detail) return notFound();
+  const detail = await getNasabahDetails({id});
+
+  if (!detail.success) notFound();
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-semibold mb-4">Edit Nasabah</h1>
-      <EditNasabahForm id={id} defaultValues={detail} />
+      <NasabahForm 
+        mode='update'
+        id={id}
+        // THE IS TYPECASTED 
+        initialData={detail.data as NasabahFormType}
+      />
     </div>
   );
 }

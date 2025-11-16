@@ -1,28 +1,28 @@
 import { Suspense } from 'react';
-import Table from '@/features/nasabah/table-view';
 import Link from "next/link";
 import Search from "@/components/Search";
 import Pagination from '@/components/Pagination';
-import { fetchNasabahPage } from '@/features/nasabah/actions/fetch-table-page';
-import { tableQuerySchema } from '@/lib/types';
-import { NasabahSort } from '@/lib/nasabah/types';
-
-type RawSearchParams = {
-    search?: string;
-    page?: number;
-    sort?: NasabahSort
-};
+import NasabahTable from '@/features/nasabah/table/nasabah-table';
+import { NasabahTableSearchParams } from '@/lib/nasabah/type';
+import fetchNasabahPage from '@/features/nasabah/actions/fetch-table-page';
 
 export default async function Page({
     searchParams
 }: {
-    searchParams?: RawSearchParams;
+    searchParams: NasabahTableSearchParams;
 }) {
-    const raw = await searchParams;
-    const params = tableQuerySchema.parse(raw);
-    const { search, page, sort } = params
+    const params = await searchParams;
+    const search = params?.search ?? "";
+    const page = Number(params?.page ?? 1);
+    const size = Number(params?.size ?? 10);
 
-    const { rows, total, pageCount } = await fetchNasabahPage({ search, page });
+    const response = await fetchNasabahPage({searchParams});
+    if (!response.success) {
+        throw new Error(response.message);
+    }
+
+    const rows = response.data ? response.data.rows : [];
+    const pageCount = Math.ceil((response.data?.total_count ?? 0) / size);
 
     return (
         <div>
@@ -36,21 +36,19 @@ export default async function Page({
                         />
                     </div>
                 </div>
-                <Suspense key={`${search}-${page}-${sort}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
+                <Suspense key={`${search}-${page}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
                     <>
-                        <Table rows={rows} total={total} pageCount={pageCount} />
-                        <Pagination page={page} pageCount={pageCount} />
+                        <NasabahTable 
+                            data={rows}
+                        />
+                        <Pagination
+                            page={page}
+                            pageCount={pageCount}
+                        />
                     </>
                 </Suspense>
             </div>
             <div>
-                {/* <Link
-                    href={"/dashboard/nasabah/create-nasabah"}
-                >
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Create Nasabah
-                    </button>
-                </Link> */}
                 <Link
                     href={"/dashboard/nasabah/tambah-nasabah"}
                 >

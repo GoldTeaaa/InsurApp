@@ -1,15 +1,18 @@
+import { p } from "framer-motion/client";
 import { Controller, useFormContext, type FieldValues, type Path } from "react-hook-form";
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   options: readonly string[];
+  disabled?: boolean;
 };
 
 export function RadioField<T extends FieldValues>({
   name,
   label,
   options,
+  disabled
 }: Props<T>) {
   const { control } = useFormContext<T>();
 
@@ -32,6 +35,7 @@ export function RadioField<T extends FieldValues>({
                   checked={field.value === option}
                   onChange={() => field.onChange(option)}
                   className="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500"
+                  disabled={disabled}
                 />
                 <span className="text-base text-gray-800">{option}</span>
               </label>

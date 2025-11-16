@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import DatePresetButtons from './DatePresetButtons';
 import { Button } from './ui/button';
 
@@ -83,14 +83,16 @@ export default function DateFilter() {
                     onChange={handleDateChange}
                     className="border rounded px-2 py-1 text-sm" />
             </div>
-            <DatePresetButtons onPresetSelect={handlePresetSelect} />
             <Button
                 type='button'
                 onClick={handleClear}
-                className='bg-white border border-red-200 text-red-500 px-4 py-2 rounded-md hover:bg-red-600 hover:text-white'
+                className='bg-white border border-grey-400 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white'
             >
-                Clear
+                All
             </Button>
+            <DatePresetButtons
+                onPresetSelect={handlePresetSelect}
+            />
         </div>
     );
 }

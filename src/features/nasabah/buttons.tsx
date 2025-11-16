@@ -1,6 +1,7 @@
+'use client';
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import {deleteNasabahAction} from '@/features/nasabah/actions';
+import {deleteNasabahAction} from '@/features/nasabah/actions/deleteNasabah';
 
 export function CreateInvoice() {
   return (

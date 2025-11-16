@@ -1,9 +1,11 @@
-import CreateNasabahForm from "@/features/nasabah/main-create-form";
+import NasabahForm from "@/features/nasabah/form/NasabahForm";
 
 export default function Page() {
     return (
         <div>
-            <CreateNasabahForm />
+            <NasabahForm 
+                mode="create"
+            />
         </div>
     );
 }

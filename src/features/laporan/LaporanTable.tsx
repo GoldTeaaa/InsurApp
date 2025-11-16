@@ -64,7 +64,10 @@ export default function LaporanTable<TData>({
                     <tbody>
                         {table.getRowModel().rows.map(row => (
                             <Fragment key={row.id}>
-                                <tr onClick={row.getToggleExpandedHandler()} className="border-b transition-colors hover:bg-muted/50">
+                                <tr
+                                    onClick={row.getToggleExpandedHandler()}
+                                    className="border-b transition-colors hover:bg-muted/50"
+                                >
                                     {row.getVisibleCells().map(cell => (
                                         <td key={cell.id} className="p-4 align-middle whitespace-nowrap">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

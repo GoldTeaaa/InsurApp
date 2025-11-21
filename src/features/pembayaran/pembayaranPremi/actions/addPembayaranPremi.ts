@@ -3,7 +3,7 @@ import {
     addPembayaranPremiFormSchema, 
     addPembayaranPremiPayloadSchema 
 } from "@/lib/pembayaran/pembayaran_premi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 
 type State = {
     success: boolean;

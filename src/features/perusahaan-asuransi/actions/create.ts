@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import {
   perusahaanCreateToRpcSchema,
   perusahaanCreateResultArraySchema,

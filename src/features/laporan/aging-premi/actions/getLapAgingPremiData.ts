@@ -1,6 +1,6 @@
 'use server';
 import { LaporanAgingPremiRPC, LaporanAgingPremiRPCSchema, searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<LaporanAgingPremiRPC>;

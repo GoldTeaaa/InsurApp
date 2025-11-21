@@ -1,5 +1,5 @@
 'use server';
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 

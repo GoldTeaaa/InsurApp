@@ -5,7 +5,7 @@ import {
   toRpcCreatePerusahaan,
 } from "@/lib/nasabah/type";
 import { ActionReturnState } from "@/lib/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 
 type ReturnState = ActionReturnState<NasabahForm>;
 

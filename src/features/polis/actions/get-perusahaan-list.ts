@@ -2,7 +2,7 @@
 
 import { ListPerusahaan, type ListPerusahaanType } from "@/lib/polis/step3";
 import { ActionReturnState } from "@/lib/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 
 type ReturnState = ActionReturnState<ListPerusahaanType[]>;
 

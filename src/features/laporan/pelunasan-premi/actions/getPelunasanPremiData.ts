@@ -4,7 +4,7 @@ import {
     type PelunasanPremiRPC, 
     PelunasanPremiRPCSchema 
 } from "@/lib/laporan/laporan-pelunasan-premi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<PelunasanPremiRPC>   

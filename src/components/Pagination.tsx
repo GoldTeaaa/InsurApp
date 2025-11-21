@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 function rangeWindow(curr: number, last: number, size = 5) {
   const half = Math.floor(size / 2);
@@ -18,10 +18,13 @@ export default function Pagination({
   page: number;
   pageCount: number;
 }) {
+  
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
+  // const pageSize = Number(searchParams.get('pageSize')) || 10;
+  const [pageSize, setPageSize] = useState(searchParams.get('size') || 10);
+  
   const pages = useMemo(() => rangeWindow(page, pageCount), [page, pageCount]);
 
   // nothing to paginate (Optional, user may want to ensure that the data is only one page)
@@ -32,6 +35,14 @@ export default function Pagination({
     params.set('page', String(next));
     router.push(`${pathname}?${params.toString()}`);
   };
+
+  const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('size', e.target.value);
+    params.set('page', '1'); // Reset to first page
+    setPageSize(e.target.value);
+    router.push(`${pathname}?${params.toString()}`);
+  }
 
   const item = (p: number) => (
     <button
@@ -61,8 +72,24 @@ export default function Pagination({
 
   return (
     <div className="mt-6">
-      <div className="border-b border-gray-200 px-6 py-3">
-        <div className="max-w-full mx-auto text-sm text-gray-600">Page {page} of {pageCount}</div>
+      <div className="flex items-center justify-between border-b border-gray-200 px-6 py-3">
+        <div className="flex items-center gap-2">
+          <label htmlFor="pageSize" className="text-sm text-gray-600">Rows per page:</label>
+          <select
+            id="pageSize"
+            value={pageSize}
+            onChange={handlePageSizeChange}
+            className="rounded-md border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {[5, 10, 25, 50].map(size => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="text-sm text-gray-600">Page {page} of {pageCount}</div>
       </div>
 
       <div className="px-6 py-4">

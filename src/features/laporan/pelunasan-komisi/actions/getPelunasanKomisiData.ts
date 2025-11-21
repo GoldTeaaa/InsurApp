@@ -1,6 +1,6 @@
 import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import { LaporanPelunasanKomisiRPCPayload, LaporanPelunasanKomisiRPCSchema } from "@/lib/laporan/laporan-pelunasan-komisi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<LaporanPelunasanKomisiRPCPayload>;

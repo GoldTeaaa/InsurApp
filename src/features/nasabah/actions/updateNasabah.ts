@@ -1,6 +1,6 @@
 'use server';
 import { NasabahForm, toRpcCreatePerusahaan, toRpcCreatePribadi } from "@/lib/nasabah/type";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 import { redirect } from "next/navigation";
 

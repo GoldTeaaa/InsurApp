@@ -5,7 +5,7 @@ import {
 	type LaporanAgingKomisiRPCPayload,
 	LaporanAgingKomisiRPCPayloadSchema
 } from "@/lib/laporan/laporan-aging-komisi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<LaporanAgingKomisiRPCPayload>;

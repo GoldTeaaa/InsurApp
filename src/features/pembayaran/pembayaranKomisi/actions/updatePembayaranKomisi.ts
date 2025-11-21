@@ -1,6 +1,6 @@
 "use server";
 import { UpdatePembayaranKomisiFormSchema } from "@/lib/pembayaran/pembayaran_komisi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 
 type ReturnState = {
   success: boolean;

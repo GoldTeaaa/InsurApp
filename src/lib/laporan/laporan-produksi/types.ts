@@ -30,4 +30,4 @@ export const laporanProduksiRPCSchema = z.object({
 
 export type RPCGetLaporanProduksi= z.infer<typeof laporanProduksiRPCSchema>;
 export type LaporanProduksiRow = z.infer<typeof laporanProduksiSchema>;
-
+export type LaporanProduksiTable = z.infer<typeof laporanProduksiRowSchema>;

@@ -4,6 +4,7 @@ import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import DateFilter from "@/components/DateFilter";
 import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import ExportOptions from "@/components/ExportOptions";
 
 export default async function Page({
     searchParams
@@ -12,6 +13,8 @@ export default async function Page({
     const search = params?.search ?? "";
     const page = Number(params?.page ?? 1);
     const size = Number(params?.size ?? 10);
+    const startDate = params?.date_from;
+    const endDate = params?.date_to;
 
     const data = await getLaporanProduksiData({searchParams})
     if (!data.success) {
@@ -26,7 +29,14 @@ export default async function Page({
                 placeholder="Cari nomor-polis / nama / asuransi"
                 search={search}
             />
-            <DateFilter />
+            <div className="flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between">
+                <DateFilter />
+                <ExportOptions 
+                    laporanData={rowData}
+                    startDate={startDate}
+                    endDate={endDate}
+                />
+            </div>
             <LaporanProduksiTable
                 data={rowData}
             />

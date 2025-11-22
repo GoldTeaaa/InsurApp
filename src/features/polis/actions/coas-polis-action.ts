@@ -1,6 +1,6 @@
 "use server"
 import { ActionReturnState } from "@/lib/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { PolisSchema, type Polis } from "@/lib/polis/create-types";
 import { error } from "console";
 

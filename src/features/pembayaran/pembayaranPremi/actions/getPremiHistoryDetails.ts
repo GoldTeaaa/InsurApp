@@ -1,6 +1,6 @@
 "use server";
 import { PremiHistoryRow } from "@/lib/pembayaran/pembayaran_premi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<PremiHistoryRow[]>;

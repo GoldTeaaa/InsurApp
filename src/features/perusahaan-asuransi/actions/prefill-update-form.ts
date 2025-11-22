@@ -1,6 +1,6 @@
 // features/perusahaan-asuransi/queries/get-by-id.ts
 import { z } from "zod";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import {
   perusahaanFormSchema,
   type PerusahaanForm,

@@ -1,6 +1,6 @@
 "use server";
 import { ListNasabah, type ListNasabahType } from "@/lib/polis/step1";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 
 export default async function getListNasabah(): Promise<ListNasabahType[]> {
   const { data, error } = await supabase

@@ -1,6 +1,6 @@
 import { NasabahTableRPC, NasabahTableRPCSchema } from "@/lib/nasabah/tableType";
 import { NasabahTableSearchParams } from "@/lib/nasabah/type";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<NasabahTableRPC>

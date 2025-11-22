@@ -1,6 +1,6 @@
 'use server';
 import { PayloadPembayaranKomisiFormSchema } from "@/lib/pembayaran/pembayaran_komisi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 // Set to correct return type if determined

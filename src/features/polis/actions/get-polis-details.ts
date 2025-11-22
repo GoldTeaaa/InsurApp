@@ -1,6 +1,6 @@
 'use server';
 import { GetPolisSchema, ViewPolisSchema } from "@/lib/polis/get-types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 const formatDateForInput = (date: string | Date | null | undefined): string => {

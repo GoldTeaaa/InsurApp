@@ -1,6 +1,6 @@
 "use server";
 import { nasabahDetailsSchema, NasabahDetailsType } from "@/lib/polis/step1";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 import z from "zod";
 

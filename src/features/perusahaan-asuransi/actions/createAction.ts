@@ -6,7 +6,7 @@ import {
   perusahaanCreateToRpcSchema,
   type PerusahaanReturnResult,
 } from "@/lib/perusahaan_asuransi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { revalidatePath } from "next/cache";
 import { ActionReturnState } from "@/lib/types";
 

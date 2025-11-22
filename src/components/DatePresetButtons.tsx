@@ -11,7 +11,7 @@ const buttonPresets = [
     { label: 'Last 30 Days', days: 30 },
 ];
 
-const buttonClass = "px-3 py-1 bg-white text-blue-700 border rounded text-sm hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-700";
+const buttonClass = "px-3 py-1 bg-white text-blue-700 border rounded text-sm hover:bg-blue-500 hover:text-white focus:bg-blue-500 focus:text-white focus:outline-none";
 
 export default function DatePresetButtons({ onPresetSelect }: DatePresetButtonsProps) {
     const handlePresetClick = (days: number) => {

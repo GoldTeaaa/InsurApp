@@ -1,6 +1,6 @@
 'use server';
 import { komisiTableData } from "@/lib/pembayaran/pembayaran_komisi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState, TableParams } from "@/lib/types";
 
 type ReturnState = ActionReturnState<komisiTableData>;

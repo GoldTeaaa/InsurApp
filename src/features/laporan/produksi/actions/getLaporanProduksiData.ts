@@ -1,7 +1,7 @@
 'use server';
 import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import { laporanProduksiRPCSchema, RPCGetLaporanProduksi } from "@/lib/laporan/laporan-produksi/types";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
 
 type TableParams = {

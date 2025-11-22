@@ -20,3 +20,8 @@ export function formatDateRange(startDate: string | Date, endDate: string | Date
 
     return `${formattedStart} - ${formattedEnd}`;
 }
+
+export function formatDate(date: string | Date): string {
+    if (!date) return '-';
+    return new Date(date).toLocaleDateString(LOCALE, DATE_OPTIONS);
+}

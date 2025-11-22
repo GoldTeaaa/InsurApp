@@ -8,14 +8,16 @@ import { AgingKomisiSearchParams } from "@/lib/laporan/laporan-aging-komisi/type
 export default async function Page({
     searchParams
 }: { searchParams: AgingKomisiSearchParams }) {
-    const response = await getLapAgingKomisiData(searchParams);
-    if (!response.success) {
-        throw new Error(response.message);
-    }
+
     const params = await searchParams;
     const search = params.search ?? "";
     const page = Number(params.page ?? 1);
     const size = Number(params.size ?? 10);
+
+    const response = await getLapAgingKomisiData({searchParams});
+    if (!response.success) {
+        throw new Error(response.message);
+    }
 
     return (
         <div>

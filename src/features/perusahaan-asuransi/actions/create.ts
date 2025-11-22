@@ -36,16 +36,6 @@ export async function createPerusahaanAction(
     };
   }
 
-  // 3) Create a server-side Supabase client bound to cookies (auth.uid() for created_by/updated_by)
-  const cookieStore = cookies();
-
-  // Optional: enforce signed-in if you expect auth.uid() (else created_by will be NULL)
-  // const { data: { user } } = await supabase.auth.getUser();
-  // if (!user) {
-  //   return { success: false, message: "Silakan login untuk membuat perusahaan." };
-  // }
-
-  // 4) Call RPC
   const { data, error } = await supabase.rpc("perusahaan_asuransi_create_v1", rpcParams.data);
 
   if (error) {
@@ -76,11 +66,11 @@ export async function createPerusahaanAction(
     const rows = perusahaanCreateResultArraySchema.parse(data ?? []);
     rowId = rows[0].id;
     rowNama = rows[0].nama_asuransi;
-  } catch (e: any) {
+  } catch (e) {
     return {
       success: false,
       message: "Format respons server tidak sesuai.",
-      errors: { rpc: [String(e?.message ?? e)] },
+      errors: { rpc: [String(e)] },
     };
   }
 

@@ -1,4 +1,3 @@
-# 🧾 Insurance Agency ERP Dashboard
 
 An internal-use **ERP web application** built for an **insurance broker company** to manage customers, policies, commissions, and payment tracking — complete with in-dashboard analytics and reporting.
 

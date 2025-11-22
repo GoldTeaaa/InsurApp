@@ -9,7 +9,7 @@ export default async function Page({
     searchParams
 }: { searchParams: searchParamsProps }) {
 
-    const response = await getLapAgingPremiData({ searchParams })
+    const response = await getLapAgingPremiData(searchParams)
     if (!response.success) {
         throw new Error(response.message)
     }

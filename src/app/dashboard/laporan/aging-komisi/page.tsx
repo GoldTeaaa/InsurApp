@@ -3,11 +3,11 @@ import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import getLapAgingKomisiData from "@/features/laporan/aging-komisi/actions/getLapAgingKomisiData";
 import LaporanAgingKomisiTable from "@/features/laporan/aging-komisi/LaporanAgingKomisiTable";
-import { AgingKomisiSearchParams } from "@/lib/laporan/laporan-aging-komisi/types";
+import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 
 export default async function Page({
     searchParams
-}: { searchParams: AgingKomisiSearchParams }) {
+}: { searchParams: searchParamsProps }) {
 
     const params = await searchParams;
     const search = params.search ?? "";

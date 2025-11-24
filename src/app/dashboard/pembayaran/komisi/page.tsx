@@ -3,14 +3,26 @@ import Search from "@/components/Search";
 import getPembayaranKomisiTableData from "@/features/pembayaran/pembayaranKomisi/actions/getPembayaranKomisiTableData";
 import KomisiPembayaranTable from "@/features/pembayaran/pembayaranKomisi/KomisiPembayaranTable";
 import StatusFilters from "@/features/pembayaran/pembayaranPremi/StatusFilters";
+import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 import { komisiTableData, komisiTableRowData } from "@/lib/pembayaran/pembayaran_komisi/types";
-import { TableParams } from "@/lib/types";
+import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 
 export default async function Page({
     searchParams,
-}: { searchParams?: TableParams }) {
+}: { searchParams : Promise<RawSearchParams> }) {
 
-    const params = await searchParams;
+    const raw = await searchParams;
+    const normalized = NormalizeSearchParams(raw);
+
+    const parsed = SearchParamsSchema.safeParse(normalized);
+    if (!parsed.success) {
+        return {
+            success: false,
+            message: parsed.error.message,
+        };
+    }
+    const params = parsed.data;
+    
     const search = params?.search ?? "";
     const page = Number(params?.page ?? 1);
     const size = Number(params?.size ?? 10);

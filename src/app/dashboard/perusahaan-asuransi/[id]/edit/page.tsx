@@ -4,9 +4,7 @@ import UpdatePerusahaanForm from "@/features/perusahaan-asuransi/updateForm";
 import { notFound } from "next/navigation";
 import { getPerusahaanAsuransiById } from "@/features/perusahaan-asuransi/actions/prefill-update-form";
 
-type id = { id: string };
-
-export default async function Page({ params }: { params: id }) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const prefill = await getPerusahaanAsuransiById(id);
   if (!prefill) return notFound();

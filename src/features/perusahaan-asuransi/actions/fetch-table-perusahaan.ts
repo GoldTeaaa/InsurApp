@@ -7,23 +7,22 @@ import {
   type PerusahaanSort,
 } from "@/lib/perusahaan_asuransi/types";
 
-const PAGE_SIZE = 5;
-
 /** Fetch one page via RPC with Zod-verified params + results */
 export async function fetchPerusahaanPage({
   search,
   page,
   sort,
+  size
 }: {
-  search: string;
+  search: string | null;
   page: number;
-  sort: PerusahaanSort;
-  pageSize?: number;
+  sort?: PerusahaanSort;
+  size: number;
 }): Promise<{ rows: PerusahaanRow[]; total: number; pageCount: number }> {
   const params = perusahaanListParamsSchema.parse({
-    p_search: search.trim(),
+    p_search: search? search.trim() : undefined,
     p_page: Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1,
-    p_page_size: PAGE_SIZE,
+    p_page_size: size,
     p_sort: sort,
   });
 

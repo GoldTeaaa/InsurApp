@@ -64,6 +64,8 @@ export type TableParams = {
   status?: string;
 };
 
+// ==================== SEARCH PARAMS ====================
+
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
 export const SearchParamsSchema = z.object({
@@ -72,6 +74,9 @@ export const SearchParamsSchema = z.object({
   size: z.coerce.number().int().optional().transform(val => val || 10),
   date_from: z.string().optional().transform(val => val || null),
   date_to: z.string().optional().transform(val => val || null),
+  status: z.string().optional().transform(val => val || null),
 });
 
 export type SearchParamsProps = z.infer<typeof SearchParamsSchema>;
+
+// ===================== FORM PARAMS =======================

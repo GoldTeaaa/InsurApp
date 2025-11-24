@@ -36,10 +36,10 @@ export type tableQuery = z.infer<typeof tableQuerySchema>;
 
 // List RPC params
 export const perusahaanListParamsSchema = z.object({
-  p_search: z.string(),
+  p_search: z.string().optional().transform(val => val || undefined),
   p_page: z.number().int().min(1),
   p_page_size: z.number().int().min(1).max(50),
-  p_sort: sortEnum,
+  p_sort: sortEnum.optional(),
 });
 
 // One list row

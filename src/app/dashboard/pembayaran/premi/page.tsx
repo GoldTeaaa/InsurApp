@@ -3,17 +3,24 @@ import Search from "@/components/Search";
 import getPembayaranTableData from "@/features/pembayaran/pembayaranPremi/actions/getPembayaranTable";
 import PembayaranTable from "@/features/pembayaran/pembayaranPremi/PremiPembayaranTable";
 import StatusFilters from "@/features/pembayaran/pembayaranPremi/StatusFilters";
+import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 import { PembayaranTableRow } from "@/lib/pembayaran/pembayaran_premi/types";
+import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 
 export default async function Page({ searchParams }: {
-    searchParams?: {
-        search?: string;
-        page?: string;
-        size?: string;
-        status?: string;
-    };
+    searchParams : Promise<RawSearchParams>
 }) {
-    const params = await searchParams;
+    const raw = await searchParams;
+    const normalized = NormalizeSearchParams(raw);
+
+    const parsed = SearchParamsSchema.safeParse(normalized);
+    if (!parsed.success) {
+        return {
+            success: false,
+            message: parsed.error.message,
+        };
+    }
+    const params = parsed.data;
     const search = params?.search ?? "";
     const page = Number(params?.page ?? 1);
     const size = Number(params?.size ?? 10);

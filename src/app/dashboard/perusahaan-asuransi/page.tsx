@@ -5,22 +5,27 @@ import Search from "@/components/Search";
 import Table from "@/features/perusahaan-asuransi/table-view";
 import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/fetch-table-perusahaan";
 import Pagination from "@/components/Pagination";
+import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
+import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 
-type RawSearchParams = {
-    q?: string;
-    page?: number;
-    sort?: PerusahaanSort;
-};
+export default async function Page({ searchParams }: { searchParams : Promise<RawSearchParams> }) {
+    const raw = await searchParams;
+    const normalized = NormalizeSearchParams(raw);
 
-export default async function Page({ searchParams }: { searchParams?: RawSearchParams }) {
-    const raw = await searchParams ?? {};
-    const parsed = tableQuerySchema.parse(raw);
+    const parsed = SearchParamsSchema.safeParse(normalized);
+    if (!parsed.success) {
+        return {
+            success: false,
+            message: parsed.error.message,
+        };
+    }
+    const params = parsed.data;
 
-    const search = parsed.q;
-    const page = parsed.page;
-    const sort = parsed.sort;
+    const search = params.search ?? "";
+    const page = params.page ?? 1;
+    const size = params.size ?? 10;
 
-    const data = await fetchPerusahaanPage({ search, page, sort });
+    const data = await fetchPerusahaanPage({ search, page, size});
 
     return (
         <div className="w-full p-4">
@@ -33,7 +38,7 @@ export default async function Page({ searchParams }: { searchParams?: RawSearchP
                     />
                 </div>
             </div>
-            <Suspense key={`${search}-${page}-${sort}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
+            <Suspense key={`${search}-${page}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
                 <Table rows={data.rows} totalPage={data.total} />
             </Suspense>
             <Pagination page={page} pageCount={data.pageCount} />

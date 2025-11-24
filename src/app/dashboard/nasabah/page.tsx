@@ -9,14 +9,14 @@ import fetchNasabahPage from '@/features/nasabah/actions/fetch-table-page';
 export default async function Page({
     searchParams
 }: {
-    searchParams: NasabahTableSearchParams;
+    searchParams: Promise<NasabahTableSearchParams>;
 }) {
     const params = await searchParams;
     const search = params?.search ?? "";
     const page = Number(params?.page ?? 1);
     const size = Number(params?.size ?? 10);
 
-    const response = await fetchNasabahPage({searchParams});
+    const response = await fetchNasabahPage({ searchParams: params });
     if (!response.success) {
         throw new Error(response.message);
     }

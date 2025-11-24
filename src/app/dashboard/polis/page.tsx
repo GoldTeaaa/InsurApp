@@ -6,15 +6,28 @@ import Search from "@/components/Search"
 import Pagination from "@/components/Pagination"
 import getPolisTableData from "@/features/polis/actions/get-polis-table"
 import { PolisTableRow } from "@/lib/polis/table-types"
+import { RawSearchParams, SearchParamsSchema } from "@/lib/types"
+import NormalizeSearchParams from "@/lib/normalizeSearchParams"
 
 export const metadata = { title: "Polis" }
 
 export default async function Page({
 	searchParams,
 }: {
-	searchParams?: { search?: string; page?: string; size?: string }
+	searchParams : Promise<RawSearchParams>
 }) {
-	const params = await searchParams;
+	const raw = await searchParams;
+	const normalized = NormalizeSearchParams(raw);
+
+	const parsed = SearchParamsSchema.safeParse(normalized);
+	if (!parsed.success) {
+		return {
+			success: false,
+			message: parsed.error.message,
+		};
+	}
+	
+	const params = parsed.data;
 	const search = params?.search ?? ""
 	const page = Number(params?.page ?? 1)
 	const size = Number(params?.size ?? 10)

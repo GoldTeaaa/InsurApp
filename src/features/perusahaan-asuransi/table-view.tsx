@@ -1,6 +1,4 @@
-import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/fetch-table-perusahaan";
-import Pagination from "@/features/perusahaan-asuransi/pagination";
-import { PerusahaanRow, type PerusahaanSort } from "@/lib/perusahaan_asuransi/types";
+import { PerusahaanRow } from "@/lib/perusahaan_asuransi/types";
 import { UpdatePerusahaanAsuransi, DeletePerusahaanAsuransi } from "@/features/perusahaan-asuransi/buttons";
 
 function fmt(iso?: string | null) {

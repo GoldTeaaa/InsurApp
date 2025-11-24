@@ -1,14 +1,7 @@
 'use server';
-import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import { laporanProduksiRPCSchema, RPCGetLaporanProduksi } from "@/lib/laporan/laporan-produksi/types";
 import { supabase } from "~/utils/supabase/client";
-import { ActionReturnState } from "@/lib/types";
-
-type TableParams = {
-    page: number;
-    size: number;
-    search: string;
-};
+import { ActionReturnState, SearchParamsProps } from "@/lib/types";
 
 type ReturnState = ActionReturnState<RPCGetLaporanProduksi>;
 

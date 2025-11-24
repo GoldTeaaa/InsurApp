@@ -4,12 +4,22 @@ import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import DateFilter from "@/components/DateFilter";
 import ExportOptions from "@/components/ExportOptions";
-import { SearchParamsProps } from "@/lib/types";
+import { RawSearchParams, SearchParamsProps, SearchParamsSchema } from "@/lib/types";
 
 export default async function Page({
     searchParams
-}: { searchParams: SearchParamsProps }) {
-    const params = await searchParams;
+}: { searchParams: Promise<RawSearchParams> }) {
+
+    const raw = await searchParams;
+    const parsed = SearchParamsSchema.safeParse(raw);
+    if (!parsed.success) {
+        return {
+            success: false,
+            message: parsed.error.message,
+        };
+    }
+    const params = parsed.data;
+
     const search = params?.search ?? "";
     const page = Number(params?.page ?? 1);
     const size = Number(params?.size ?? 10);

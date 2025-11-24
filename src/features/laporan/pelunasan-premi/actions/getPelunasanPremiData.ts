@@ -1,11 +1,10 @@
 'use server';
-import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import { 
     type PelunasanPremiRPC, 
     PelunasanPremiRPCSchema 
 } from "@/lib/laporan/laporan-pelunasan-premi/types";
 import { supabase } from "~/utils/supabase/client";
-import { ActionReturnState } from "@/lib/types";
+import { ActionReturnState, SearchParamsProps } from "@/lib/types";
 
 type ReturnState = ActionReturnState<PelunasanPremiRPC>   
 

@@ -1,22 +1,36 @@
 import getPelunasanPremiData from "@/features/laporan/pelunasan-premi/actions/getPelunasanPremiData";
 import PelunasanPremiTable from "@/features/laporan/pelunasan-premi/PelunasanPremiTable";
-import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import DateFilter from "@/components/DateFilter";
+import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
+import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 
 export default async function Page({
     searchParams
-}: { searchParams: SearchParamsProps }) {
+}: { searchParams: Promise<RawSearchParams> }) {
+    
+    const raw = await searchParams;
+    const normalized = NormalizeSearchParams(raw);
 
-    const response = await getPelunasanPremiData({ searchParams });
-    if (!response.success) {
-        throw new Error(response.message);
+    const parsed = SearchParamsSchema.safeParse(normalized);
+    if (!parsed.success) {
+        return {
+            success: false,
+            message: parsed.error.message,
+        };
     }
-    const params = await searchParams;
+    const params = parsed.data;
+
     const search = params.search ?? "";
     const page = Number(params.page ?? 1);
     const size = Number(params.size ?? 10);
+
+    const response = await getPelunasanPremiData({ searchParams: params });
+    if (!response.success) {
+        throw new Error(response.message);
+    }
+    
 
     return (
         <div>

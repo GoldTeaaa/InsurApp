@@ -2,7 +2,6 @@ import { RawSearchParams, SearchParamsProps } from "./types";
 
 export default function NormalizeSearchParams(raw: RawSearchParams): SearchParamsProps {
     const handleArray = (value: string| string[] | undefined) =>  Array.isArray(value) ? value[0] : value ?? "";
-
     
     return {
         search: handleArray(raw.search),

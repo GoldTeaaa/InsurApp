@@ -9,11 +9,7 @@ import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<NasabahForm>;
 
-type Props = {
-    id: string
-}
-
-export default async function getNasabahDetails({id}: Props):Promise<ReturnState> {
+export default async function getNasabahDetails(id: string):Promise<ReturnState> {
     const {data, error} = await supabase
     .from('initial_update_nasabah_value')
     .select()

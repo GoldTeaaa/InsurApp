@@ -9,9 +9,11 @@ import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 export default async function Page({
     searchParams
 }: { searchParams: Promise<RawSearchParams> }) {
+
     const raw = await searchParams;
     const normalized = NormalizeSearchParams(raw);
     const parsed = SearchParamsSchema.safeParse(normalized);
+    
     if (!parsed.success) {
         return {
             success: false,

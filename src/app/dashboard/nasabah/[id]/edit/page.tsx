@@ -3,13 +3,11 @@ import NasabahForm from '@/features/nasabah/form/NasabahForm';
 import { type NasabahForm as NasabahFormType } from '@/lib/nasabah/type';
 import { notFound } from 'next/navigation';
 
-type Params = { 
-  id: string 
-};
 
-export default async function EditPage({ params }: { params: Params }) {
+export default async function EditPage({ params }: {params : Promise<{id: string}>}) {
   const { id } = await params;
-  const detail = await getNasabahDetails({id});
+
+  const detail = await getNasabahDetails(id);
 
   if (!detail.success) notFound();
 

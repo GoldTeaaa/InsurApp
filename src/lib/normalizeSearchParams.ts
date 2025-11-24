@@ -9,5 +9,6 @@ export default function NormalizeSearchParams(raw: RawSearchParams): SearchParam
         size: Number(handleArray(raw.size)),
         date_from: handleArray(raw.date_from),
         date_to: handleArray(raw.date_to),
+        status: handleArray(raw.status)
     }
 }

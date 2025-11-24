@@ -4,7 +4,7 @@ import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import DateFilter from "@/components/DateFilter";
 import ExportOptions from "@/components/ExportOptions";
-import { RawSearchParams, SearchParamsProps, SearchParamsSchema } from "@/lib/types";
+import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 
 export default async function Page({
     searchParams
@@ -13,10 +13,7 @@ export default async function Page({
     const raw = await searchParams;
     const parsed = SearchParamsSchema.safeParse(raw);
     if (!parsed.success) {
-        return {
-            success: false,
-            message: parsed.error.message,
-        };
+        throw new Error(parsed.error.message);
     }
     const params = parsed.data;
 

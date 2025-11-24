@@ -28,7 +28,6 @@ export default async function Page({
         throw new Error(response.message);
     }
     
-
     return (
         <div>
             <Search

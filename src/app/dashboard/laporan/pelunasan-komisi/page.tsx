@@ -24,7 +24,7 @@ export default async function Page({
     const page = Number(params.page ?? 1);
     const size = Number(params.size ?? 10);
 
-    const data = await getPelunasanKomisiData({ searchParams })
+    const data = await getPelunasanKomisiData({ searchParams: params })
 
     if (!data.success) {
         throw new Error(data.message);

@@ -1,5 +1,5 @@
 'use server';
-import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import { laporanProduksiRPCSchema, RPCGetLaporanProduksi } from "@/lib/laporan/laporan-produksi/types";
 import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
@@ -14,7 +14,7 @@ type ReturnState = ActionReturnState<RPCGetLaporanProduksi>;
 
 export default async function getLaporanProduksiData({
     searchParams
-}: { searchParams: searchParamsProps }): Promise<ReturnState> {
+}: { searchParams: SearchParamsProps }): Promise<ReturnState> {
 
     const params = await searchParams;
     const search = params?.search ?? "";

@@ -1,13 +1,13 @@
 import getPelunasanPremiData from "@/features/laporan/pelunasan-premi/actions/getPelunasanPremiData";
 import PelunasanPremiTable from "@/features/laporan/pelunasan-premi/PelunasanPremiTable";
-import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import DateFilter from "@/components/DateFilter";
 
 export default async function Page({
     searchParams
-}: { searchParams: searchParamsProps }) {
+}: { searchParams: SearchParamsProps }) {
 
     const response = await getPelunasanPremiData({ searchParams });
     if (!response.success) {

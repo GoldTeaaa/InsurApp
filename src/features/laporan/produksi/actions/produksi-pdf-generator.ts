@@ -1,7 +1,7 @@
 import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { formatDate } from "../utils/formatDate";
+import { formatDate } from "../../../../lib/utils/formatDate";
 
 const formatCurrency = (value: number) => {
     return value.toLocaleString('id-ID', {

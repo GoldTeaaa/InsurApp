@@ -2,7 +2,7 @@
 import { Download } from "lucide-react";
 import { Button } from "./ui/button";
 import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
-import { generateProduksiPDF } from "@/lib/laporan/pdf-generator";
+import { generateProduksiPDF } from "@/features/laporan/produksi/actions/produksi-pdf-generator";
 
 type Props = {
     laporanData: LaporanProduksiRow[];

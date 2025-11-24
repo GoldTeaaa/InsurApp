@@ -3,12 +3,12 @@ import getLaporanProduksiData from "../../../../features/laporan/produksi/action
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import DateFilter from "@/components/DateFilter";
-import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import ExportOptions from "@/components/ExportOptions";
 
 export default async function Page({
     searchParams
-}: { searchParams: searchParamsProps }) {
+}: { searchParams: SearchParamsProps }) {
     const params = await searchParams;
     const search = params?.search ?? "";
     const page = Number(params?.page ?? 1);

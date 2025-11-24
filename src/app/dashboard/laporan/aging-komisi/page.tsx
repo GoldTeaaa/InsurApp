@@ -3,22 +3,34 @@ import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import getLapAgingKomisiData from "@/features/laporan/aging-komisi/actions/getLapAgingKomisiData";
 import LaporanAgingKomisiTable from "@/features/laporan/aging-komisi/LaporanAgingKomisiTable";
-import { AgingKomisiSearchParams } from "@/lib/laporan/laporan-aging-komisi/types";
-import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import { AgingKomisiSearchParamsSchema } from "@/lib/laporan/laporan-aging-komisi/types";
+import NormalizeSearchParams from "@/lib/normalizeSearchParams";
+import { RawSearchParams } from "@/lib/types";
 
 export default async function Page({
     searchParams
-}: { searchParams: searchParamsProps }) {
+}: { searchParams: Promise<RawSearchParams> }) {
 
-    const params = searchParams;
-    const search = params.search ?? "";
-    const page = Number(params.page ?? 1);
-    const size = Number(params.size ?? 10);
+    const raw = await searchParams;
+    const params = NormalizeSearchParams(raw);
 
-    const response = await getLapAgingKomisiData({searchParams});
+    const parsedParams = AgingKomisiSearchParamsSchema.safeParse(params);
+    if (!parsedParams.success) {
+        return {
+            success: false,
+            message: parsedParams.error.message,
+        };
+    }
+
+    const search = parsedParams.data.search ?? "";
+    const page = Number(parsedParams.data.page ?? 1);
+    const size = Number(parsedParams.data.size ?? 10);
+
+    const response = await getLapAgingKomisiData({ searchParams: params });
     if (!response.success) {
         throw new Error(response.message);
     }
+    const pageCount = Math.ceil((response.data?.total_count ?? 0) / size);
 
     return (
         <div>
@@ -34,7 +46,7 @@ export default async function Page({
             />
             <Pagination
                 page={page}
-                pageCount={Math.ceil((response.data?.total_count ?? 0) / size)}
+                pageCount={pageCount}
             />
         </div>
     );

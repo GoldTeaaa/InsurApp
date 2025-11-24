@@ -2,7 +2,7 @@
 import {
   LaporanAgingPremiRPC,
   LaporanAgingPremiRPCSchema,
-  searchParamsProps,
+  SearchParamsProps,
 } from "@/lib/laporan/laporan-aging-premi/types";
 import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
@@ -10,7 +10,7 @@ import { ActionReturnState } from "@/lib/types";
 type ReturnState = ActionReturnState<LaporanAgingPremiRPC>;
 
 export default async function getLapAgingPremiData(
-  searchParams: searchParamsProps
+  searchParams: SearchParamsProps
 ): Promise<ReturnState> {
   const params = await searchParams;
   const search = params?.search ?? "";

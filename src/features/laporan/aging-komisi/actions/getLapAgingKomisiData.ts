@@ -6,21 +6,21 @@ import {
 } from "@/lib/laporan/laporan-aging-komisi/types";
 import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState } from "@/lib/types";
-import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 
 type ReturnState = ActionReturnState<LaporanAgingKomisiRPCPayload>;
 
 export default async function getLapAgingKomisiData({
   searchParams,
 }: {
-  searchParams: searchParamsProps;
+  searchParams: SearchParamsProps;
 }): Promise<ReturnState> {
   const params = await searchParams;
   const parsedParams = AgingKomisiSearchParamsSchema.safeParse(params);
   if (!parsedParams.success) {
     return {
       success: false,
-      message: "Invalid input parameters.",
+      message: parsedParams.error.message,
     };
   }
 

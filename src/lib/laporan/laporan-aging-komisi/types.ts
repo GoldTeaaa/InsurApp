@@ -2,9 +2,9 @@ import { z } from 'zod';
 import { AGING_RANGE } from '@/lib/types';
 
 export const AgingKomisiSearchParamsSchema = z.object({
-	search: z.string().optional(),
-	page: z.coerce.number().int().positive().optional(),
-	size: z.coerce.number().int().positive().optional(),
+	search: z.string().optional().transform(val => val || null),
+	page: z.coerce.number().int().optional().transform(val => val || 1),
+	size: z.coerce.number().int().optional().transform(val => val || 10),
 	date_from: z.string().optional().transform(val => val || null),
 	date_to: z.string().optional().transform(val => val || null),
 });

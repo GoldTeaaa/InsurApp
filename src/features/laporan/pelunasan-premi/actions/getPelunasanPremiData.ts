@@ -1,5 +1,5 @@
 'use server';
-import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import { 
     type PelunasanPremiRPC, 
     PelunasanPremiRPCSchema 
@@ -11,7 +11,7 @@ type ReturnState = ActionReturnState<PelunasanPremiRPC>
 
 export default async function getPelunasanPremiData({
     searchParams
-}: {searchParams: searchParamsProps}): Promise<ReturnState> {
+}: {searchParams: SearchParamsProps}): Promise<ReturnState> {
 
     const params = await searchParams;
     const search = params?.search ?? "";

@@ -63,3 +63,5 @@ export type TableParams = {
   size?: number;
   status?: string;
 };
+
+export type RawSearchParams = Record<string, string | string[] | undefined>;

@@ -1,7 +1,7 @@
 import { AGING_RANGE } from "@/lib/types";
 import { z } from "zod";
 
-export type searchParamsProps = {
+export type SearchParamsProps = {
     search: string;
     page: string;
     size: string;

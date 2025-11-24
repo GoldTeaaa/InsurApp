@@ -3,11 +3,11 @@ import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import getLapAgingPremiData from "@/features/laporan/aging-premi/actions/getLapAgingPremiData";
 import LaporanAgingPremiTable from "@/features/laporan/aging-premi/LaporanAgingPremiTable";
-import { searchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 
 export default async function Page({
     searchParams
-}: { searchParams: searchParamsProps }) {
+}: { searchParams: SearchParamsProps }) {
 
     const response = await getLapAgingPremiData(searchParams)
     if (!response.success) {

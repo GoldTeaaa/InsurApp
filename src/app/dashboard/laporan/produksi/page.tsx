@@ -3,8 +3,8 @@ import getLaporanProduksiData from "../../../../features/laporan/produksi/action
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import DateFilter from "@/components/DateFilter";
-import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
 import ExportOptions from "@/components/ExportOptions";
+import { SearchParamsProps } from "@/lib/types";
 
 export default async function Page({
     searchParams
@@ -13,8 +13,8 @@ export default async function Page({
     const search = params?.search ?? "";
     const page = Number(params?.page ?? 1);
     const size = Number(params?.size ?? 10);
-    const startDate = params?.date_from;
-    const endDate = params?.date_to;
+    const startDate = params?.date_from ? params.date_from : "";
+    const endDate = params?.date_to ? params.date_to : "";
 
     const data = await getLaporanProduksiData({searchParams})
     if (!data.success) {

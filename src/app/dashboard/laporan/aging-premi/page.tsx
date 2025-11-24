@@ -3,20 +3,33 @@ import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import getLapAgingPremiData from "@/features/laporan/aging-premi/actions/getLapAgingPremiData";
 import LaporanAgingPremiTable from "@/features/laporan/aging-premi/LaporanAgingPremiTable";
-import { SearchParamsProps } from "@/lib/laporan/laporan-aging-premi/types";
+import NormalizeSearchParams from "@/lib/normalizeSearchParams";
+import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 
 export default async function Page({
     searchParams
-}: { searchParams: SearchParamsProps }) {
+}: { searchParams: Promise<RawSearchParams> }) {
 
-    const response = await getLapAgingPremiData(searchParams)
+    const raw = await searchParams;
+    const params = NormalizeSearchParams(raw);
+
+    const parsedParams = SearchParamsSchema.safeParse(params);
+    if (!parsedParams.success) {
+        return {
+            success: false,
+            message: parsedParams.error.message,
+        };
+    }
+    const parsedParamsData = parsedParams.data;
+
+    const search = parsedParamsData.search ?? "";
+    const page = Number(parsedParamsData.page ?? 1);
+    const size = Number(parsedParamsData.size ?? 10);
+
+    const response = await getLapAgingPremiData({ searchParams: parsedParamsData });
     if (!response.success) {
         throw new Error(response.message)
     }
-    const params = await searchParams;
-    const search = params.search ?? "";
-    const page = Number(params.page ?? 1);
-    const size = Number(params.size ?? 10);
 
     return (
         <div>

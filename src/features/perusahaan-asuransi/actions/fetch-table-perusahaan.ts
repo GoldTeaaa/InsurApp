@@ -7,7 +7,6 @@ import {
   type PerusahaanSort,
 } from "@/lib/perusahaan_asuransi/types";
 
-/** Fetch one page via RPC with Zod-verified params + results */
 export async function fetchPerusahaanPage({
   search,
   page,

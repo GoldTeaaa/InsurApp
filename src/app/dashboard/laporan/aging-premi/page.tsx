@@ -15,10 +15,7 @@ export default async function Page({
 
     const parsedParams = SearchParamsSchema.safeParse(params);
     if (!parsedParams.success) {
-        return {
-            success: false,
-            message: parsedParams.error.message,
-        };
+        throw new Error(parsedParams.error.message);
     }
     const parsedParamsData = parsedParams.data;
 

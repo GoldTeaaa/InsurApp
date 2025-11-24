@@ -5,20 +5,18 @@ import getPelunasanKomisiData from "@/features/laporan/pelunasan-komisi/actions/
 import PelunasanKomisiTable from "@/features/laporan/pelunasan-komisi/PelunasanKomisiTable";
 import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
+import { JSX } from "react";
 
 export default async function Page({
     searchParams
-}: { searchParams: Promise<RawSearchParams> }) {
+}: { searchParams: Promise<RawSearchParams> }):Promise<JSX.Element> {
 
     const raw = await searchParams;
     const normalized = NormalizeSearchParams(raw);
     const parsed = SearchParamsSchema.safeParse(normalized);
     
     if (!parsed.success) {
-        return {
-            success: false,
-            message: parsed.error.message,
-        };
+        throw new Error(parsed.error.message);
     }
     const params = parsed.data;
 

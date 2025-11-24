@@ -6,20 +6,18 @@ import LaporanAgingKomisiTable from "@/features/laporan/aging-komisi/LaporanAgin
 import { AgingKomisiSearchParamsSchema } from "@/lib/laporan/laporan-aging-komisi/types";
 import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 import { RawSearchParams } from "@/lib/types";
+import { JSX } from "react";
 
 export default async function Page({
     searchParams
-}: { searchParams: Promise<RawSearchParams> }) {
+}: { searchParams: Promise<RawSearchParams> }):Promise<JSX.Element> {
 
     const raw = await searchParams;
     const params = NormalizeSearchParams(raw);
 
     const parsedParams = AgingKomisiSearchParamsSchema.safeParse(params);
     if (!parsedParams.success) {
-        return {
-            success: false,
-            message: parsedParams.error.message,
-        };
+        throw new Error(parsedParams.error.message);
     }
 
     const search = parsedParams.data.search ?? "";

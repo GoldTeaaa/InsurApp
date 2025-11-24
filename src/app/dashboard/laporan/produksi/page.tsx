@@ -23,7 +23,7 @@ export default async function Page({
     const startDate = params?.date_from ? params.date_from : "";
     const endDate = params?.date_to ? params.date_to : "";
 
-    const data = await getLaporanProduksiData({searchParams})
+    const data = await getLaporanProduksiData({searchParams: params});
     if (!data.success) {
         throw new Error(data.message);
     }

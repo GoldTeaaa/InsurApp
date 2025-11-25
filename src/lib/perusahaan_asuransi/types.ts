@@ -14,26 +14,6 @@ export const sortEnum = z.enum([
 ]);
 export type PerusahaanSort = z.infer<typeof sortEnum>;
 
-// URL -> clean query
-export const tableQuerySchema = z.object({
-  q: z
-    .union([z.string(), z.array(z.string()), z.undefined()])
-    .transform((v) => (Array.isArray(v) ? v[0] : v ?? ""))
-    .transform((s) => s.trim()),
-  page: z
-    .union([z.string(), z.array(z.string()), z.undefined()])
-    .transform((v) => (Array.isArray(v) ? v[0] : v))
-    .transform((s) => {
-      const n = Number(s ?? 1);
-      return Number.isFinite(n) && n >= 1 ? Math.floor(n) : 1;
-    }),
-  sort: z
-    .union([z.string(), z.array(z.string()), z.undefined()])
-    .transform((v) => (Array.isArray(v) ? v[0] : v ?? "created_desc"))
-    .pipe(sortEnum),
-});
-export type tableQuery = z.infer<typeof tableQuerySchema>;
-
 // List RPC params
 export const perusahaanListParamsSchema = z.object({  
   p_search: z.string().optional().transform(val => val || undefined),
@@ -54,8 +34,11 @@ export const perusahaanRowSchema = z.object({
   updated_at: z.string(),
   total_count: z.coerce.number(), // bigint → number
 });
-export const perusahaanRowsSchema = z.array(perusahaanRowSchema);
+export const perusahaanListSchema = z.array(perusahaanRowSchema);
 export type PerusahaanRow = z.infer<typeof perusahaanRowSchema>;
+export type PerusahaanList = z.infer<typeof perusahaanListSchema>;
+
+
 
 /* ====================== NEW (reusable primitives) ====================== */
 

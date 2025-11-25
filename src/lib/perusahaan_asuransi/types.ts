@@ -18,7 +18,7 @@ export type PerusahaanSort = z.infer<typeof sortEnum>;
 export const perusahaanListParamsSchema = z.object({  
   p_search: z.string().optional().transform(val => val || undefined),
   p_page: z.number().int().min(1),
-  p_page_size: z.number().int().min(1).max(50),
+  p_size: z.number().int().min(1).max(50),
   p_sort: sortEnum.optional(),
 });
 
@@ -34,10 +34,16 @@ export const perusahaanRowSchema = z.object({
   updated_at: z.string(),
   total_count: z.coerce.number(), // bigint → number
 });
+
 export const perusahaanListSchema = z.array(perusahaanRowSchema);
+
+export const perusahaanRpcPayloadSchema = z.object({
+  rows: perusahaanListSchema,
+  total_count: z.number(),
+})
 export type PerusahaanRow = z.infer<typeof perusahaanRowSchema>;
 export type PerusahaanList = z.infer<typeof perusahaanListSchema>;
-
+export type PerusahaanRpcPayload = z.infer<typeof perusahaanRpcPayloadSchema>;
 
 
 /* ====================== NEW (reusable primitives) ====================== */

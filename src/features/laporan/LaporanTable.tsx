@@ -62,7 +62,8 @@ export default function LaporanTable<TData>({
                         ))}
                     </thead>
                     <tbody>
-                        {table.getRowModel().rows.map(row => (
+                        {table.getCoreRowModel().rows.length ? (
+                            table.getRowModel().rows.map(row => (
                             <Fragment key={row.id}>
                                 <tr
                                     onClick={row.getToggleExpandedHandler()}
@@ -82,7 +83,13 @@ export default function LaporanTable<TData>({
                                     </tr>
                                 )}
                             </Fragment>
-                        ))}
+                        ))): (
+                            <tr>
+                                <td colSpan={columns.length} className="h-24 text-center">
+                                    No results.
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

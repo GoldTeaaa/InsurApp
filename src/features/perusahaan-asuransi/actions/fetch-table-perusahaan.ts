@@ -2,10 +2,12 @@
 import { supabase } from "~/utils/supabase/client";
 import {
   perusahaanListParamsSchema,
-  perusahaanRowsSchema,
-  type PerusahaanRow,
+  PerusahaanRpcPayload,
   type PerusahaanSort,
 } from "@/lib/perusahaan_asuransi/types";
+import { ActionReturnState } from "@/lib/types";
+
+type ReturnState = ActionReturnState<PerusahaanRpcPayload>;
 
 export async function fetchPerusahaanPage({
   search,
@@ -17,26 +19,25 @@ export async function fetchPerusahaanPage({
   page: number;
   sort?: PerusahaanSort;
   size: number;
-}): Promise<{ rows: PerusahaanRow[]; total: number; pageCount: number }> {
+}): Promise<ReturnState> {
   const params = perusahaanListParamsSchema.parse({
     p_search: search? search.trim() : undefined,
     p_page: Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1,
-    p_page_size: size,
+    p_size: size > 0 ? size : 10,
     p_sort: sort,
   });
 
   const { data, error } = await supabase.rpc(
-    "perusahaan_asuransi_list_v1",
+    "perusahaan_asuransi_table_list",
     params
   );
   if (error) {
-    // Surface safe error; you can map messages if needed
     throw new Error(error.message || "Gagal memuat data perusahaan.");
   }
 
-  const rows = perusahaanRowsSchema.parse(data ?? []) as PerusahaanRow[];
-  const total = rows.length > 0 ? rows[0].total_count : 0;
-  const pageCount = Math.max(1, Math.ceil(total / params.p_page_size));
-
-  return { rows, total, pageCount };
+  return {
+    success: true,
+    message: "Success",
+    data
+  }
 }

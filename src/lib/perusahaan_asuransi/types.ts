@@ -14,31 +14,11 @@ export const sortEnum = z.enum([
 ]);
 export type PerusahaanSort = z.infer<typeof sortEnum>;
 
-// URL -> clean query
-export const tableQuerySchema = z.object({
-  q: z
-    .union([z.string(), z.array(z.string()), z.undefined()])
-    .transform((v) => (Array.isArray(v) ? v[0] : v ?? ""))
-    .transform((s) => s.trim()),
-  page: z
-    .union([z.string(), z.array(z.string()), z.undefined()])
-    .transform((v) => (Array.isArray(v) ? v[0] : v))
-    .transform((s) => {
-      const n = Number(s ?? 1);
-      return Number.isFinite(n) && n >= 1 ? Math.floor(n) : 1;
-    }),
-  sort: z
-    .union([z.string(), z.array(z.string()), z.undefined()])
-    .transform((v) => (Array.isArray(v) ? v[0] : v ?? "created_desc"))
-    .pipe(sortEnum),
-});
-export type tableQuery = z.infer<typeof tableQuerySchema>;
-
 // List RPC params
 export const perusahaanListParamsSchema = z.object({  
   p_search: z.string().optional().transform(val => val || undefined),
   p_page: z.number().int().min(1),
-  p_page_size: z.number().int().min(1).max(50),
+  p_size: z.number().int().min(1).max(50),
   p_sort: sortEnum.optional(),
 });
 
@@ -54,39 +34,33 @@ export const perusahaanRowSchema = z.object({
   updated_at: z.string(),
   total_count: z.coerce.number(), // bigint → number
 });
-export const perusahaanRowsSchema = z.array(perusahaanRowSchema);
+
+export const perusahaanListSchema = z.array(perusahaanRowSchema);
+
+export const perusahaanRpcPayloadSchema = z.object({
+  rows: perusahaanListSchema,
+  total_count: z.number(),
+})
 export type PerusahaanRow = z.infer<typeof perusahaanRowSchema>;
+export type PerusahaanList = z.infer<typeof perusahaanListSchema>;
+export type PerusahaanRpcPayload = z.infer<typeof perusahaanRpcPayloadSchema>;
 
-/* ====================== NEW (reusable primitives) ====================== */
-
-export const nonEmpty3 = z.string().trim().min(3, "Nama wajib diisi (min 3 karakter)");
-export const optionalText = z
-  .string()
-  .trim()
-  .transform((v) => (v === "" ? null : v))
-  .nullable()
-  .optional();
-
-export const optionalEmail = z
-  .string()
-  .trim()
-  .email("Format email tidak valid")
-  .or(z.literal("")) // Allow empty string
-  .transform((v) => (v === "" ? null : v.toLowerCase())) // transform empty to null, and lowercase
-  .nullable()
-  .optional();
 
 /* ====================== NEW (base reusable field set) ====================== */
 
+const nonEmpty3 = z.string().min(3, "Nama minimal 3 karakter");
+const validEmail = z.string().email("Email tidak valid");
+const nonEmptyKontak = z.string().min(5, "Kontak minimal 10 karakter");
+const optionalText = z.string().optional().nullable();
+const optionalEmail = validEmail.nullable().optional();
+
 export const perusahaanFormSchema = z.object({
   nama: nonEmpty3,
-  email: optionalEmail,
+  email: validEmail,
   alamat: optionalText,
-  kontak_1: optionalText,
+  kontak_1: nonEmptyKontak,
   kontak_2: optionalText,
 });
-
-// 1) Form input (UI)
 export type PerusahaanForm = z.infer<typeof perusahaanFormSchema>;
 
 export const defaultPerusahaanForm: PerusahaanForm = {
@@ -97,7 +71,7 @@ export const defaultPerusahaanForm: PerusahaanForm = {
   kontak_2: "",
 }
 
-// 2) RPC params (exact SQL signature)
+// 4. Build RPC schemas from reusable field schemas.
 export const perusahaanCreateRpcParamsSchema = z.object({
   p_nama: nonEmpty3,
   p_email: optionalEmail,
@@ -107,7 +81,6 @@ export const perusahaanCreateRpcParamsSchema = z.object({
 });
 export type PerusahaanCreateParams = z.infer<typeof perusahaanCreateRpcParamsSchema>;
 
-// 3) Zod-powered mapper: Form → RPC params
 export const perusahaanCreateToRpcSchema = perusahaanFormSchema
   .transform((v) => ({
     p_nama: v.nama.trim(),
@@ -118,7 +91,6 @@ export const perusahaanCreateToRpcSchema = perusahaanFormSchema
   }))
   .pipe(perusahaanCreateRpcParamsSchema);
 
-// 4) RPC result
 export const perusahaanReturnResultSchema = z.object({
   id: z.string().uuid(),
   nama_asuransi: z.string(),
@@ -141,25 +113,15 @@ export const perusahaanPrefillUpdateSchema = z.object({
 
 export type PerusahaanPrefillUpdate = z.infer<typeof perusahaanPrefillUpdateSchema>;
 
-/* ====================== (Optional) UPDATE later ====================== */
+/* ====================== UPDATE ====================== */
 export const perusahaanUpdateFormSchema = z.object({
   id: z.string().uuid(),
   nama: nonEmpty3,
   email: optionalEmail,
   alamat: optionalText,
-  kontak_1: optionalText,
+  kontak_1: nonEmptyKontak,
   kontak_2: optionalText,
 });
 
 export type PerusahaanUpdateFormValues = z.infer<typeof perusahaanUpdateFormSchema>;
 
-export const perusahaanUpdateRpcParamsSchema = z.object({
-  p_id: z.string().uuid(),
-  p_nama: nonEmpty3.optional(),
-  p_email: optionalEmail,
-  p_alamat: optionalText,
-  p_kontak_1: optionalText,
-  p_kontak_2: optionalText,
-});
-
-export type PerusahaanUpdateParams = z.infer<typeof perusahaanUpdateRpcParamsSchema>;

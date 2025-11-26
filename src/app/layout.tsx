@@ -1,5 +1,6 @@
 import ClientProviders from "@/providers/ClientProvider";
 import "../style/globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,6 +9,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ClientProviders>
           {children}
         </ClientProviders>
+        <Toaster />
       </body>
     </html>
   );

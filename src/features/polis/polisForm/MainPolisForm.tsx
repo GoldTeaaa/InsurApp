@@ -28,7 +28,7 @@ const steps: StepsProps[] = [
         id: 'Step 1',
         name: 'Data Nasabah',
         component: <Step1 />,
-        fields: ['id_nasabah', 'bisnis', 'kendaraan']
+        fields: ['id_nasabah', 'bisnis']
     },
     {
         id: 'Step 2',
@@ -63,6 +63,7 @@ export default function MainPolisForm() {
     const [previousStep, setPreviousStep] = useState<number>(0);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [toastErrors, setToastErrors] = useState<FieldErrors<Polis> | null>(null);
+    const [fieldToModify, setFieldToModify] = useState<(Path<Polis>)[]>(steps[currentStep].fields || []);
 
     const delta = currentStep - previousStep;
 
@@ -97,9 +98,9 @@ export default function MainPolisForm() {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(debouncedWatchedValues));
     }, [debouncedWatchedValues]);
 
-    const jenisCoas = useWatch({
+    const [jenisCoas, bisnis] = useWatch({
         control,
-        name: "jenis_coas",
+        name: ["jenis_coas", "bisnis"],
     })
 
     const isFirstRender = useIsFirstRender();
@@ -117,18 +118,21 @@ export default function MainPolisForm() {
 
     }, [jenisCoas, setValue, isFirstRender]);
 
-    const next = async () => {
-        const field = steps[currentStep].fields;
-        if (!field) {
-            // For steps without validation, like the final review
-            if (currentStep < steps.length - 1) {
-                setPreviousStep(currentStep);
-                setCurrentStep(step => step + 1);
-            }
-            return;
-        }
+    useEffect(() => {
+        const fieldsForCurrentStep = steps[currentStep].fields ? [...steps[currentStep].fields] : [];
+        // const fieldsForCurrentStep = steps[currentStep].fields ?? [];
 
-        const output = await trigger(field, { shouldFocus: true })
+        if (currentStep === 0) { 
+            if (bisnis === 'kendaraan') {
+                fieldsForCurrentStep.push('kendaraan.jenis_kendaraan', 'kendaraan.plat_nomor');
+            }
+            // If 'bisnis' is not 'kendaraan', we do nothing, and the original fields are used.
+        }
+        setFieldToModify(fieldsForCurrentStep);
+    }, [bisnis, currentStep]); // This effect now correctly manages the fields to be validated.
+
+    const next = async () => {
+        const output = await trigger(fieldToModify, { shouldFocus: true })
         console.log("output: ", output)
 
         if (!output) {

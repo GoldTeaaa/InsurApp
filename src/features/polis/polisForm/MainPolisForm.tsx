@@ -1,7 +1,7 @@
 "use client"
-import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { FormProvider, Resolver, useForm, useWatch, FieldErrors } from "react-hook-form";
+import { useEffect, useState, useRef, JSX } from "react";
+import { useRouter } from "next/navigation"
+import { FormProvider, Resolver, useForm, useWatch, FieldErrors, Path } from "react-hook-form";
 import { Button } from "@/components/button";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
@@ -10,18 +10,25 @@ import { motion } from 'framer-motion'
 import ReviewPolis from "./ReviewPolis";
 import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/create-types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDebounce } from "@/lib/utils/useDebounce"; 
+import { useDebounce } from "@/lib/utils/useDebounce";
 import ErrorToast from "@/features/polis/polisForm/ErrorToast";
 import CoasPolisAction from "../actions/coas-polis-action";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
 
-const  steps = [
+interface StepsProps {
+    id: string,
+    name: string,
+    component: JSX.Element,
+    fields?: (Path<Polis>)[]
+}
+
+const steps: StepsProps[] = [
     {
         id: 'Step 1',
         name: 'Data Nasabah',
         component: <Step1 />,
-        fields: ['id_nasabah', 'bisnis']
+        fields: ['id_nasabah', 'bisnis', 'kendaraan']
     },
     {
         id: 'Step 2',
@@ -55,8 +62,9 @@ export default function MainPolisForm() {
     const router = useRouter();
     const [previousStep, setPreviousStep] = useState<number>(0);
     const [currentStep, setCurrentStep] = useState<number>(0);
-    const delta = currentStep - previousStep
     const [toastErrors, setToastErrors] = useState<FieldErrors<Polis> | null>(null);
+
+    const delta = currentStep - previousStep;
 
     const getInitialValues = () => {
         try {
@@ -109,8 +117,6 @@ export default function MainPolisForm() {
 
     }, [jenisCoas, setValue, isFirstRender]);
 
-    type FieldName = keyof Polis;
-
     const next = async () => {
         const field = steps[currentStep].fields;
         if (!field) {
@@ -122,7 +128,7 @@ export default function MainPolisForm() {
             return;
         }
 
-        const output = await trigger(field as FieldName[], { shouldFocus: true })
+        const output = await trigger(field, { shouldFocus: true })
         console.log("output: ", output)
 
         if (!output) {
@@ -143,6 +149,11 @@ export default function MainPolisForm() {
         }
     }
 
+    const goTo = (stepIndex: number) => {
+        setPreviousStep(currentStep);
+        setCurrentStep(stepIndex);
+    }
+
     const submit = async (data: Polis) => {
         const res = await CoasPolisAction(data);
         if (res.success) {
@@ -153,14 +164,12 @@ export default function MainPolisForm() {
         }
     }
 
-    const goTo = (stepIndex: number) => {
-        setPreviousStep(currentStep);
-        setCurrentStep(stepIndex);
-    }
-
     return (
         <FormProvider {...methods} >
-            <ErrorToast errors={toastErrors} onClose={() => setToastErrors(null)} />
+            <ErrorToast
+                errors={toastErrors}
+                onClose={() => setToastErrors(null)}
+            />
             <nav aria-label='Progress'>
                 <ol role='list' className='space-y-4 md:flex md:space-x-8 md:space-y-0'>
                     {steps.map((step, index) => (

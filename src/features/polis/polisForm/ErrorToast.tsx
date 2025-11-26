@@ -1,5 +1,5 @@
 // src/components/ErrorToast.tsx
-import { useState, useEffect } from 'react';
+import {  useEffect } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -39,7 +39,7 @@ function ErrorList({ errors }: { errors: object }) {
     );
 }
 
-interface ErrorToastProps {
+type ErrorToastProps = {
     errors: FieldErrors | null;
     onClose: () => void;
 }

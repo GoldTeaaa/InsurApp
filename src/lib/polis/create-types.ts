@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { JENIS_BISNIS, JENIS_COAS } from "../types";
+import { JENIS_BISNIS, JENIS_COAS, JENIS_KENDARAAN } from "../types";
 
 const COAS_ROLE = z.enum(["leader", "member"]);
 const JENIS_RATE = z.enum(["mille", "percent"]);
@@ -33,6 +33,11 @@ export const PolisShareSchema = z.object({
   detail_komisi: DetailKomisiSchema,
 });
 
+const kendaraanSchema = z.object({
+  jenis_kendaraan: JENIS_KENDARAAN,
+  plat_nomor: z.string().min(3, "Plat nomor wajib diisi"),
+})
+
 // BASE POLIS
 export const basePolisObjectSchema = z.object({
   nomor_polis: noPolis,
@@ -57,6 +62,7 @@ export const basePolisObjectSchema = z.object({
       invalid_type_error: "Format tanggal periode akhir tidak valid.",
     })
   ),
+  kendaraan: kendaraanSchema.optional(),
   detail_bisnis: z.record(z.any()).optional(),
 });
 
@@ -80,6 +86,16 @@ const basePolisSchema = basePolisObjectSchema.superRefine((data, ctx) => {
       message: "Total premi tidak boleh melebihi Total Sum Insured.",
       path: ["total_premi"],
     });
+  }
+
+  if(data.bisnis === "kendaraan"){
+    if(!data.kendaraan){
+      ctx.addIssue({
+        code: "custom",
+        message: "Kendaraan belum dipilih",
+        path: ["kendaraan"],
+      });
+    }
   }
 });
 

@@ -10,6 +10,9 @@ export const JENIS_BISNIS = z.enum([
   "marine",
 ]);
 
+export const jenis_kendaraan = ["mobil", "motor"] as const;
+export const JENIS_KENDARAAN = z.enum(jenis_kendaraan);
+
 export const JENIS_COAS = z.enum(["coas", "non-coas"]);
 
 export const CARA_BAYAR = [

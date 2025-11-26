@@ -6,10 +6,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="id" suppressHydrationWarning className="h-full">
       <body className="h-full">
-        <Toaster />
         <ClientProviders>
           {children}
         </ClientProviders>
+        <Toaster />
       </body>
     </html>
   );

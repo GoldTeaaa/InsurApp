@@ -1,79 +1,52 @@
 "use server";
 import {
-    perusahaanUpdateFormSchema, 
-    perusahaanUpdateRpcParamsSchema, 
-    type PerusahaanUpdateFormValues,
-    type PerusahaanUpdateParams,
-    type PerusahaanReturnResult
+    type PerusahaanReturnResult,
+    perusahaanUpdateFormSchema
 } from "@/lib/perusahaan_asuransi/types";
 import { supabase } from "~/utils/supabase/client";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { ActionReturnState } from "@/lib/types";
 
-function toUpdateRpc(v: PerusahaanUpdateFormValues): PerusahaanUpdateParams {
-  return {
-    p_id: v.id,
-    p_nama: v.nama?.trim(),
-    p_email: v.email ?? null,
-    p_alamat: v.alamat ?? null,
-    p_kontak_1: v.kontak_1 ?? null,
-    p_kontak_2: v.kontak_2 ?? null,
-  };
-}
 
 export type ReturnState = ActionReturnState<PerusahaanReturnResult>;
 
 export async function updatePerusahaanAction(
   id: string,
-  _prev: ReturnState,
+  prevState: ReturnState,
   formData: FormData
-): Promise<ActionReturnState> {
-  // 1) Shape FormData to a plain object that matches the UI schema
-  const shaped: PerusahaanUpdateFormValues = {
-    id: id,
-    nama: String(formData.get("nama") ?? ""),
-    email: ((): string | null => {
-      const v = formData.get("email");
-      return typeof v === "string" ? v : "";
-    })(),
-    alamat: ((): string | null => {
-      const v = formData.get("alamat");
-      return typeof v === "string" ? v : "";
-    })(),
-    kontak_1: ((): string | null => {
-      const v = formData.get("kontak_1");
-      return typeof v === "string" ? v : "";
-    })(),
-    kontak_2: ((): string | null => {
-      const v = formData.get("kontak_2");
-      return typeof v === "string" ? v : "";
-    })(),
-  };
+): Promise<ReturnState> {
 
-  // 2) Validate UI shape
-  const parsed = perusahaanUpdateFormSchema.safeParse(shaped);
+  const formValues = Object.fromEntries(formData.entries());
+  const parsed = perusahaanUpdateFormSchema.safeParse({
+    ...formValues, id
+  });
+
   if (!parsed.success) {
     return {
       success: false,
-      message: "Periksa kembali input",
-      errors: parsed.error.flatten().fieldErrors,
+      message: "Input tidak valid.",
     };
-    // example: { nama: ["Nama wajib diisi (min 3 karakter)"], email: ["Format email tidak valid"] }
   }
 
-  // 3) Map to RPC params and validate that too (defense in depth)
-  const rpcParams = perusahaanUpdateRpcParamsSchema.parse(toUpdateRpc(parsed.data));
+  const {nama, email, alamat, kontak_1, kontak_2} = parsed.data;
 
-  // 4) Call RPC
-  const { error } = await supabase.rpc("perusahaan_asuransi_update_v1", rpcParams);
-  if (error) {
+  const {data, error} = await supabase.rpc('perusahaan_asuransi_update_v1', {
+    p_id: id,
+    p_nama: nama,
+    p_email: email,
+    p_alamat: alamat,
+    p_kontak_1: kontak_1,
+    p_kontak_2: kontak_2
+  });
+
+  if(error){
     return {
       success: false,
-      message: error.message ?? "Gagal menyimpan perubahan",
-    };
+      message: error.message
+    }
   }
-  
-  revalidatePath("/dashboard/perusahaan-asuransi");
-  redirect("/dashboard/perusahaan-asuransi");
+
+  return{
+    success: true,
+    message: `Berhasil Update Perusahaan ${data[0].nama_asuransi}`
+  }
 }

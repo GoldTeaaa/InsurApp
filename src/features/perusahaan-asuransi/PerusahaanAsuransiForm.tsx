@@ -11,19 +11,41 @@ import FormTextField from "@/components/TextField";
 import { createPerusahaan, type ReturnState } from "./actions/createAction";
 import { Button } from "@/components/button";
 import Link from "next/link";
+import { toast } from "sonner";
+import { updatePerusahaanAction } from "./actions/update-form";
+import { useRouter } from "next/navigation";
 
-export default function CreatePerusahaanForm() {
+type PerusahaanFormProps = | {
+    mode: "create";
+    id?: never;
+    prefillData?: never;
+} | {
+    mode: "update";
+    id: string;
+    prefillData: PerusahaanForm;
+}
+
+export default function PerusahaanForm({
+    mode,
+    id,
+    prefillData
+}: PerusahaanFormProps) {
+    const defaultValues = prefillData || defaultPerusahaanForm;
+    const router = useRouter();
 
     const method = useForm<PerusahaanForm>({
         mode: 'all',
         resolver: zodResolver(perusahaanFormSchema),
-        defaultValues: defaultPerusahaanForm
+        defaultValues: defaultValues
     });
 
     const { handleSubmit } = method;
 
-    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(createPerusahaan, {
-        success: false, message: ""
+    const action = mode === "create" ? createPerusahaan : updatePerusahaanAction.bind(null, id);
+
+    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(action, {
+        success: false,
+        message: ""
     });
     const [isTransitioning, startTransition] = useTransition();
 
@@ -33,9 +55,10 @@ export default function CreatePerusahaanForm() {
 
     useEffect(() => {
         if (state.success) {
-            method.reset();
+            router.push("/dashboard/perusahaan-asuransi");
+            toast.success(state.message);
         }
-    }, [state, method]);
+    }, [state, method, router]);
 
     return (
         <FormProvider {...method}>
@@ -48,7 +71,7 @@ export default function CreatePerusahaanForm() {
                     });
                 })}
                 className="max-w-xl mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-                <h2 className="text-lg font-semibold">Tambah Perusahaan Asuransi</h2>
+                <h2 className="text-lg font-semibold">{mode === "create" ? "Tambah Perusahaan Asuransi" : "Update Perusahaan Asuransi"}</h2>
 
                 <FormTextField<PerusahaanForm>
                     name='nama'
@@ -76,13 +99,13 @@ export default function CreatePerusahaanForm() {
                         {isPending ? "Menyimpan..." : "Simpan"}
                     </Button>
                     <Link href={"/dashboard/perusahaan-asuransi"}>
-                        <Button>
+                        <Button variant="ghost">
                             Cancel
                         </Button>
                     </Link>
                 </div>
 
-                {state.message && (
+                {(!state.success && state.message) && (
                     <p className={`text-sm ${state.success ? 'text-green-600' : 'text-red-600'}`}>
                         {state.message}
                     </p>

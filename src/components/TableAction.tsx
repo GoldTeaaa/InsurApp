@@ -12,10 +12,12 @@ import { TableMetaAction } from "@/lib/perusahaan_asuransi/types/tableActionType
 
 type TableActionProps = {
     id: string,
+    item?: string
 } & TableMetaAction
 
 export default function TableAction({
     id,
+    item,
     handleEdit,
     handleDelete
 }: TableActionProps) {
@@ -35,6 +37,7 @@ export default function TableAction({
                 <DeleteConfirmationMenuItem
                     onConfirm={() => handleDelete(id)}
                     className="text-red-600 focus:bg-red-50 focus:text-red-700"
+                    item={item}
                 >
                     Delete
                 </DeleteConfirmationMenuItem>

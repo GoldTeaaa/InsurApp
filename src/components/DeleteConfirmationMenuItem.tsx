@@ -16,13 +16,13 @@ import { DropdownMenuItem } from "@/components/dropdown-menu";
 type DeleteConfirmationMenuItemProps = {
   onConfirm: () => void;
   children: React.ReactNode;
-  entityName?: string;
+  item?: string;
 } & React.ComponentProps<typeof DropdownMenuItem>;
 
 export default function DeleteConfirmationMenuItem({
   onConfirm,
   children,
-  entityName = "item",
+  item,
   ...props
 }: DeleteConfirmationMenuItemProps) {
   const [isDialogOpen, setDialogOpen] = React.useState(false);
@@ -35,14 +35,19 @@ export default function DeleteConfirmationMenuItem({
       <AlertDialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Apakah Anda Yakin Untuk Menghapus {item}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this {entityName}.
+              Aksi Ini Tidak Dapat Dikembalikan
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={onConfirm} className="bg-red-600 hover:bg-red-700">Delete</AlertDialogAction>
+            <AlertDialogAction
+              onClick={onConfirm}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

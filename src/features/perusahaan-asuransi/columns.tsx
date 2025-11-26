@@ -32,12 +32,14 @@ export const PerusahaanAsuransiColumns: ColumnDef<PerusahaanRow>[] = [
         cell: ({ row, table }) => {
             const { handleDelete, handleEdit } = table.options.meta as TableMetaAction;
             const id = row.original.id;
+            const nama = row.original.nama;
             return (
                 <div className="flex gap-2">
-                    <TableAction 
+                    <TableAction
                         id={id}
                         handleEdit={handleEdit}
                         handleDelete={handleDelete}
+                        item={nama}
                     />
                 </div>
             )

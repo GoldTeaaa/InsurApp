@@ -50,8 +50,8 @@ export type PerusahaanRpcPayload = z.infer<typeof perusahaanRpcPayloadSchema>;
 
 const nonEmpty3 = z.string().min(3, "Nama minimal 3 karakter");
 const validEmail = z.string().email("Email tidak valid");
-const nonEmptyKontak = z.string().min(10, "Kontak minimal 10 karakter");
-const optionalText = z.string().optional();
+const nonEmptyKontak = z.string().min(5, "Kontak minimal 10 karakter");
+const optionalText = z.string().optional().nullable();
 const optionalEmail = validEmail.nullable().optional();
 
 export const perusahaanFormSchema = z.object({
@@ -125,13 +125,3 @@ export const perusahaanUpdateFormSchema = z.object({
 
 export type PerusahaanUpdateFormValues = z.infer<typeof perusahaanUpdateFormSchema>;
 
-export const perusahaanUpdateRpcParamsSchema = z.object({
-  p_id: z.string().uuid(),
-  p_nama: nonEmpty3.optional(),
-  p_email: optionalEmail,
-  p_alamat: optionalText,
-  p_kontak_1: nonEmptyKontak,
-  p_kontak_2: optionalText,
-});
-
-export type PerusahaanUpdateParams = z.infer<typeof perusahaanUpdateRpcParamsSchema>;

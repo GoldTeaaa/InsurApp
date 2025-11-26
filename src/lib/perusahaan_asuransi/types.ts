@@ -46,36 +46,21 @@ export type PerusahaanList = z.infer<typeof perusahaanListSchema>;
 export type PerusahaanRpcPayload = z.infer<typeof perusahaanRpcPayloadSchema>;
 
 
-/* ====================== NEW (reusable primitives) ====================== */
-
-export const nonEmpty3 = z.string().trim().min(3, "Nama wajib diisi (min 3 karakter)");
-export const optionalText = z
-  .string()
-  .trim()
-  .transform((v) => (v === "" ? null : v))
-  .nullable()
-  .optional();
-
-export const optionalEmail = z
-  .string()
-  .trim()
-  .email("Format email tidak valid")
-  .or(z.literal("")) // Allow empty string
-  .transform((v) => (v === "" ? null : v.toLowerCase())) // transform empty to null, and lowercase
-  .nullable()
-  .optional();
-
 /* ====================== NEW (base reusable field set) ====================== */
+
+const nonEmpty3 = z.string().min(3, "Nama minimal 3 karakter");
+const validEmail = z.string().email("Email tidak valid");
+const nonEmptyKontak = z.string().min(10, "Kontak minimal 10 karakter");
+const optionalText = z.string().optional();
+const optionalEmail = validEmail.nullable().optional();
 
 export const perusahaanFormSchema = z.object({
   nama: nonEmpty3,
-  email: optionalEmail,
+  email: validEmail,
   alamat: optionalText,
-  kontak_1: optionalText,
+  kontak_1: nonEmptyKontak,
   kontak_2: optionalText,
 });
-
-// 1) Form input (UI)
 export type PerusahaanForm = z.infer<typeof perusahaanFormSchema>;
 
 export const defaultPerusahaanForm: PerusahaanForm = {
@@ -86,7 +71,7 @@ export const defaultPerusahaanForm: PerusahaanForm = {
   kontak_2: "",
 }
 
-// 2) RPC params (exact SQL signature)
+// 4. Build RPC schemas from reusable field schemas.
 export const perusahaanCreateRpcParamsSchema = z.object({
   p_nama: nonEmpty3,
   p_email: optionalEmail,
@@ -96,7 +81,6 @@ export const perusahaanCreateRpcParamsSchema = z.object({
 });
 export type PerusahaanCreateParams = z.infer<typeof perusahaanCreateRpcParamsSchema>;
 
-// 3) Zod-powered mapper: Form → RPC params
 export const perusahaanCreateToRpcSchema = perusahaanFormSchema
   .transform((v) => ({
     p_nama: v.nama.trim(),
@@ -107,7 +91,6 @@ export const perusahaanCreateToRpcSchema = perusahaanFormSchema
   }))
   .pipe(perusahaanCreateRpcParamsSchema);
 
-// 4) RPC result
 export const perusahaanReturnResultSchema = z.object({
   id: z.string().uuid(),
   nama_asuransi: z.string(),
@@ -130,13 +113,13 @@ export const perusahaanPrefillUpdateSchema = z.object({
 
 export type PerusahaanPrefillUpdate = z.infer<typeof perusahaanPrefillUpdateSchema>;
 
-/* ====================== (Optional) UPDATE later ====================== */
+/* ====================== UPDATE ====================== */
 export const perusahaanUpdateFormSchema = z.object({
   id: z.string().uuid(),
   nama: nonEmpty3,
   email: optionalEmail,
   alamat: optionalText,
-  kontak_1: optionalText,
+  kontak_1: nonEmptyKontak,
   kontak_2: optionalText,
 });
 
@@ -147,7 +130,7 @@ export const perusahaanUpdateRpcParamsSchema = z.object({
   p_nama: nonEmpty3.optional(),
   p_email: optionalEmail,
   p_alamat: optionalText,
-  p_kontak_1: optionalText,
+  p_kontak_1: nonEmptyKontak,
   p_kontak_2: optionalText,
 });
 

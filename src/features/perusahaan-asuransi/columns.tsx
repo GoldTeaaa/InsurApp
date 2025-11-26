@@ -1,11 +1,18 @@
 import { PerusahaanRow } from "@/lib/perusahaan_asuransi/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { DeletePerusahaanAsuransi, UpdatePerusahaanAsuransi } from "./buttons";
+// import { DeletePerusahaanAsuransi, UpdatePerusahaanAsuransi } from "./buttons";
+import TableAction from "@/components/TableAction";
+import { TableMetaAction } from "@/lib/perusahaan_asuransi/types/tableActionType";
+
 
 export const PerusahaanAsuransiColumns: ColumnDef<PerusahaanRow>[] = [
     {
-        accessorKey: 'alamat',
+        accessorKey: 'nama',
         header: 'Nama Perusahaan',
+    },
+    {
+        accessorKey: 'alamat',
+        header: 'Alamat',
     },
     {
         accessorKey: 'email',
@@ -22,15 +29,15 @@ export const PerusahaanAsuransiColumns: ColumnDef<PerusahaanRow>[] = [
     {
         id: 'actions',
         header: () => <span className="sr-only">Actions</span>,
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
+            const { handleDelete, handleEdit } = table.options.meta as TableMetaAction;
             const id = row.original.id;
             return (
                 <div className="flex gap-2">
-                    <UpdatePerusahaanAsuransi
+                    <TableAction 
                         id={id}
-                    />
-                    <DeletePerusahaanAsuransi
-                        id={id}
+                        handleEdit={handleEdit}
+                        handleDelete={handleDelete}
                     />
                 </div>
             )

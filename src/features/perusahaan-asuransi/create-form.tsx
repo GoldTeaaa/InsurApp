@@ -1,5 +1,5 @@
 'use client';
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useTransition } from "react";
 import {
     perusahaanFormSchema,
     defaultPerusahaanForm,
@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormTextField from "@/components/TextField";
 import { createPerusahaan, type ReturnState } from "./actions/createAction";
 import { Button } from "@/components/button";
+import Link from "next/link";
 
 export default function CreatePerusahaanForm() {
 
@@ -19,14 +20,16 @@ export default function CreatePerusahaanForm() {
         defaultValues: defaultPerusahaanForm
     });
 
-    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(
-        createPerusahaan, 
-        { success: false, message: "" }
-    );
+    const { handleSubmit } = method;
 
-    const handleReset = () => {
-        method.reset(defaultPerusahaanForm);
-    }
+    const [state, formAction, isPending] = useActionState<ReturnState, FormData>(createPerusahaan, {
+        success: false, message: ""
+    });
+    const [isTransitioning, startTransition] = useTransition();
+
+    // const handleReset = () => {
+    //     method.reset(defaultPerusahaanForm);
+    // }
 
     useEffect(() => {
         if (state.success) {
@@ -36,7 +39,15 @@ export default function CreatePerusahaanForm() {
 
     return (
         <FormProvider {...method}>
-            <form action={formAction} className="max-w-xl mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+            <form
+                onSubmit={handleSubmit((data) => {
+                    const formData = new FormData();
+                    Object.entries(data).forEach(([key, value]) => formData.append(key, value as string));
+                    startTransition(() => {
+                        formAction(formData);
+                    });
+                })}
+                className="max-w-xl mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <h2 className="text-lg font-semibold">Tambah Perusahaan Asuransi</h2>
 
                 <FormTextField<PerusahaanForm>
@@ -60,13 +71,15 @@ export default function CreatePerusahaanForm() {
                     label="Kontak 2"
                 />
 
-                <div className="pt-2">
+                <div className="pt-2 flex gap-2">
                     <Button type="submit" disabled={isPending}>
                         {isPending ? "Menyimpan..." : "Simpan"}
                     </Button>
-                    <Button onClick={handleReset}>
-                        Reset
-                    </Button>
+                    <Link href={"/dashboard/perusahaan-asuransi"}>
+                        <Button>
+                            Cancel
+                        </Button>
+                    </Link>
                 </div>
 
                 {state.message && (

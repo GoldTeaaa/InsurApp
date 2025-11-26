@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import Search from "@/components/Search";
-import Table from "@/features/perusahaan-asuransi/table-view";
+// import Table from "@/features/perusahaan-asuransi/table-view";
 import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/fetch-table-perusahaan";
 import Pagination from "@/components/Pagination";
 import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
@@ -33,7 +33,7 @@ export default async function Page({ searchParams }: { searchParams : Promise<Ra
     return (
         <div className="w-full p-4">
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Daftar Perusahaan Asurani</h1>
+                <h1 className="text-2xl font-bold">Daftar Perusahaan Asuransi</h1>
                 <div className="w-1/3">
                     <Search
                         placeholder='Cari nama / email / kontak / alamat'

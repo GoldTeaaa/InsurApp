@@ -1,7 +1,5 @@
 import {
   basePolisObjectSchema,
-  DetailKomisiSchema,
-  DetailPremiSchema,
   PolisShareSchema,
 } from "@/lib/polis/create-types";
 import z from "zod";

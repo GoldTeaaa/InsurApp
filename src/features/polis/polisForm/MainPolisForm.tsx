@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/lib/utils/useDebounce";
 import ErrorToast from "@/features/polis/polisForm/ErrorToast";
 import CoasPolisAction from "../actions/coas-polis-action";
+import { toast } from "sonner";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
 
@@ -162,9 +163,10 @@ export default function MainPolisForm() {
         const res = await CoasPolisAction(data);
         if (res.success) {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
+            toast.success('Polis Berhasil Ditambahkan')
             router.push('/dashboard/polis');
         } else {
-            alert(`Submission failed: ${res.message}`);
+            toast.error(res.message);
         }
     }
 

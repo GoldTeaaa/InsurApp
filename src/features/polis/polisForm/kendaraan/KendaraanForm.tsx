@@ -9,12 +9,12 @@ export default function KendaraanForm() {
         <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800">Detail Kendaraan</h3>
             <SelectField<Polis>
-                name="kendaraan.jenis_kendaraan"
+                name="bisnis_details.jenis_kendaraan"
                 label="Jenis Kendaraan"
                 options={jenis_kendaraan}
             />
             <FormTextField<Polis>
-                name="kendaraan.plat_nomor"
+                name="bisnis_details.plat_nomor"
                 label="Plat Nomor"
             />
         </div>

@@ -34,11 +34,23 @@ export const PolisShareSchema = z.object({
 });
 
 const kendaraanSchema = z.object({
+  bisnis: z.literal("kendaraan"),
   jenis_kendaraan: JENIS_KENDARAAN,
   plat_nomor: z.string().min(3, "Plat nomor wajib diisi"),
 });
 
-// BASE POLIS
+const healthSchema = z.object({
+  bisnis: z.literal("kesehatan"),
+});
+const marineSchema = z.object({
+  bisnis: z.literal("marine_cargo"),
+});
+const propertySchema = z.object({
+  bisnis: z.literal("properti"),
+});
+
+const businessDetailsSchema = z.discriminatedUnion("bisnis", [kendaraanSchema, healthSchema, marineSchema, propertySchema]);
+
 export const basePolisObjectSchema = z.object({
   nomor_polis: noPolis,
   bisnis: JENIS_BISNIS,
@@ -62,8 +74,8 @@ export const basePolisObjectSchema = z.object({
       invalid_type_error: "Format tanggal periode akhir tidak valid.",
     })
   ),
-  kendaraan: kendaraanSchema.optional(),
-  detail_bisnis: z.record(z.any()).optional(),
+  bisnis_details: businessDetailsSchema.optional().nullable(),
+  detail_bisnis: z.record(z.any()).optional(), // May be remove later
 });
 
 const basePolisSchema = basePolisObjectSchema.superRefine((data, ctx) => {
@@ -93,11 +105,11 @@ const basePolisSchema = basePolisObjectSchema.superRefine((data, ctx) => {
   }
 
   if (data.bisnis === "kendaraan") {
-    if (!data.kendaraan) {
+    if (!data.bisnis_details) {
       ctx.addIssue({
         code: "custom",
-        message: "Kendaraan belum dipilih",
-        path: ["kendaraan"],
+        message: "Detail kendaraan wajib diisi.",
+        path: ["bisnis_details"],
       });
     }
   }

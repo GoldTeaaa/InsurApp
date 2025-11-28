@@ -74,7 +74,7 @@ export const basePolisObjectSchema = z.object({
       invalid_type_error: "Format tanggal periode akhir tidak valid.",
     })
   ),
-  bisnis_details: businessDetailsSchema.optional().nullable(),
+  bisnis_details: businessDetailsSchema,
   detail_bisnis: z.record(z.any()).optional(), // May be remove later
 });
 

@@ -20,7 +20,7 @@ export default function DetailPolis() {
         getValues
     } = useFormContext<Polis>();
 
-    const [nomor_polis] = useState(getValues(['nomor_polis'],));
+    const [nomor_polis] = useState(getValues(['nomor_polis']));
     const bisnis = useState(getValues('bisnis'))[0];
 
     useEffect(() => {

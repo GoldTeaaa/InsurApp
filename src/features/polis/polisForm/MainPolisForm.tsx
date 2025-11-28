@@ -14,6 +14,8 @@ import { useDebounce } from "@/lib/utils/useDebounce";
 import ErrorToast from "@/features/polis/polisForm/ErrorToast";
 import CoasPolisAction from "../actions/coas-polis-action";
 import { toast } from "sonner";
+import Link from "next/link";
+import { ArrowLeftIcon } from "lucide-react";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
 
@@ -123,9 +125,9 @@ export default function MainPolisForm() {
         const fieldsForCurrentStep = steps[currentStep].fields ? [...steps[currentStep].fields] : [];
         // const fieldsForCurrentStep = steps[currentStep].fields ?? [];
 
-        if (currentStep === 0) { 
+        if (currentStep === 0) {
             if (bisnis === 'kendaraan') {
-                fieldsForCurrentStep.push('kendaraan.jenis_kendaraan', 'kendaraan.plat_nomor');
+                fieldsForCurrentStep.push('bisnis_details');
             }
             // If 'bisnis' is not 'kendaraan', we do nothing, and the original fields are used.
         }
@@ -176,98 +178,106 @@ export default function MainPolisForm() {
                 errors={toastErrors}
                 onClose={() => setToastErrors(null)}
             />
-            <nav aria-label='Progress'>
-                <ol role='list' className='space-y-4 md:flex md:space-x-8 md:space-y-0'>
-                    {steps.map((step, index) => (
-                        <li key={step.name} className='md:flex-1'>
-                            {currentStep > index ? (
-                                <button
-                                    type="button"
-                                    className='group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 text-left transition-colors hover:border-sky-800 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4'
-                                    onClick={() => goTo(index)}
+            <div className="flex gap-4">
+                <Link href={'/dashboard/polis'} className="flex items-center">
+                    <ArrowLeftIcon className="w-5" />
+                </Link>
+                <h1 className="text-2xl font-bold">Tambah Polis</h1>
+            </div>
+            <div className="mt-4 border-t border-gray-200 pt-4">
+                <nav aria-label='Progress'>
+                    <ol role='list' className='space-y-4 md:flex md:space-x-8 md:space-y-0'>
+                        {steps.map((step, index) => (
+                            <li key={step.name} className='md:flex-1'>
+                                {currentStep > index ? (
+                                    <button
+                                        type="button"
+                                        className='group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 text-left transition-colors hover:border-sky-800 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4'
+                                        onClick={() => goTo(index)}
+                                    >
+                                        <span className='text-sm font-medium text-sky-600 transition-colors'>{step.id}</span>
+                                        <span className='text-sm font-medium'>{step.name}</span>
+                                    </button>
+                                ) : (
+                                    <div
+                                        className={`flex w-full flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4 ${currentStep === index ? 'border-sky-600' : 'border-gray-200'
+                                            }`}
+                                        aria-current={currentStep === index ? 'step' : undefined}
+                                    >
+                                        <span className={`text-sm font-medium ${currentStep === index ? 'text-sky-600' : 'text-gray-500'}`}>{step.id}</span>
+                                        <span className="text-sm font-medium">{step.name}</span>
+                                    </div>
+                                )}
+                            </li>
+                        ))}
+                    </ol>
+                </nav>
+                <form onSubmit={methods.handleSubmit(submit)} className="max-w-4xl mx-auto space-y-6 p-4">
+                    <motion.div
+                        key={currentStep} // Add key to ensure motion triggers on step change
+                        initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    >
+                        {steps[currentStep].component}
+                        {currentStep === steps.length - 1 && (
+                            <div className="mt-8 flex justify-end">
+                                <Button
+                                    type="submit" disabled={isSubmitting}
                                 >
-                                    <span className='text-sm font-medium text-sky-600 transition-colors'>{step.id}</span>
-                                    <span className='text-sm font-medium'>{step.name}</span>
-                                </button>
-                            ) : (
-                                <div
-                                    className={`flex w-full flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4 ${currentStep === index ? 'border-sky-600' : 'border-gray-200'
-                                        }`}
-                                    aria-current={currentStep === index ? 'step' : undefined}
-                                >
-                                    <span className={`text-sm font-medium ${currentStep === index ? 'text-sky-600' : 'text-gray-500'}`}>{step.id}</span>
-                                    <span className="text-sm font-medium">{step.name}</span>
-                                </div>
-                            )}
-                        </li>
-                    ))}
-                </ol>
-            </nav>
-            <form onSubmit={methods.handleSubmit(submit)} className="max-w-4xl mx-auto space-y-6 p-4">
-                <motion.div
-                    key={currentStep} // Add key to ensure motion triggers on step change
-                    initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                >
-                    {steps[currentStep].component}
-                    {currentStep === steps.length - 1 && (
-                        <div className="mt-8 flex justify-end">
-                            <Button
-                                type="submit" disabled={isSubmitting}
+                                    {isSubmitting ? (
+                                        <span className="flex items-center gap-2">Submitting...</span>
+                                    ) : 'Submit Polis'}
+                                </Button>
+                            </div>
+                        )}
+                    </motion.div>
+                </form>
+                <div className='mt-8 pt-5'>
+                    <div className='flex justify-between'>
+                        <button
+                            type='button'
+                            onClick={prev}
+                            disabled={currentStep === 0}
+                            className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50'
+                        >
+                            <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                fill='none'
+                                viewBox='0 0 24 24'
+                                strokeWidth='1.5'
+                                stroke='currentColor'
+                                className='h-6 w-6'
                             >
-                                {isSubmitting ? (
-                                    <span className="flex items-center gap-2">Submitting...</span>
-                                ) : 'Submit Polis'}
-                            </Button>
-                        </div>
-                    )}
-                </motion.div>
-            </form>
-            <div className='mt-8 pt-5'>
-                <div className='flex justify-between'>
-                    <button
-                        type='button'
-                        onClick={prev}
-                        disabled={currentStep === 0}
-                        className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50'
-                    >
-                        <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth='1.5'
-                            stroke='currentColor'
-                            className='h-6 w-6'
+                                <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    d='M15.75 19.5L8.25 12l7.5-7.5'
+                                />
+                            </svg>
+                        </button>
+                        <button
+                            type='button'
+                            onClick={next}
+                            disabled={currentStep === steps.length - 1}
+                            className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50'
                         >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                d='M15.75 19.5L8.25 12l7.5-7.5'
-                            />
-                        </svg>
-                    </button>
-                    <button
-                        type='button'
-                        onClick={next}
-                        disabled={currentStep === steps.length - 1}
-                        className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50'
-                    >
-                        <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth='1.5'
-                            stroke='currentColor'
-                            className='h-6 w-6'
-                        >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                d='M8.25 4.5l7.5 7.5-7.5 7.5'
-                            />
-                        </svg>
-                    </button>
+                            <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                fill='none'
+                                viewBox='0 0 24 24'
+                                strokeWidth='1.5'
+                                stroke='currentColor'
+                                className='h-6 w-6'
+                            >
+                                <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    d='M8.25 4.5l7.5 7.5-7.5 7.5'
+                                />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </FormProvider>

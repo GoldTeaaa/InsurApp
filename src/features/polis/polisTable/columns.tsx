@@ -3,18 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table"
 import PolisDropdown from "@/features/polis/polisTable/dropdown"
 import AsuransiPenanggungCell from "./AsuransiPenanggungCell"
-
-type PolisTableRow = {
-	id: string
-	nomor_polis: string
-	bisnis: string
-	nama_nasabah: string | null
-	total_premi: number | null
-	periode_mulai: string
-	periode_akhir: string
-	nama_perusahaan_asuransi: string | null
-	full_count: number
-}
+import { JenisBisnis } from "@/lib/types"
+import { PolisRow } from "@/lib/polis/table-types"
 
 function dateFormater(dateString: string) {
 	const date = new Date(dateString)
@@ -29,77 +19,98 @@ function dateFormater(dateString: string) {
 	);
 }
 
-export const columns: ColumnDef<PolisTableRow>[] = [
-	{
-		accessorKey: "nomor_polis",
-		header: "Nomor Polis",
-	},
-	{
-		accessorKey: "jenis_coas",
-		header: "Jenis Coas",
-	},
-	{
-		accessorKey: "bisnis",
-		header: "Bisnis",
-	},
-	{
-		accessorKey: "nama_nasabah",
-		header: "Nama Nasabah",
-	},
-	{
-		accessorKey: "total_premi",
-		header: "Total Premi",
-		cell: ({ row }) => {
-			const amount = parseFloat(row.getValue("total_premi"))
-			const formatted = new Intl.NumberFormat("id-ID", {
-				style: "currency",
-				currency: "IDR",
-			}).format(amount)
+export function getColumns(jenis_bisnis?: JenisBisnis): ColumnDef<PolisRow>[] {
+	const baseColumns: ColumnDef<PolisRow>[] = [
+		{
+			accessorKey: "nomor_polis",
+			header: "Nomor Polis",
+		},
+		{
+			accessorKey: "jenis_coas",
+			header: "Jenis Coas",
+		},
+		{
+			accessorKey: "bisnis",
+			header: "Bisnis",
+		},
+		{
+			accessorKey: "nama_nasabah",
+			header: "Nama Nasabah",
+		},
+		{
+			accessorKey: "total_premi",
+			header: "Total Premi",
+			cell: ({ row }) => {
+				const amount = parseFloat(row.getValue("total_premi"))
+				const formatted = new Intl.NumberFormat("id-ID", {
+					style: "currency",
+					currency: "IDR",
+				}).format(amount)
 
-			return <div className="text-left font-medium">{formatted}</div>
+				return <div className="text-left font-medium">{formatted}</div>
+			},
 		},
-	},
-	{
-		accessorKey: "periode_mulai",
-		header: "Periode Mulai",
-		cell: ({ row }) => {
-			const dateString = row.getValue<string>("periode_mulai")
-			if (!dateString) return null
-			return(
-				dateFormater(dateString)
-			)
+		{
+			accessorKey: "periode_mulai",
+			header: "Periode Mulai",
+			cell: ({ row }) => {
+				const dateString = row.getValue<string>("periode_mulai")
+				if (!dateString) return null
+				return (
+					dateFormater(dateString)
+				)
+			},
 		},
-	},
-	{
-		accessorKey: "periode_akhir",
-		header: "Periode Akhir",
-		cell: ({ row }) => {
-			const dateString = row.getValue<string>("periode_akhir")
-			if (!dateString) return null
-			return(
-				dateFormater(dateString)
-			)
+		{
+			accessorKey: "periode_akhir",
+			header: "Periode Akhir",
+			cell: ({ row }) => {
+				const dateString = row.getValue<string>("periode_akhir")
+				if (!dateString) return null
+				return (
+					dateFormater(dateString)
+				)
+			},
 		},
-	},
-	{
-		accessorKey: "nama_perusahaan_asuransi",
-		header: "Asuransi Penanggung",
-		cell: ({ row }) => {
-			const insurers = row.getValue<string | null>("nama_perusahaan_asuransi")
-			return (
-				<AsuransiPenanggungCell insurers={insurers} />
-			)
+		{
+			accessorKey: "nama_perusahaan_asuransi",
+			header: "Asuransi Penanggung",
+			cell: ({ row }) => {
+				const insurers = row.getValue<string | null>("nama_perusahaan_asuransi")
+				return (
+					<AsuransiPenanggungCell insurers={insurers} />
+				)
+			},
 		},
-	},
-	{
-		id: "actions",
-		cell: ({ row }) => {
-			const polis = row.original
-			return (
-				<PolisDropdown
-					id={polis.id}
-				/>
-			)
+	]
+
+	const kendaraanColumns: ColumnDef<PolisRow>[] = [
+		{
+			accessorKey: "plat_nomor",
+			header: "Plat Nomor",
 		},
-	},
-]
+		{
+			accessorKey: 'jenis_kendaraan',
+			header: 'Jenis Kendaraan',
+		}
+	]
+
+	const actions: ColumnDef<PolisRow>[] = [
+		{
+			id:'actions',
+			cell: ({row}) => {
+				const id = row.original.id
+				return (
+					<PolisDropdown id={id} />
+				)
+			}
+		}
+	]
+	
+	const jenis = jenis_bisnis ?? "all"
+	if (jenis === "kendaraan") {
+		return [...baseColumns, ...kendaraanColumns, ...actions]
+	}
+
+	return [...baseColumns, ...actions]
+}

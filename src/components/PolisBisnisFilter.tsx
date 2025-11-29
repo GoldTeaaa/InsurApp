@@ -1,6 +1,7 @@
 'use client';
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "./ui/button";
+import FilterBox from "./FilterBox";
 
 export default function PolisBisnisFilter() {
     const searchParams = useSearchParams();
@@ -18,13 +19,18 @@ export default function PolisBisnisFilter() {
     };
 
     return (
-        <div className="flex gap-2">
-            <Button onClick={() => handleFilter('')}>
-                All
-            </Button>
-            <Button onClick={() => handleFilter('Kendaraan')}>
-                Kendaraan
-            </Button>
+        <div className="flex items-center justify-between">
+            <div className="flex gap-2">
+                <Button onClick={() => handleFilter('')}>
+                    All
+                </Button>
+                <Button onClick={() => handleFilter('Kendaraan')}>
+                    Kendaraan
+                </Button>
+            </div>
+            <div className="bottom-0">
+                <FilterBox />
+            </div>
         </div>
     );
 }

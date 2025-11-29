@@ -9,6 +9,7 @@ export const JENIS_BISNIS = z.enum([
   "property",
   "marine",
 ]);
+
 export type JenisBisnis = z.infer<typeof JENIS_BISNIS>;
 
 export const jenis_kendaraan = ["mobil", "motor"] as const;

@@ -18,14 +18,12 @@ export default async function getPolisTableData({
   const page = Number(params?.page ?? 1);
   const size = Number(params?.size ?? 10);
   const jenis_bisnis = params.jenis_bisnis as JenisBisnis ?? null;
-  const plat_nomor = params.plat_nomor ?? null;
 
   const { data, error } = await supabase.rpc("polis_table_route", {
     p_search: search,
     p_page: page,
     p_size: size,
     p_jenis_bisnis: jenis_bisnis,
-    p_plat_nomor: plat_nomor,
   });
 
   if (error) {

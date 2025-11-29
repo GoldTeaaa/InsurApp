@@ -1,68 +1,121 @@
 'use client';
-import React, { useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarDays } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Search from "./Search";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { jenis_bisnis } from "@/lib/types";
 
 export type Filters = {
   search: string;
   startDate: string | null; // ISO date (yyyy-mm-dd) or null
   endDate: string | null;
-  status: string; // e.g. "all" | "open" | "closed"
-  categories: string[]; // e.g. ["electronics", "books"]
+  jenis_bisnis: string;
+  jenis_coas: ('coas' | 'non-coas')[];
 };
 
 export default function FilterBox({
-  initial = undefined,
   onApply,
   onClear,
 }: {
-  initial?: Partial<Filters> | undefined;
   onApply?: (filters: Filters) => void;
   onClear?: () => void;
 }) {
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const defaultFilters: Filters = {
     search: "",
     startDate: null,
     endDate: null,
-    status: "all",
-    categories: [],
+    jenis_bisnis: "",
+    jenis_coas: [],
   };
 
-  const [filters, setFilters] = useState<Filters>({ ...defaultFilters, ...(initial || {}) });
+  const [filters, setFilters] = useState<Filters>(() => {
+    // Initialize state from URL search params
+    const params = new URLSearchParams(searchParams.toString());
+    return {
+      search: params.get('search') || "",
+      startDate: params.get('date_from') || null,
+      endDate: params.get('date_to') || null,
+      jenis_bisnis: params.get('jenis_bisnis') || "",
+      jenis_coas: (params.get('jenis_coas')?.split(',') as ('coas' | 'non-coas')[]) || [],
+    };
+  });
 
-  function handleCategoryChange(category: string, checked: boolean) {
-    setFilters((currentFilters) => {
-      const oldCategories = currentFilters.categories;
-      const newCategories = checked
-        ? [...oldCategories, category]
-        : oldCategories.filter((c) => c !== category);
-      return {
-        ...currentFilters, categories: newCategories 
-      };
+  // Effect to update state if searchParams change from external navigation
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    setFilters({
+      search: params.get('search') || "",
+      startDate: params.get('date_from') || null,
+      endDate: params.get('date_to') || null,
+      jenis_bisnis: params.get('jenis_bisnis') || "",
+      jenis_coas: (params.get('jenis_coas')?.split(',').filter(Boolean) as ('coas' | 'non-coas')[]) || [],
     });
-  }
+  }, [searchParams]);
+
+  const createQueryString = useCallback((filtersToApply: Filters) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (filtersToApply.search) {
+      params.set('search', filtersToApply.search);
+    } else {
+      params.delete('search');
+    }
+
+    if (filtersToApply.startDate) {
+      params.set('date_from', filtersToApply.startDate);
+    } else {
+      params.delete('date_from');
+    }
+
+    if (filtersToApply.endDate) {
+      params.set('date_to', filtersToApply.endDate);
+    } else {
+      params.delete('date_to');
+    }
+
+    if (filtersToApply.jenis_bisnis) {
+      params.set('jenis_bisnis', filtersToApply.jenis_bisnis);
+    } else {
+      params.delete('jenis_bisnis');
+    }
+
+    if (filtersToApply.jenis_coas.length > 0) {
+      params.set('jenis_coas', filtersToApply.jenis_coas.join(','));
+    } else {
+      params.delete('jenis_coas');
+    }
+
+    return params.toString();
+  }, [searchParams]);
+
+  const handleCategoryChange = (value: string) => {
+    setFilters({ ...filters, jenis_bisnis: value });
+  };
 
   function clearAll() {
     setFilters(defaultFilters);
+    router.push(pathname); // Clear URL params
     onClear?.();
   }
 
   function apply() {
+    router.push(`${pathname}?${createQueryString(filters)}`);
     onApply?.(filters);
   }
 
   return (
     <div className="rounded-lg border p-6 bg-white shadow-sm">
-      <h3 className="text-lg font-medium mb-4">Filters</h3>
-
       <div className="grid grid-cols-12 gap-4 items-end">
         {/* Search */}
         <div className="col-span-12 md:col-span-4">
-          <Search 
+          <Search
             placeholder="Search by title or description"
             search={filters.search}
           />
@@ -77,7 +130,6 @@ export default function FilterBox({
               value={filters.startDate ?? ""}
               onChange={(e) => setFilters({ ...filters, startDate: e.target.value || null })}
             />
-            {/* <CalendarDays className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" /> */}
           </div>
         </div>
 
@@ -90,49 +142,29 @@ export default function FilterBox({
               value={filters.endDate ?? ""}
               onChange={(e) => setFilters({ ...filters, endDate: e.target.value || null })}
             />
-            {/* <CalendarDays className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" /> */}
           </div>
-        </div>
-
-        {/* Status */}
-        <div className="col-span-12 sm:col-span-4 md:col-span-2">
-          <label className="block text-sm text-muted-foreground mb-2">Status</label>
-          <Select value={filters.status} onValueChange={(v) => setFilters({ ...filters, status: v })}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="All" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="open">Open</SelectItem>
-              <SelectItem value="closed">Closed</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         {/* Category */}
         <div className="col-span-12 md:col-span-4">
-          <label className="block text-sm text-muted-foreground mb-2">Category</label>
-          <div className="grid grid-cols-2 gap-2">
-            <label className="flex items-center space-x-2">
-              <Checkbox checked={filters.categories.includes('electronics')} onCheckedChange={(v) => handleCategoryChange('electronics', !!v)} />
-              <span className="text-sm">Electronics</span>
-            </label>
-
-            <label className="flex items-center space-x-2">
-              <Checkbox checked={filters.categories.includes('clothing')} onCheckedChange={(v) => handleCategoryChange('clothing', !!v)} />
-              <span className="text-sm">Clothing</span>
-            </label>
-
-            <label className="flex items-center space-x-2">
-              <Checkbox checked={filters.categories.includes('books')} onCheckedChange={(v) => handleCategoryChange('books', !!v)} />
-              <span className="text-sm">Books</span>
-            </label>
-
-            <label className="flex items-center space-x-2">
-              <Checkbox checked={filters.categories.includes('homeGoods')} onCheckedChange={(v) => handleCategoryChange('homeGoods', !!v)} />
-              <span className="text-sm">Home Goods</span>
-            </label>
-          </div>
+          <label className="block text-sm text-muted-foreground">Jenis Bisnis</label>
+          <h5 className="text-sm text-muted-foreground mb-2">Only support kendaraan for now</h5>
+          <RadioGroup
+            value={filters.jenis_bisnis}
+            onValueChange={handleCategoryChange}
+            className="grid grid-cols-2 gap-2"
+          >
+            {jenis_bisnis.map((bisnis) => (
+              <label key={bisnis} className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={bisnis}
+                  id={bisnis}
+                  disabled={bisnis !== 'kendaraan'}
+                />
+                <span className="text-sm">{bisnis}</span>
+              </label>
+            ))}
+          </RadioGroup>
         </div>
 
         {/* Buttons row */}

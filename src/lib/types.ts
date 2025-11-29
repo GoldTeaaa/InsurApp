@@ -2,13 +2,14 @@
 import z from "zod";
 
 // =============== LAPORAN SECTION ==================
-export const JENIS_BISNIS = z.enum([
+export const jenis_bisnis = [
   "kendaraan",
   "health",
   "life",
   "property",
   "marine",
-]);
+] as const;
+export const JENIS_BISNIS = z.enum(jenis_bisnis);
 
 export type JenisBisnis = z.infer<typeof JENIS_BISNIS>;
 

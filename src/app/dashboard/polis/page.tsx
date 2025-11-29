@@ -42,22 +42,8 @@ export default async function Page({
 	return (
 		<div className="w-full p-4 space-y-4">
 			<h1 className="text-2xl font-bold">Polis</h1>
-			<div className="w-full border border-zinc-300 rounded-md p-4">
-				<div className="flex justify-between items-center mb-4">
-					{/* <div className="w-1/3">
-						<Search
-							placeholder={jenis_bisnis === 'kendaraan'
-								? 'Cari plat nomor / email / kontak / alamat'
-								: 'Cari nama / email / kontak / alamat'
-							}
-							search={search}
-						/>
-					</div> */}
-					<div>
-						{/* <PolisBisnisFilter /> */}
-						<FilterBox />
-					</div>
-				</div>
+			<div className="w-full border border-zinc-300 rounded-md p-4 space-y-4">
+				<FilterBox />
 				<div>
 					<Suspense key={tableKey} fallback={<div className="text-center p-8">Loading polis data...</div>}>
 						<PolisTable

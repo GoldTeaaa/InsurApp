@@ -1,9 +1,9 @@
 'use client';
 import React, { useCallback, useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Search from "./Search";
+import { DatePicker } from "@/components/ui/date-picker";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { jenis_bisnis } from "@/lib/types";
 
@@ -15,13 +15,7 @@ export type Filters = {
   jenis_coas: ('coas' | 'non-coas')[];
 };
 
-export default function FilterBox({
-  onApply,
-  onClear,
-}: {
-  onApply?: (filters: Filters) => void;
-  onClear?: () => void;
-}) {
+export default function FilterBox() {
 
   const router = useRouter();
   const pathname = usePathname();
@@ -102,21 +96,19 @@ export default function FilterBox({
   function clearAll() {
     setFilters(defaultFilters);
     router.push(pathname); // Clear URL params
-    onClear?.();
   }
 
   function apply() {
     router.push(`${pathname}?${createQueryString(filters)}`);
-    onApply?.(filters);
   }
 
   return (
     <div className="rounded-lg border p-6 bg-white shadow-sm">
-      <div className="grid grid-cols-12 gap-4 items-end">
+      <div className="grid border-b-2 p-2 grid-cols-12 gap-4 items-center">
         {/* Search */}
         <div className="col-span-12 md:col-span-4">
           <Search
-            placeholder="Search by title or description"
+            placeholder="Search..."
             search={filters.search}
           />
         </div>
@@ -125,10 +117,9 @@ export default function FilterBox({
         <div className="col-span-6 sm:col-span-2 md:col-span-2">
           <label className="block text-sm text-muted-foreground mb-2">Start Date</label>
           <div className="relative">
-            <Input
-              type="date"
-              value={filters.startDate ?? ""}
-              onChange={(e) => setFilters({ ...filters, startDate: e.target.value || null })}
+            <DatePicker
+              value={filters.startDate}
+              onChange={(value) => setFilters({ ...filters, startDate: value })}
             />
           </div>
         </div>
@@ -137,10 +128,9 @@ export default function FilterBox({
         <div className="col-span-6 sm:col-span-2 md:col-span-2">
           <label className="block text-sm text-muted-foreground mb-2">End Date</label>
           <div className="relative">
-            <Input
-              type="date"
-              value={filters.endDate ?? ""}
-              onChange={(e) => setFilters({ ...filters, endDate: e.target.value || null })}
+            <DatePicker
+              value={filters.endDate}
+              onChange={(value) => setFilters({ ...filters, endDate: value })}
             />
           </div>
         </div>
@@ -159,6 +149,7 @@ export default function FilterBox({
                 <RadioGroupItem
                   value={bisnis}
                   id={bisnis}
+                  //REMOVE THIS WHEN ADDING NEW FILTERS OPTIONS
                   disabled={bisnis !== 'kendaraan'}
                 />
                 <span className="text-sm">{bisnis}</span>
@@ -167,13 +158,13 @@ export default function FilterBox({
           </RadioGroup>
         </div>
 
-        {/* Buttons row */}
-        <div className="col-span-12 flex justify-end space-x-3 mt-4">
-          <Button variant="outline" onClick={clearAll}>
-            Clear All
-          </Button>
-          <Button onClick={apply}>Apply Filters</Button>
-        </div>
+      </div>
+      {/* Buttons row */}
+      <div className="col-span-12 flex justify-end space-x-3 mt-4">
+        <Button variant="outline" onClick={clearAll}>
+          Clear All
+        </Button>
+        <Button onClick={apply}>Apply Filters</Button>
       </div>
     </div>
   );

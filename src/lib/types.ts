@@ -76,12 +76,12 @@ export type TableParams = {
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
 export const SearchParamsSchema = z.object({
-  search: z.string().optional().transform(val => val || null),
-  page: z.coerce.number().int().optional().transform(val => val || 1),
-  size: z.coerce.number().int().optional().transform(val => val || 10),
-  date_from: z.string().optional().transform(val => val || null),
-  date_to: z.string().optional().transform(val => val || null),
-  status: z.string().optional().transform(val => val || null),
+  search: z.string().optional().nullable().transform(val => val || null),
+  page: z.coerce.number().int().optional().nullable().transform(val => val || 1),
+  size: z.coerce.number().int().optional().nullable().transform(val => val || 10),
+  date_from: z.string().optional().nullable().transform(val => val || null),
+  date_to: z.string().optional().nullable().transform(val => val || null),
+  status: z.string().optional().nullable().transform(val => val || null),
 });
 
 export type SearchParamsProps = z.infer<typeof SearchParamsSchema>;

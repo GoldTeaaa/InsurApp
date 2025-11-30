@@ -2,12 +2,10 @@ import { Suspense } from "react"
 import Link from "next/link"
 import PolisTable from "@/features/polis/polisTable/PolisTable"
 import { Button } from "@/components/button"
-import Search from "@/components/Search"
 import Pagination from "@/components/Pagination"
 import getPolisTableData from "@/features/polis/actions/get-polis-table"
 import { polisSearchSchema } from "@/lib/polis/table-types"
 import { RawSearchParams } from "@/lib/types"
-import PolisBisnisFilter from "@/components/PolisBisnisFilter"
 import FilterBox from "@/components/FilterBox"
 
 export default async function Page({

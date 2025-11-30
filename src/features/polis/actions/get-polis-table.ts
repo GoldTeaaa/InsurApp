@@ -1,7 +1,7 @@
 "use server";
-import { ActionReturnState, JenisBisnis } from "@/lib/types";
+import { ActionReturnState } from "@/lib/types";
 import { supabase } from "~/utils/supabase/client";
-import { PolisRow, PolisTableSearchParams } from "@/lib/polis/table-types";
+import { PolisRow, polisSearchSchema, PolisTableSearchParams } from "@/lib/polis/table-types";
 import { PolisTableRow } from "@/lib/polis/table-types";
 // import { Polis } from "@/lib/polis/create-types";
 
@@ -14,16 +14,16 @@ export default async function getPolisTableData({
 }): Promise<ReturnState> {
   const params = await searchParams;
 
-  const search = params?.search ?? "";
-  const page = Number(params?.page ?? 1);
-  const size = Number(params?.size ?? 10);
-  const jenis_bisnis = params.jenis_bisnis as JenisBisnis ?? null;
+  const parsedData = polisSearchSchema.safeParse(params).data;
+  const {search, page, size, jenis_bisnis, date_from, date_to} = parsedData as PolisTableSearchParams;
 
   const { data, error } = await supabase.rpc("polis_table_route", {
     p_search: search,
     p_page: page,
     p_size: size,
     p_jenis_bisnis: jenis_bisnis,
+    p_date_from: date_from,
+    p_date_to: date_to
   });
 
   if (error) {

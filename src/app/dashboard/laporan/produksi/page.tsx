@@ -1,5 +1,5 @@
 import LaporanProduksiTable from "@/features/laporan/produksi/LaporanProduksiTable";
-import getLaporanProduksiData from "../../../../features/laporan/produksi/actions/getLaporanProduksiData";
+import getLaporanProduksiData from "@/features/laporan/produksi/actions/getLaporanProduksiData";
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import DateFilter from "@/components/DateFilter";
@@ -29,6 +29,8 @@ export default async function Page({
     }
     const rowData = data.data?.rows ?? [];
     const pageCount = Math.ceil((data.data?.total_count ?? 0) / size);
+    console.log('total count: ', data.data?.total_count);
+    console.log('size: ', size);
 
     return (
         <div>

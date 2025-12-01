@@ -12,7 +12,7 @@ import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/create-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/lib/utils/useDebounce";
 import ErrorToast from "@/features/polis/polisForm/ErrorToast";
-import CoasPolisAction from "../actions/coas-polis-action";
+import createPolis from "@/features/polis/actions/create-polis";
 import { toast } from "sonner";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
@@ -162,7 +162,7 @@ export default function MainPolisForm() {
     }
 
     const submit = async (data: Polis) => {
-        const res = await CoasPolisAction(data);
+        const res = await createPolis(data);
         if (res.success) {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success('Polis Berhasil Ditambahkan')

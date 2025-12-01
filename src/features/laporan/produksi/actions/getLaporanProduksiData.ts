@@ -19,6 +19,7 @@ export default async function getLaporanProduksiData({
         p_size: size,
         p_search: search
     })
+    console.log('data: ', data);
 
     const parsedData = laporanProduksiRPCSchema.safeParse(data);
     if(!parsedData.success){

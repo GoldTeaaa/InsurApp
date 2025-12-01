@@ -11,8 +11,8 @@ const formatCurrency = (value: number) => {
     });
 };
 
-export function generateProduksiPDF(
-    laporanData: LaporanProduksiRow[],
+export function generateProduksiPDF<T>(
+    laporanData: T[],
     startDate?: string,
     endDate?: string
 ) {

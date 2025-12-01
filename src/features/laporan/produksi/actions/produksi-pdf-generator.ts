@@ -11,8 +11,8 @@ const formatCurrency = (value: number) => {
     });
 };
 
-export function generateProduksiPDF<T>(
-    laporanData: T[],
+export function generateProduksiPDF(
+    laporanData: LaporanProduksiRow[],
     startDate?: string,
     endDate?: string
 ) {
@@ -132,11 +132,13 @@ export function generateProduksiPDF<T>(
     });
 
     // Save the PDF
-    const datePart = startDate && endDate
-        ? `${formatDate(startDate)}_to_${formatDate(endDate)}`
-        : 'all_time';
+    // const datePart = startDate && endDate
+    //     ? `${formatDate(startDate)}_to_${formatDate(endDate)}`
+    //     : 'all_time';
+    //
+    // const fileName = `Laporan_Produksi_${datePart}.pdf`;
+    //
+    // doc.save(fileName);
 
-    const fileName = `Laporan_Produksi_${datePart}.pdf`;
-
-    doc.save(fileName);
+    return doc.output('datauristring');
 }

@@ -81,7 +81,7 @@ export const SearchParamsSchema = z.object({
   size: z.coerce.number().int().optional().nullable().transform(val => val || 10),
   date_from: z.string().optional().nullable().transform(val => val || null),
   date_to: z.string().optional().nullable().transform(val => val || null),
-  status: z.string().optional().nullable().transform(val => val || null),
+  status: z.string().nullable().optional().transform(val => val || null),
 });
 
 export type SearchParamsProps = z.infer<typeof SearchParamsSchema>;

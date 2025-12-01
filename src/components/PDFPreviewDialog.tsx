@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default function PDFPreviewDialog({ isOpen, onClose, onDownload, pdfDataUrl, title }: Props) {
-    if (!isOpen) return null;
+    if(!isOpen) return null;
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -26,13 +26,13 @@ export default function PDFPreviewDialog({ isOpen, onClose, onDownload, pdfDataU
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
-                <div className="flex-grow border rounded-md">
-                    <iframe
-                        src={pdfDataUrl}
-                        className="w-full h-full"
-                        title={title}
-                    />
-                </div>
+                    <div className="flex-grow border rounded-md">
+                        <iframe
+                            src={pdfDataUrl}
+                            className="w-full h-full"
+                            title={title}
+                        />
+                    </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>Close</Button>
                     <Button onClick={onDownload}>Download PDF</Button>

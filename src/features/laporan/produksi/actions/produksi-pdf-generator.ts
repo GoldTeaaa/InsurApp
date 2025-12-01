@@ -19,6 +19,7 @@ export function generateProduksiPDF(
     const doc = new jsPDF({
         orientation: "landscape",
     });
+    let no = 1;
 
     // Add Title
     doc.setFontSize(16);
@@ -31,6 +32,7 @@ export function generateProduksiPDF(
     // Define table columns
     const head = [
         [
+            'No',
             'No. Polis',
             'Nama Tertanggung',
             'Periode Polis',
@@ -51,6 +53,7 @@ export function generateProduksiPDF(
 
     // Map data to table body
     const body = laporanData.map(row => [
+        no++,
         row.nomor_polis,
         row.nama_tertanggung,
         `${formatDate(row.periode_mulai)} - ${formatDate(row.periode_akhir)}`,
@@ -140,5 +143,6 @@ export function generateProduksiPDF(
     //
     // doc.save(fileName);
 
+    console.log("doc.output('datauristring'): ", doc.output('datauristring'));
     return doc.output('datauristring');
 }

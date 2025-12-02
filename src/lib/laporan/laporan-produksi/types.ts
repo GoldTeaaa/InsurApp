@@ -2,6 +2,7 @@ import { z } from "zod";
 import { JENIS_BISNIS, JENIS_COAS } from "@/lib/types";
 
 export const laporanProduksiSchema = z.object({
+    polis_share_id: z.string().uuid(),
     periode_mulai: z.coerce.date(),
     periode_akhir: z.coerce.date(),
     nomor_polis: z.string(),

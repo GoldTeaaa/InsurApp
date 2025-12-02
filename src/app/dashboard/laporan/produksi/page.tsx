@@ -9,11 +9,15 @@ import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
 import PDFPreviewDialog from "@/components/PDFPreviewDialog";
 import LaporanFilter from "@/components/LaporanFilter";
 import useLaporanProduksiExporter from "@/features/laporan/produksi/actions/useLaporanProduksiExporter";
+import ExcelPreviewDialog from "@/components/ExcelPreviewDialog";
+import { reports } from "@/lib/laporan/laporan-options";
+import { formatDate } from "@/lib/utils/formatDate";
 
 // Can't use searchParams because need to have onClick event for download
 export default function Page() {
     const params = useSearchParams();
-    const [rowData, setRowData] = useState<LaporanProduksiRow[]>([]);
+    const [paginatedRowData, setPaginatedRowData] = useState<LaporanProduksiRow[]>([]);
+    const [exportRowData, setExportRowData] = useState<LaporanProduksiRow[]>([]);
     const [pageCount, setPageCount] = useState(0);
 
     const search = params?.get('search') ?? "";
@@ -27,8 +31,32 @@ export default function Page() {
         handlePDFPreview,
         handlePDFDownload,
         closePDFPreview,
-        handleExcelExport
-    } = useLaporanProduksiExporter({ rowData, startDate, endDate });
+        isExcelPreviewOpen,
+        handleExcelPreview,
+        closeExcelPreview,
+        handleExcelExport,
+    } = useLaporanProduksiExporter({ rowData: exportRowData, startDate, endDate });
+
+    const prepareDataForExport = async () => {
+        const res = await getLaporanProduksiData({
+            searchParams: {
+                search,
+                page: 1,
+                size: 5000, // Use a large number to get all data
+                date_from: startDate,
+                date_to: endDate,
+                status: null,
+            },
+        });
+        if (res.success) {
+            setExportRowData(res.data?.rows ?? []);
+            return true; // Indicate success
+        } else {
+            console.error("Failed to fetch data for export:", res.message);
+            setExportRowData([]);
+            return false; // Indicate failure
+        }
+    };
 
     useEffect(() => {
         getLaporanProduksiData({
@@ -42,16 +70,33 @@ export default function Page() {
             }
         }).then((data) => {
             if (data.success) {
-                setRowData(data.data?.rows ?? []);
+                setPaginatedRowData(data.data?.rows ?? []);
                 setPageCount(Math.ceil((data.data?.total_count ?? 0) / size));
             } else {
                 console.error(data.message);
             }
         })
-        .catch(error => { // Handle promise rejection (e.g., network error)
-            console.error("Failed to fetch laporan produksi data:", error);
-        });
-    }, [search, page, size, startDate, endDate, setRowData, setPageCount]);
+            .catch(error => { // Handle promise rejection (e.g., network error)
+                console.error("Failed to fetch laporan produksi data:", error);
+            });
+    }, [search, page, size, startDate, endDate]);
+
+    const report = reports.find((report) => {
+        return report.id === "produksi";
+    })
+
+    const excelColumns = report?.columns?.map((column) => {
+        return {
+            header: column.header,
+            accessor: (row: LaporanProduksiRow) => {
+                const value = row[column.key];
+                if (column.key === 'periode_mulai' || column.key === 'periode_akhir') {
+                    return formatDate(value as string);
+                }
+                return value as React.ReactNode;
+            }
+        }
+    })
 
     return (
         <div>
@@ -59,12 +104,20 @@ export default function Page() {
                 placeholder="Cari nomor-polis / nama / asuransi"
                 search={search}
             />
-            <LaporanFilter 
-                handlePDFPreview={handlePDFPreview}
-                handleExcelPreview={handleExcelExport}
+            <LaporanFilter
+                handlePDFPreview={async () => {
+                    if (await prepareDataForExport()) {
+                        handlePDFPreview();
+                    }
+                }}
+                handleExcelPreview={async () => {
+                    if (await prepareDataForExport()) {
+                        handleExcelPreview();
+                    }
+                }}
             />
             <LaporanProduksiTable
-                data={rowData}
+                data={paginatedRowData}
             />
             <Pagination
                 page={page}
@@ -77,6 +130,14 @@ export default function Page() {
                     onDownload={handlePDFDownload}
                     pdfDataUrl={pdfPreview.dataUrl}
                     title="Preview Laporan Produksi"
+                />
+                <ExcelPreviewDialog<LaporanProduksiRow>
+                    isOpen={isExcelPreviewOpen}
+                    onClose={closeExcelPreview}
+                    onDownload={handleExcelExport}
+                    title="Preview Laporan Produksi (Excel)"
+                    data={exportRowData}
+                    columns={excelColumns ?? []}
                 />
             </div>
         </div>

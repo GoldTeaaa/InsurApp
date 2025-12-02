@@ -122,7 +122,7 @@ export function generateProduksiPDF(
             );
             // Add generation date
             doc.text(
-                `Generated on: ${new Date().toLocaleDateString('id-ID')}`,
+                `Tanggal Pembuatan: ${new Date().toLocaleDateString('id-ID')}`,
                 doc.internal.pageSize.width - data.settings.margin.right,
                 doc.internal.pageSize.height - 10,
                 { align: 'right' }

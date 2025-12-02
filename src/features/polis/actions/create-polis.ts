@@ -2,11 +2,10 @@
 import { ActionReturnState } from "@/lib/types";
 import { supabase } from "~/utils/supabase/client";
 import { PolisSchema, type Polis } from "@/lib/polis/create-types";
-import { error } from "console";
 
 type ReturnState = ActionReturnState<Polis>;
 
-export default async function CoasPolisAction(formData: Polis): Promise<ReturnState> {
+export default async function createPolis(formData: Polis): Promise<ReturnState> {
   const parsedData = PolisSchema.safeParse(formData);
   if (!parsedData.success) {
     return {

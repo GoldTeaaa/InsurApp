@@ -78,7 +78,7 @@ export default function PremiKomisiBox({
                     <h2 className="mb-3 text-base font-semibold text-gray-900">Input Detail Premi</h2>
                 )
             }
-            {editMode && onRemove && currentIndex > 1 && (
+            {(!editMode && onRemove && currentIndex > 1) && (
                 <button
                     type="button"
                     onClick={onRemove}

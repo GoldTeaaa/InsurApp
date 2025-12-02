@@ -1,8 +1,7 @@
 "use client";
-
 import { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useDebounce } from '../../../lib/utils/useDebounce';
+import { useDebounce } from '@/lib/utils/useDebounce';
 
 interface FormAutoSaveProps {
     storageKey: string;

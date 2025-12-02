@@ -10,7 +10,6 @@ export default async function EditPolisPage({ params }: {params : Promise<{id: s
 
     return (
         <div className="">
-            {/* <pre className="p-4">{JSON.stringify(result.data, null, 2)}</pre> */}
             <EditPolisForm data={result.data}/>
         </div>
     );

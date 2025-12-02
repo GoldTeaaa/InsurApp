@@ -5,17 +5,18 @@ import { Label } from "./ui/label";
 type Props<T extends FieldValues> = {
     name: Path<T>;
     label: string;
-    type?: "text" | "number" | "hidden" | "password";
+    type?: "text" | "number" | "hidden" | "password" | "hidden";
     placeholder?: string;
     step?: string;
     min?: string;
     max?: string;
     readOnly?: boolean;
     disabled?: boolean;
+    value?: string;
 }
 
 export default function FormTextField<T extends FieldValues>({
-    name, label, placeholder, type, step, readOnly, disabled, ...props
+    name, label, placeholder, type, step, readOnly, disabled, value, ...props
 }: Props<T>) {
     const { control } = useFormContext();
 
@@ -32,7 +33,7 @@ export default function FormTextField<T extends FieldValues>({
                         <Input
                             {...field}
                             {...props}
-                            value={field.value ? field.value : ""}
+                            value={field.value ?? (value ?? "")}
                             onChange={(e) => {
                                 //Wrap to number for 
                                 if (type === 'number') {

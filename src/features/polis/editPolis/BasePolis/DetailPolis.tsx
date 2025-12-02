@@ -9,7 +9,7 @@ import getListNasabah from "@/features/polis/actions/get-nasabah-list";
 import PremiCalculationGroup from "../../polisForm/PremiCalculationGroup";
 import DateField from "@/components/DateField";
 import { SelectField } from "@/components/SelectField";
-import { Button } from "@/components/button";
+import KendaraanForm from "../../polisForm/kendaraan/KendaraanForm";
 
 export default function DetailPolis() {
     const [loadingDetails, setLoadingDetails] = useState(false);
@@ -20,7 +20,8 @@ export default function DetailPolis() {
         getValues
     } = useFormContext<Polis>();
 
-    const [nomor_polis] = useState(getValues('nomor_polis'));
+    const [nomor_polis] = useState(getValues(['nomor_polis']));
+    const bisnis = useState(getValues('bisnis'))[0];
 
     useEffect(() => {
         async function fetchNasabahList() {
@@ -29,8 +30,6 @@ export default function DetailPolis() {
         }
         fetchNasabahList();
     }, []);
-
-    
 
     return (
         <div>
@@ -79,6 +78,9 @@ export default function DetailPolis() {
                     <PremiCalculationGroup />
                 </div>
             </div>
+            {bisnis === 'kendaraan'  && (
+                <KendaraanForm />
+            )}
         </div>
     );
 }

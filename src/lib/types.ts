@@ -2,13 +2,20 @@
 import z from "zod";
 
 // =============== LAPORAN SECTION ==================
-export const JENIS_BISNIS = z.enum([
+export const jenis_bisnis = [
   "kendaraan",
   "health",
   "life",
   "property",
   "marine",
-]);
+] as const;
+export const JENIS_BISNIS = z.enum(jenis_bisnis);
+
+export type JenisBisnis = z.infer<typeof JENIS_BISNIS>;
+
+export const jenis_kendaraan = ["mobil", "motor"] as const;
+export type JenisKendaraan = z.infer<typeof JENIS_KENDARAAN>;
+export const JENIS_KENDARAAN = z.enum(jenis_kendaraan);
 
 export const JENIS_COAS = z.enum(["coas", "non-coas"]);
 
@@ -69,12 +76,12 @@ export type TableParams = {
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
 export const SearchParamsSchema = z.object({
-  search: z.string().optional().transform(val => val || null),
-  page: z.coerce.number().int().optional().transform(val => val || 1),
-  size: z.coerce.number().int().optional().transform(val => val || 10),
-  date_from: z.string().optional().transform(val => val || null),
-  date_to: z.string().optional().transform(val => val || null),
-  status: z.string().optional().transform(val => val || null),
+  search: z.string().optional().nullable().transform(val => val || null),
+  page: z.coerce.number().int().optional().nullable().transform(val => val || 1),
+  size: z.coerce.number().int().optional().nullable().transform(val => val || 10),
+  date_from: z.string().optional().nullable().transform(val => val || null),
+  date_to: z.string().optional().nullable().transform(val => val || null),
+  status: z.string().nullable().optional().transform(val => val || null),
 });
 
 export type SearchParamsProps = z.infer<typeof SearchParamsSchema>;

@@ -21,7 +21,14 @@ export default async function getPolisDetails(
     p_polis_id: id,
   });
 
-  console.log("data before PARSE: ", data);
+  if (error){
+    return{
+      success : false,
+      message : error.message
+    }
+  }
+  console.log('before parse', data);
+
   const parsedData = ViewPolisSchema.safeParse(data);
   if (!parsedData.success) {
     console.error("Zod validation failed:", parsedData.error.flatten());
@@ -30,6 +37,7 @@ export default async function getPolisDetails(
       message: "Invalid data structure from API.",
     };
   }
+  console.log('parsedData.data: ', parsedData.data);
 
   const formattedData = {
     ...parsedData.data,

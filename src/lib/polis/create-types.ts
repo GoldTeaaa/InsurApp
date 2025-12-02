@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { JENIS_BISNIS, JENIS_COAS } from "../types";
+import { JENIS_BISNIS, JENIS_COAS, JENIS_KENDARAAN } from "../types";
 
 const COAS_ROLE = z.enum(["leader", "member"]);
 const JENIS_RATE = z.enum(["mille", "percent"]);
@@ -28,16 +28,33 @@ export const PolisShareSchema = z.object({
     .min(1, "Persentase share wajib diisi")
     .max(100, "Persentase share tidak boleh lebih dari 100"),
   coas_role: COAS_ROLE,
-  id_perusahaan_asuransi: z.string().uuid('Asuransi Penanggung Belum Dipilih'),
+  id_perusahaan_asuransi: z.string().uuid("Asuransi Penanggung Belum Dipilih"),
   detail_premi: DetailPremiSchema,
   detail_komisi: DetailKomisiSchema,
 });
 
-// BASE POLIS
+const kendaraanSchema = z.object({
+  bisnis: z.literal("kendaraan"),
+  jenis_kendaraan: JENIS_KENDARAAN,
+  plat_nomor: z.string().min(3, "Plat nomor wajib diisi"),
+});
+
+const healthSchema = z.object({
+  bisnis: z.literal("kesehatan"),
+});
+const marineSchema = z.object({
+  bisnis: z.literal("marine_cargo"),
+});
+const propertySchema = z.object({
+  bisnis: z.literal("properti"),
+});
+
+const businessDetailsSchema = z.discriminatedUnion("bisnis", [kendaraanSchema, healthSchema, marineSchema, propertySchema]);
+
 export const basePolisObjectSchema = z.object({
   nomor_polis: noPolis,
   bisnis: JENIS_BISNIS,
-  id_nasabah: z.string().uuid('Nasabah Belum Dipilih'),
+  id_nasabah: z.string().uuid("Nasabah Belum Dipilih"),
   total_sum_insured: nonNegative,
   nilai_rate: z.coerce.number().positive("Rate harus lebih dari 0"),
   jenis_rate: JENIS_RATE,
@@ -57,19 +74,24 @@ export const basePolisObjectSchema = z.object({
       invalid_type_error: "Format tanggal periode akhir tidak valid.",
     })
   ),
-  detail_bisnis: z.record(z.any()).optional(),
+  bisnis_details: businessDetailsSchema,
+  detail_bisnis: z.record(z.any()).optional(), // May be remove later
 });
 
 const basePolisSchema = basePolisObjectSchema.superRefine((data, ctx) => {
   // 1) periode checks
-  if (!data.periode_mulai) {
-    // This is already handled by required_error, but good for completeness
-  } else if (data.periode_akhir <= data.periode_mulai) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Periode akhir harus setelah periode mulai",
-      path: ["periode_akhir"],
-    });
+  // Ensure both dates are valid before comparing
+  if (
+    data.periode_mulai instanceof Date &&
+    data.periode_akhir instanceof Date
+  ) {
+    if (data.periode_akhir <= data.periode_mulai) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Periode akhir harus setelah periode mulai",
+        path: ["periode_akhir"],
+      });
+    }
   }
 
   // 2) total_premi should not exceed total_sum_insured
@@ -80,6 +102,16 @@ const basePolisSchema = basePolisObjectSchema.superRefine((data, ctx) => {
       message: "Total premi tidak boleh melebihi Total Sum Insured.",
       path: ["total_premi"],
     });
+  }
+
+  if (data.bisnis === "kendaraan") {
+    if (!data.bisnis_details) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Detail kendaraan wajib diisi.",
+        path: ["bisnis_details"],
+      });
+    }
   }
 });
 
@@ -108,6 +140,19 @@ export const PolisSchema = z
       data.jenis_coas === "coas" ? data.shares : [data.shares];
 
     const sharesArr = getSharesArray();
+
+    if (
+      data.periode_mulai instanceof Date &&
+      data.periode_akhir instanceof Date
+    ) {
+      if (data.periode_akhir <= data.periode_mulai) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Periode akhir harus setelah periode mulai",
+          path: ["periode_akhir"],
+        });
+      }
+    }
 
     // 2) Sum of percent must be ~100 for coas
     if (data.jenis_coas === "coas") {

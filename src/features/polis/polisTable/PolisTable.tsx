@@ -1,5 +1,4 @@
 "use client"
-
 import {
 	flexRender,
 	getCoreRowModel,
@@ -13,10 +12,23 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/table"
-import { PolisTableRow } from "@/lib/polis/table-types"
-import { columns } from "@/features/polis/polisTable/columns"
+import { PolisRow } from "@/lib/polis/table-types"
+import { getColumns } from "@/features/polis/polisTable/columns"
+import { JenisBisnis } from "@/lib/types"
 
-export default function PolisTable({ data }: { data: PolisTableRow[] }) {
+type PolisTableProps = {
+	data: PolisRow[],
+	jenis_bisnis?: JenisBisnis
+}
+
+export default function PolisTable({ 
+	data,
+	jenis_bisnis
+}: PolisTableProps) {
+
+	const columns = getColumns(jenis_bisnis);
+	console.log('jenis_bisnis: ', jenis_bisnis)
+	console.log('columns: ', columns)
 
 	const table = useReactTable({
 		data,
@@ -31,7 +43,7 @@ export default function PolisTable({ data }: { data: PolisTableRow[] }) {
 				{table.getHeaderGroups().map(headerGroup => (
 					<TableRow key={headerGroup.id}>
 						{headerGroup.headers.map(header => (
-							<TableHead key={header.id}>
+							<TableHead key={header.id} className="bg-sky-700 text-white">
 								{header.isPlaceholder
 									? null
 									: flexRender(

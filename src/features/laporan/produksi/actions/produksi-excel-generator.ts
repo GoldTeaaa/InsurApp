@@ -1,4 +1,5 @@
 import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
+import { jenis_bisnis } from "@/lib/types";
 import { formatDate, formatDateRange } from "@/lib/utils/formatDate";
 import ExcelJS from "exceljs";
 
@@ -160,7 +161,8 @@ export const generateProduksiExcel = async (
       );
 
       const subtotalRow = worksheet.addRow({
-        nama_tertanggung: `Subtotal for Polis ${group[0].nomor_polis}`,
+        // jenis_bisnis: `Total Polis ${group[0].nomor_polis}}`,
+        jenis_bisnis: `Total`,
         premi: subTotals.premi,
         discount: subTotals.discount,
         biaya_admin_materai: subTotals.biaya_admin_materai,
@@ -182,7 +184,7 @@ export const generateProduksiExcel = async (
   // === 5. ADD GRAND TOTAL FOOTER ===
   worksheet.addRow([]); // Spacer row
   const footerRow = worksheet.addRow({
-    nama_tertanggung: "GRAND TOTAL",
+    jenis_bisnis: "TOTAL",
     premi: grandTotals.premi,
     discount: grandTotals.discount,
     biaya_admin_materai: grandTotals.biaya_admin_materai,

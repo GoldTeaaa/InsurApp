@@ -1,9 +1,9 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { SearchParamsProps } from "@/lib/types";
 
+// Can't use the ActionState type because it doesn't have the data{rows and total_count} property
 type FetcherResponse<T> = {
     success: boolean;
     message?: string;

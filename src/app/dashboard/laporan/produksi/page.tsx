@@ -6,7 +6,7 @@ import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
 import PDFPreviewDialog from "@/components/PDFPreviewDialog";
 import LaporanFilter from "@/components/LaporanFilter";
 import ExcelPreviewDialog from "@/components/ExcelPreviewDialog";
-import { reports } from "@/lib/laporan/laporan-options";
+import { reportsConfig } from "@/lib/laporan/laporan-options";
 import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 import getLaporanProduksiData from "@/features/laporan/produksi/actions/getLaporanProduksiData";
 import useLaporanProduksiExporter from "@/features/laporan/produksi/actions/useLaporanProduksiExporter";
@@ -33,12 +33,10 @@ export default function Page() {
         handleExcelExport,
     } = useLaporanProduksiExporter({ rowData: exportRowData, startDate, endDate });
 
-    const report = reports.find((report) => {
-        return report.id === "produksi";
-    })
+    const reportConfig = reportsConfig["produksi"];
 
     // Use the generic parser to generate columns
-    const excelColumns = excelColumnParser<LaporanProduksiRow>(report?.columns ?? []);
+    const excelColumns = excelColumnParser(reportConfig.columns);
 
     return (
         <div>

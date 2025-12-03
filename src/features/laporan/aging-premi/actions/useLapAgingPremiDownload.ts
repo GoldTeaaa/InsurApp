@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { LaporanAgingPremiRow } from "@/lib/laporan/laporan-aging-premi/types";
 import { generateAgingPremiPDF } from "@/features/laporan/aging-premi/actions/pdf-aging-premi-generator";
 import { formatDate } from "@/lib/utils/formatDate";
+import { generateAgingPremiExcel } from '@/features/laporan/aging-premi/actions/aging-premi-excel-generator';
 
 interface ExporterProps {
   rowData: LaporanAgingPremiRow[];
@@ -40,14 +41,13 @@ export default function useLapAgingPremiDownload({
     setPdfPreview({ isOpen: false, dataUrl: "" });
   };
 
-  // --- TODO: Implement Excel Generation ---
+  // --- Excel Generation ---
   const handleExcelPreview = () => {
     if (rowData.length === 0) {
       console.log("No data to preview.");
       return;
     }
-    // setIsExcelPreviewOpen(true);
-    console.log("Excel preview for Aging Premi is not yet implemented.");
+    setIsExcelPreviewOpen(true);
   };
 
   const closeExcelPreview = () => {
@@ -55,9 +55,21 @@ export default function useLapAgingPremiDownload({
   };
 
   const handleExcelExport = async () => {
-    console.log("Excel export for Aging Premi is not yet implemented.");
-    // const excelBlob = await generateAgingPremiExcel(rowData, startDate, endDate);
-    // ... trigger download
+    if (rowData.length === 0) {
+      console.log("No data to generate Excel file.");
+      return;
+    }
+
+    const excelBlob = await generateAgingPremiExcel(rowData, startDate, endDate);
+    const dataUrl = URL.createObjectURL(excelBlob);
+    const datePart =
+      startDate && endDate
+        ? `${formatDate(startDate)}_to_${formatDate(endDate)}`
+        : "all_time";
+    const fileName = `Laporan_Aging_Premi_${datePart}.xlsx`;
+
+    triggerDownload(dataUrl, fileName);
+    closeExcelPreview(); // Close dialog after download starts
   };
 
   function triggerDownload(url: string, fileName: string) {

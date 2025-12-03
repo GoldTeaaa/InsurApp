@@ -9,7 +9,7 @@ export default function ReportNavBar() {
   const pathname = usePathname() ?? "/";
 
   // derive active by startsWith for nested routes
-  const activeId = reports.find((r) => pathname.startsWith(r.route))?.id;
+  const activeId = reports.find((r) => pathname.startsWith(r.route));
 
   return (
     <div className="space-y-4">
@@ -24,7 +24,7 @@ export default function ReportNavBar() {
       >
         {reports.map((laporan) => {
           const Icon = laporan.icon;
-          const active = activeId === laporan.id;
+          const active = activeId === laporan;
 
           return (
             <Link
@@ -62,7 +62,7 @@ export default function ReportNavBar() {
         <select
           id="report-select"
           className="w-full rounded-md border px-3 py-2 text-sm"
-          value={activeId ?? ""}
+          value={activeId?.id ?? ""}
           onChange={(e) => {
             const selected = reports.find((r) => r.id === e.target.value);
             if (selected) window.location.href = selected.route;

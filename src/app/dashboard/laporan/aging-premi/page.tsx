@@ -7,7 +7,7 @@ import LaporanAgingPremiTable from "@/features/laporan/aging-premi/LaporanAgingP
 import { LaporanAgingPremiRow } from "@/lib/laporan/laporan-aging-premi/types";
 import PDFPreviewDialog from "@/components/PDFPreviewDialog";
 import ExcelPreviewDialog from "@/components/ExcelPreviewDialog";
-import { reports } from "@/lib/laporan/laporan-options";
+import { reportsConfig } from "@/lib/laporan/laporan-options";
 import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 import getLapAgingPremiData from "@/features/laporan/aging-premi/actions/getLapAgingPremiData";
 import useLapAgingPremiDownload from "@/features/laporan/aging-premi/actions/useLapAgingPremiDownload";
@@ -37,9 +37,10 @@ export default function Page() {
         endDate
     });
 
-    const reportConfig = reports.find((report) => report.id === "aging-premi");
+    // Directly access the strongly-typed config, no .find() needed.
+    const reportConfig = reportsConfig["aging-premi"];
 
-    const excelColumns = excelColumnParser<LaporanAgingPremiRow>(reportConfig?.columns);
+    const excelColumns = excelColumnParser(reportConfig.columns);
 
     return (
         <div>

@@ -11,7 +11,7 @@ import LaporanFilter from "@/components/LaporanFilter";
 import useLaporanProduksiExporter from "@/features/laporan/produksi/actions/useLaporanProduksiExporter";
 import ExcelPreviewDialog from "@/components/ExcelPreviewDialog";
 import { reports } from "@/lib/laporan/laporan-options";
-import { formatDate } from "@/lib/utils/formatDate";
+import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 
 // Can't use searchParams because need to have onClick event for download
 export default function Page() {
@@ -85,18 +85,11 @@ export default function Page() {
         return report.id === "produksi";
     })
 
-    const excelColumns = report?.columns?.map((column) => {
-        return {
-            header: column.header,
-            accessor: (row: LaporanProduksiRow) => {
-                const value = row[column.key];
-                if (column.key === 'periode_mulai' || column.key === 'periode_akhir') {
-                    return formatDate(value as string);
-                }
-                return value as React.ReactNode;
-            }
-        }
-    })
+    // console.log("report: ", report);
+    // console.log('report columns: ', report?.columns);
+
+    // Use the generic parser to generate columns
+    const excelColumns = excelColumnParser<LaporanProduksiRow>(report?.columns ?? []);
 
     return (
         <div>

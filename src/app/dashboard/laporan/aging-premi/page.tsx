@@ -12,6 +12,7 @@ import PDFPreviewDialog from "@/components/PDFPreviewDialog";
 import ExcelPreviewDialog from "@/components/ExcelPreviewDialog";
 import { reports } from "@/lib/laporan/laporan-options";
 import useLapAgingPremiDownload from "@/features/laporan/aging-premi/actions/useLapAgingPremiDownload";
+import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 
 
 export default function Page() {
@@ -56,6 +57,8 @@ export default function Page() {
             return false;
         }
     };
+
+    const excelColumns = excelColumnParser<LaporanAgingPremiRow>(reportConfig?.columns);
 
     useEffect(() => {
         getLapAgingPremiData({
@@ -103,7 +106,7 @@ export default function Page() {
                     onDownload={handleExcelExport}
                     title="Preview Laporan Aging Premi (Excel)"
                     data={exportRowData}
-                    columns={[]}
+                    columns={excelColumns}
                 />
             </div>
         </div>

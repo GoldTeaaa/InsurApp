@@ -48,13 +48,18 @@ export function AuthForm({
         setResponse({ error: res.error });
       }
     } catch (error) {
+      // The redirect function throws an error, so we need to catch it and ignore it.
+      // See: https://nextjs.org/docs/app/api-reference/functions/redirect#how-redirect-works
+      if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
+        return;
+      }
       setResponse({ error: "An unexpected error occurred." });
     }
   };
 
   return (
-    <Card className="mx-auto max-w-md">
-      <CardHeader>
+    <Card className="w-full mx-auto max-w-md transition-shadow duration-300 hover:shadow-xl">
+      <CardHeader className="text-center">
         <CardTitle className="text-2xl">{mode === "signin" ? "Sign In" : "Sign Up"}</CardTitle>
         <CardDescription>
           {mode === "signin" ? "Sign in to your account" : "Sign up for an account"}

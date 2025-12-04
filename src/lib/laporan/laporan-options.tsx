@@ -1,5 +1,6 @@
 import { Calendar, Clock, FileText, ListChecks, DollarSign } from "lucide-react";
 import { LaporanProduksiRow } from "./laporan-produksi/types";
+import { LaporanAgingKomisiItem } from "./laporan-aging-komisi/types";
 import { LaporanAgingPremiRow } from "./laporan-aging-premi/types";
 
 export type ReportColumn<T> = {
@@ -68,8 +69,21 @@ export const reportsConfig = {
         name: "Aging Komisi",
         route: "/dashboard/laporan/aging-komisi",
         icon: FileText,
-        columns: []
-    },
+        columns: [ // as ReportColumn<LaporanAgingKomisiItem>[]
+            { header: "Nomor Polis", key: "nomor_polis" },
+            { header: "Nama Tertanggung", key: "nama_tertanggung" },
+            { header: "Nama Asuransi", key: "nama_perusahaan_asuransi" },
+            { header: "Komisi Gross", key: "komisi_gross" },
+            { header: "PPH", key: "pph" },
+            { header: "Komisi Net", key: "komisi_net" },
+            { header: "Amount Due", key: "amount_due" },
+            { header: "Amount Paid", key: "amount_paid" },
+            { header: "Status", key: "detail_komisi_status" },
+            { header: "Aging (Hari)", key: "aging_bracket" },
+            { header: "Periode Mulai", key: "periode_mulai" },
+            { header: "Periode Akhir", key: "periode_akhir" },
+        ],
+    } as ReportProps<LaporanAgingKomisiItem>,
     "pelunasan-premi": {
         id: "pelunasan-premi",
         name: "Pelunasan Premi",

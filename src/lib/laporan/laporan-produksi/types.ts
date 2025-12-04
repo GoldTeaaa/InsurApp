@@ -13,7 +13,7 @@ export const laporanProduksiSchema = z.object({
     discount: z.number(),
     biaya_admin_materai: z.number(),
     premi_net: z.number(),
-    no_kwitansi_komisi: z.string().nullable().transform(val => val || 'belum ada'),
+    no_kwitansi_komisi: z.string().nullable().transform(val => val || ' - '),
     komisi: z.number(),
     pph_komisi: z.number(),
     komisi_net: z.number(),

@@ -3,6 +3,7 @@ import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
 import { generateProduksiPDF } from "@/features/laporan/produksi/actions/produksi-pdf-generator";
 import { formatDate } from "@/lib/utils/formatDate";
 import { generateProduksiExcel } from "./produksi-excel-generator";
+import triggerDownload from '@/lib/utils/triggerDownload';
 
 interface ExporterProps {
   rowData: LaporanProduksiRow[];
@@ -75,16 +76,6 @@ export default function useLaporanProduksiExporter({
     triggerDownload(dataUrl, fileName);
     closeExcelPreview(); // Close dialog after download starts
   };
-
-  function triggerDownload(url: string, fileName: string) {
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = fileName;
-    document.body.appendChild(link); // Required for Firefox
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url); // Clean up the object URL
-  }
 
   return {
     pdfPreview,

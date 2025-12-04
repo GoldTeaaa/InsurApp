@@ -3,6 +3,7 @@ import { LaporanAgingPremiRow } from "@/lib/laporan/laporan-aging-premi/types";
 import { generateAgingPremiPDF } from "@/features/laporan/aging-premi/actions/pdf-aging-premi-generator";
 import { formatDate } from "@/lib/utils/formatDate";
 import { generateAgingPremiExcel } from '@/features/laporan/aging-premi/actions/aging-premi-excel-generator';
+import triggerDownload from '@/lib/utils/triggerDownload';
 
 interface ExporterProps {
   rowData: LaporanAgingPremiRow[];
@@ -41,7 +42,9 @@ export default function useLapAgingPremiDownload({
     setPdfPreview({ isOpen: false, dataUrl: "" });
   };
 
-  // --- Excel Generation ---
+  // =================================================================================
+  //                                  Excel Generation
+  // =================================================================================
   const handleExcelPreview = () => {
     if (rowData.length === 0) {
       console.log("No data to preview.");
@@ -71,16 +74,6 @@ export default function useLapAgingPremiDownload({
     triggerDownload(dataUrl, fileName);
     closeExcelPreview(); // Close dialog after download starts
   };
-
-  function triggerDownload(url: string, fileName: string) {
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = fileName;
-    document.body.appendChild(link); // Required for Firefox
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url); // Clean up the object URL
-  }
 
   return {
     pdfPreview,

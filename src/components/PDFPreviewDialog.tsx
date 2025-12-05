@@ -17,7 +17,7 @@ type Props = {
     title: string;
 };
 
-export default function PDFPreviewDialog({ isOpen, onClose, onDownload, pdfDataUrl, title }: Props) {
+export default function  PDFPreviewDialog({ isOpen, onClose, onDownload, pdfDataUrl, title }: Props) {
     if(!isOpen) return null;
 
     return (

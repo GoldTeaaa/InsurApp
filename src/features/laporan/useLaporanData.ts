@@ -17,7 +17,7 @@ type UseLaporanProps<T> = {
     fetcher: (params: { searchParams: SearchParamsProps }) => Promise<FetcherResponse<T>>;
 };
 
-export function useLaporan<T>({ fetcher }: UseLaporanProps<T>) {
+export function useLaporanData<T>({ fetcher }: UseLaporanProps<T>) {
     const params = useSearchParams();
     const [paginatedRowData, setPaginatedRowData] = useState<T[]>([]);
     const [exportRowData, setExportRowData] = useState<T[]>([]);

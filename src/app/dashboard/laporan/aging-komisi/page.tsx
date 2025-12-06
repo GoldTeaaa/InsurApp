@@ -10,7 +10,7 @@ import { reportsConfig } from "@/lib/laporan/laporan-options";
 import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 import getLapAgingKomisiData from "@/features/laporan/aging-komisi/actions/getLapAgingKomisiData";
 import useLapAgingKomisiDownload from "@/features/laporan/aging-komisi/actions/useLapAgingKomisiDownload";
-import { useLaporan } from "@/features/laporan/useLaporan";
+import { useLaporanData } from "@/features/laporan/useLaporanData";
 
 export default function Page() {
     const {
@@ -19,7 +19,7 @@ export default function Page() {
         pageCount,
         search, page, startDate, endDate,
         prepareDataForExport
-    } = useLaporan<LaporanAgingKomisiItem>({ fetcher: getLapAgingKomisiData });
+    } = useLaporanData<LaporanAgingKomisiItem>({ fetcher: getLapAgingKomisiData });
 
     const {
         pdfPreview,

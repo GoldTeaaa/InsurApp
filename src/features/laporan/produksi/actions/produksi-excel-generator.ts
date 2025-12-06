@@ -1,5 +1,4 @@
 import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
-import { jenis_bisnis } from "@/lib/types";
 import { formatDate, formatDateRange } from "@/lib/utils/formatDate";
 import ExcelJS from "exceljs";
 

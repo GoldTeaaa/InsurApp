@@ -11,7 +11,7 @@ import { reportsConfig } from "@/lib/laporan/laporan-options";
 import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 import getLapAgingPremiData from "@/features/laporan/aging-premi/actions/getLapAgingPremiData";
 import useLapAgingPremiDownload from "@/features/laporan/aging-premi/actions/useLapAgingPremiDownload";
-import { useLaporan } from "@/features/laporan/useLaporan";
+import { useLaporanData } from "@/features/laporan/useLaporanData";
 
 export default function Page() {
     const {
@@ -20,7 +20,7 @@ export default function Page() {
         pageCount,
         search, page, startDate, endDate,
         prepareDataForExport
-    } = useLaporan<LaporanAgingPremiRow>({ fetcher: getLapAgingPremiData });
+    } = useLaporanData<LaporanAgingPremiRow>({ fetcher: getLapAgingPremiData });
 
     const {
         pdfPreview,

@@ -4,7 +4,7 @@ import triggerDownload from '@/lib/utils/triggerDownload';
 
 interface ExporterProps<T> {
   /** The data for the report. */
-  rowData: T[];
+  rowData: T;
   /** The start date for the report period. */
   startDate: string;
   /** The end date for the report period. */
@@ -12,9 +12,9 @@ interface ExporterProps<T> {
   /** The base name for the exported files (e.g., "Laporan_Produksi"). */
   fileNamePrefix: string;
   /** A function that generates the PDF data URL. */
-  pdfGenerator: (data: T[], startDate: string, endDate: string) => string;
+  pdfGenerator: (data: T, startDate: string, endDate: string) => string;
   /** A function that generates the Excel file Blob. */
-  excelGenerator: (data: T[], startDate: string, endDate: string) => Promise<Blob>;
+  excelGenerator: (data: T, startDate: string, endDate: string) => Promise<Blob>;
 }
 
 /**

@@ -10,7 +10,7 @@ import { reportsConfig } from "@/lib/laporan/laporan-options";
 import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 import getLaporanProduksiData from "@/features/laporan/produksi/actions/getLaporanProduksiData";
 import useLaporanProduksiExporter from "@/features/laporan/produksi/actions/useLaporanProduksiExporter";
-import { useLaporan } from "@/features/laporan/useLaporan";
+import { useLaporanData } from "@/features/laporan/useLaporanData";
 
 // Can't use searchParams because need to have onClick event for download
 export default function Page() {
@@ -20,7 +20,7 @@ export default function Page() {
         pageCount,
         search, page, startDate, endDate,
         prepareDataForExport
-    } = useLaporan<LaporanProduksiRow>({ fetcher: getLaporanProduksiData });
+    } = useLaporanData<LaporanProduksiRow>({ fetcher: getLaporanProduksiData });
 
     const {
         pdfPreview,

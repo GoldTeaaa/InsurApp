@@ -22,7 +22,6 @@ export default function transformProduksiData(
   const polisMap = new Map<string, GroupedProduksiData>();
 
   for (const item of data) {
-    // If this is the first time we see this nomor_polis, create the parent object.
     if (!polisMap.has(item.nomor_polis)) {
       polisMap.set(item.nomor_polis, {
         nomor_polis: item.nomor_polis,
@@ -35,7 +34,6 @@ export default function transformProduksiData(
       });
     }
 
-    // Create the share object with its specific details.
     const share = {
       polis_share_id: item.polis_share_id,
       nama_perusahaan_asuransi: item.nama_perusahaan_asuransi,

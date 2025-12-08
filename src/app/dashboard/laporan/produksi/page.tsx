@@ -11,6 +11,7 @@ import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 import getLaporanProduksiData from "@/features/laporan/produksi/actions/getLaporanProduksiData";
 import useLaporanProduksiExporter from "@/features/laporan/produksi/actions/useLaporanProduksiExporter";
 import { useLaporanData } from "@/features/laporan/useLaporanData";
+import LapProduksiTable from "@/features/laporan/produksi/LapProduksiTable";
 
 // Can't use searchParams because need to have onClick event for download
 export default function Page() {
@@ -56,7 +57,10 @@ export default function Page() {
                     }
                 }}
             />
-            <LaporanProduksiTable
+            {/* <LaporanProduksiTable
+                data={paginatedRowData}
+            /> */}
+            <LapProduksiTable 
                 data={paginatedRowData}
             />
             <Pagination

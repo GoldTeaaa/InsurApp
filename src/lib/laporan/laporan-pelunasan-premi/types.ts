@@ -9,8 +9,8 @@ export const pelunasanPremiRowSchema = z.object({
     nomor_polis: z.string(),
     nama_tertanggung: z.string(),
     bisnis: JENIS_BISNIS,
-    periode_mulai: z.coerce.date(),
-    periode_akhir: z.coerce.date(),
+    periode_mulai: z.string(),
+    periode_akhir: z.string(),
     premi_gross: z.number(),
     discount: z.number(),
     biaya_admin_materai: z.number(),
@@ -20,7 +20,7 @@ export const pelunasanPremiRowSchema = z.object({
     share: z.number(),
     status: STATUS_BAYAR,
     amount_paid: z.number(),
-    tanggal_bayar: z.coerce.date(),
+    tanggal_bayar: z.string(),
     // amount_due: z.number(),
 });
 

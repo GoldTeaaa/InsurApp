@@ -49,7 +49,7 @@ export const reportsConfig = {
         name: "Aging Premi",
         route: "/dashboard/laporan/aging-premi",
         icon: Clock,
-        columns: [ // as ReportColumn<LaporanAgingPremiRow>[]
+        columns: [
             { header: "Nomor Polis", key: "nomor_polis" },
             { header: "Nama Tertanggung", key: "nama_tertanggung" },
             { header: "Jenis Bisnis", key: "jenis_bisnis" },
@@ -71,7 +71,7 @@ export const reportsConfig = {
         name: "Aging Komisi",
         route: "/dashboard/laporan/aging-komisi",
         icon: FileText,
-        columns: [ // as ReportColumn<LaporanAgingKomisiItem>[]
+        columns: [
             { header: "Nomor Polis", key: "nomor_polis" },
             { header: "Nama Tertanggung", key: "nama_tertanggung" },
             { header: "Nama Asuransi", key: "nama_perusahaan_asuransi" },
@@ -92,9 +92,22 @@ export const reportsConfig = {
         route: "/dashboard/laporan/pelunasan-premi",
         icon: ListChecks,
         columns: [
-            {header: "No Polis", key: "nomor_polis"},
-            {header: "Nama Tertanggung", key: "nama_tertanggung"},
-        ]
+            { header: "Nomor Polis", key: "nomor_polis" },
+            { header: "Nama Tertanggung", key: "nama_tertanggung" },
+            { header: "Jenis Bisnis", key: "bisnis" },
+            { header: "Periode Mulai", key: "periode_mulai" },
+            { header: "Periode Akhir", key: "periode_akhir" },
+            { header: "Premi Gross", key: "premi_gross" },
+            { header: "Discount", key: "discount" },
+            { header: "Biaya Admin/Materai", key: "biaya_admin_materai" },
+            { header: "Premi Net", key: "premi_net" },
+            { header: "Nama Asuransi", key: "nama_perusahaan_asuransi" },
+            { header: "Jenis Coas", key: "jenis_coas" },
+            { header: "Share", key: "share" },
+            { header: "Status", key: "status" },
+            { header: "Amount Paid", key: "amount_paid" },
+            { header: "Tanggal Bayar", key: "tanggal_bayar" },
+        ],
     } as ReportProps<PelunasanPremiRow>,
     "pelunasan-komisi": {
         id: "pelunasan-komisi",

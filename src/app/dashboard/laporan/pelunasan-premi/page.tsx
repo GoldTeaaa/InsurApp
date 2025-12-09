@@ -1,46 +1,82 @@
+'use client';
+import ExcelPreviewDialog from "@/components/ExcelPreviewDialog";
+import LaporanFilter from "@/components/LaporanFilter";
+import Pagination from "@/components/Pagination";
+import PDFPreviewDialog from "@/components/PDFPreviewDialog";
 import getPelunasanPremiData from "@/features/laporan/pelunasan-premi/actions/getPelunasanPremiData";
+import useLapPelunasanPremiExport from "@/features/laporan/pelunasan-premi/actions/useLapPelunasanPremiExport";
 import PelunasanPremiTable from "@/features/laporan/pelunasan-premi/PelunasanPremiTable";
 import Search from "@/components/Search";
-import Pagination from "@/components/Pagination";
-import DateFilter from "@/components/DateFilter";
-import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
-import NormalizeSearchParams from "@/lib/normalizeSearchParams";
+import { useLaporanData } from "@/features/laporan/useLaporanData";
+import { reportsConfig } from "@/lib/laporan/laporan-options";
+import { PelunasanPremiRow } from "@/lib/laporan/laporan-pelunasan-premi/types";
+import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 
-export default async function Page({
-    searchParams
-}: { searchParams: Promise<RawSearchParams> }) {
-    
-    const raw = await searchParams;
-    const normalized = NormalizeSearchParams(raw);
+export default function Page() {
 
-    const parsed = SearchParamsSchema.safeParse(normalized);
-    if (!parsed.success) {
-        throw new Error(parsed.error.message);
-    }
-    const params = parsed.data;
+    const {
+        paginatedRowData,
+        exportRowData,
+        pageCount,
+        search, page, startDate, endDate,
+        prepareDataForExport
+    } = useLaporanData<PelunasanPremiRow>({
+        fetcher: getPelunasanPremiData,
+    });
 
-    const search = params.search ?? "";
-    const page = Number(params.page ?? 1);
-    const size = Number(params.size ?? 10);
+    const {
+        pdfPreview,
+        handlePDFPreview,
+        handlePDFDownload,
+        closePDFPreview,
+        isExcelPreviewOpen,
+        handleExcelPreview,
+        closeExcelPreview,
+        handleExcelExport,
+    } = useLapPelunasanPremiExport({
+        rowData: exportRowData,
+        startDate,
+        endDate
+    });
 
-    const response = await getPelunasanPremiData({ searchParams: params });
-    if (!response.success) {
-        throw new Error(response.message);
-    }
-    
+    const reportConfig = reportsConfig['pelunasan-premi'];
+    const excelColumns = excelColumnParser<PelunasanPremiRow>(reportConfig.columns);
+
     return (
         <div>
             <Search
                 placeholder="Cari nomor-polis / nama / asuransi"
-                search={search ?? ""}
+                search={search}
             />
-            <DateFilter />
+            <LaporanFilter
+                handlePDFPreview={async () => {
+                    if (await prepareDataForExport()) handlePDFPreview();
+                }}
+                handleExcelPreview={async () => {
+                    if (await prepareDataForExport()) handleExcelPreview();
+                }}
+            />
             <PelunasanPremiTable
-                data={response.data ? response.data.rows : []}
+                data={paginatedRowData}
             />
             <Pagination
                 page={page}
-                pageCount={Math.ceil((response.data?.total_count ?? 0) / size)}
+                pageCount={pageCount}
+            />
+            <PDFPreviewDialog
+                isOpen={pdfPreview.isOpen}
+                onClose={closePDFPreview}
+                onDownload={handlePDFDownload}
+                pdfDataUrl={pdfPreview.dataUrl}
+                title="Preview Laporan Pelunasan Premi"
+            />
+            <ExcelPreviewDialog<PelunasanPremiRow>
+                isOpen={isExcelPreviewOpen}
+                onClose={closeExcelPreview}
+                onDownload={handleExcelExport}
+                title="Preview Laporan Pelunasan Premi (Excel)"
+                data={exportRowData}
+                columns={excelColumns}
             />
         </div>
     );

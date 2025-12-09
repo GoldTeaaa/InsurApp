@@ -85,15 +85,16 @@ export const columnLaporanProduksi: ColumnDef<LaporanProduksiRow>[] = [
     },
 ]
 
+// ANOTHER VERSION OF TABLE PRODUKSI
 export const columnLapProduksi: ColumnDef<LaporanProduksiRow>[] = [
     {
         accessorKey: 'nomor_polis',
         header: 'No. Polis',
         cell: ({ row, table, getValue }) => {
-            const previousRow = table.getRowModel().rows[row.index - 1];
-            if (previousRow && previousRow.original.nomor_polis === row.original.nomor_polis) {
-                return null;
-            }
+            // const previousRow = table.getRowModel().rows[row.index - 1];
+            // if (previousRow && previousRow.original.nomor_polis === row.original.nomor_polis) {
+            //     return null;
+            // }
             return <strong className="font-semibold">{getValue<string>()}</strong>;
         },
     },
@@ -101,10 +102,10 @@ export const columnLapProduksi: ColumnDef<LaporanProduksiRow>[] = [
         accessorKey: 'nama_tertanggung',
         header: 'Nama Tertanggung',
         cell: ({ row, table, getValue }) => {
-            const previousRow = table.getRowModel().rows[row.index - 1];
-            if (previousRow && previousRow.original.nomor_polis === row.original.nomor_polis) {
-                return null;
-            }
+            // const previousRow = table.getRowModel().rows[row.index - 1];
+            // if (previousRow && previousRow.original.nomor_polis === row.original.nomor_polis) {
+            //     return null;
+            // }
             return <strong className="font-semibold">{getValue<string>()}</strong>;
         },
     },
@@ -112,10 +113,10 @@ export const columnLapProduksi: ColumnDef<LaporanProduksiRow>[] = [
         id: 'periode',
         header: 'Periode',
         cell: ({ row, table }) => {
-            const previousRow = table.getRowModel().rows[row.index - 1];
-            if (previousRow && previousRow.original.nomor_polis === row.original.nomor_polis) {
-                return null;
-            }
+            // const previousRow = table.getRowModel().rows[row.index - 1];
+            // if (previousRow && previousRow.original.nomor_polis === row.original.nomor_polis) {
+            //     return null;
+            // }
 
             const { periode_mulai, periode_akhir } = row.original;
             if (!periode_mulai || !periode_akhir) return '-';
@@ -134,10 +135,10 @@ export const columnLapProduksi: ColumnDef<LaporanProduksiRow>[] = [
         accessorKey: 'jenis_bisnis',
         header: 'Jenis Bisnis',
         cell: ({ row, table, getValue }) => {
-            const previousRow = table.getRowModel().rows[row.index - 1];
-            if (previousRow && previousRow.original.nomor_polis === row.original.nomor_polis) {
-                return null;
-            }
+            // const previousRow = table.getRowModel().rows[row.index - 1];
+            // if (previousRow && previousRow.original.nomor_polis === row.original.nomor_polis) {
+            //     return null;
+            // }
             return <strong className="font-semibold">{getValue<string>()}</strong>;
         },
     },

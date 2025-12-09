@@ -34,7 +34,14 @@ export function useLaporanData<T>({ fetcher }: UseLaporanProps<T>) {
     useEffect(() => {
         setIsLoading(true);
         fetcher({
-            searchParams: { search, page, size, date_from: startDate, date_to: endDate, status: null }
+            searchParams: { 
+                search, 
+                page, 
+                size, 
+                date_from: startDate, 
+                date_to: endDate, 
+                status: null 
+            }
         }).then((res) => {
             if (res.success) {
                 setPaginatedRowData(res.data?.rows ?? []);

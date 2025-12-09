@@ -2,6 +2,8 @@ import { Calendar, Clock, FileText, ListChecks, DollarSign } from "lucide-react"
 import { LaporanProduksiRow } from "./laporan-produksi/types";
 import { LaporanAgingKomisiItem } from "./laporan-aging-komisi/types";
 import { LaporanAgingPremiRow } from "./laporan-aging-premi/types";
+import { LaporanPelunasanKomisiRow } from "./laporan-pelunasan-komisi/types";
+import { PelunasanPremiRow } from "./laporan-pelunasan-premi/types";
 
 export type ReportColumn<T> = {
     header: string;
@@ -89,15 +91,33 @@ export const reportsConfig = {
         name: "Pelunasan Premi",
         route: "/dashboard/laporan/pelunasan-premi",
         icon: ListChecks,
-        columns: []
-    },
+        columns: [
+            {header: "No Polis", key: "nomor_polis"},
+            {header: "Nama Tertanggung", key: "nama_tertanggung"},
+        ]
+    } as ReportProps<PelunasanPremiRow>,
     "pelunasan-komisi": {
         id: "pelunasan-komisi",
         name: "Pelunasan Komisi",
         route: "/dashboard/laporan/pelunasan-komisi",
         icon: DollarSign,
-        columns: []
-    },
+        columns: [
+            { header: "Nomor Polis", key: "nomor_polis" },
+            { header: "Nama Tertanggung", key: "nama_tertanggung" },
+            { header: "Jenis Bisnis", key: "jenis_bisnis" },
+            { header: "Periode Mulai", key: "periode_mulai" },
+            { header: "Periode Akhir", key: "periode_akhir" },
+            { header: "No Kwitansi", key: "no_kwitansi" },
+            { header: "Komisi Gross", key: "komisi_gross" },
+            { header: "PPH Komisi", key: "pph_komisi" },
+            { header: "Komisi Net", key: "komisi_net" },
+            { header: "Nama Asuransi", key: "nama_perusahaan_asuransi" },
+            { header: "Jenis Coas", key: "jenis_coas" },
+            { header: "Share", key: "share" },
+            { header: "Tanggal Bayar", key: "tanggal_bayar" },
+            { header: "Status", key: "status" },
+        ],
+    } as ReportProps<LaporanPelunasanKomisiRow>,
 };
 
 // Export an array of the report configurations for use in navigation or lists like ReportNavBar.

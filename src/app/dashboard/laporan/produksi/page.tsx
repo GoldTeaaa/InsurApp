@@ -1,5 +1,5 @@
 'use client';
-import LaporanProduksiTable from "@/features/laporan/produksi/LaporanProduksiTable";
+import LaporanProduksiTable from "@/features/laporan/produksi/OLDLaporanProduksiTable";
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
@@ -59,7 +59,8 @@ export default function Page() {
             />
             {/* <LaporanProduksiTable
                 data={paginatedRowData}
-            /> */}
+            />
+            <h1 className="text-center font-size-xl">OR</h1> */}
             <LapProduksiTable 
                 data={paginatedRowData}
             />

@@ -8,7 +8,6 @@ export const laporanProduksiSchema = z.object({
     nomor_polis: z.string(),
     nama_tertanggung: z.string(),
     jenis_bisnis: JENIS_BISNIS,
-    // periode_polis: z.date(), GENERATED VIA THE REPORT
     premi: z.number(),
     discount: z.number(),
     biaya_admin_materai: z.number(),

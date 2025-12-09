@@ -3,15 +3,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { formatDate, formatDateRange } from "../../../../lib/utils/formatDate";
 import { AGING_RANGE } from "@/lib/types";
-
-const formatCurrency = (value: number | null | undefined) => {
-    if (value === null || value === undefined) return '-';
-    return value.toLocaleString('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-    });
-};
+import { convertIDR } from "@/lib/utils/convertIDR";
 
 export function generateAgingPremiPDF(
     laporanData: LaporanAgingPremiRow[],
@@ -31,7 +23,8 @@ export function generateAgingPremiPDF(
         doc.text(`Periode: ${formatDate(startDate)} - ${formatDate(endDate)}`, 14, 28);
     }
 
-    // Define table columns
+    // Define table columns. jspdf-autotable expects the head to be an array of rows.
+    // Since we only have one header row, it's an array containing a single array of strings.
     const head = [
         [
             "No",
@@ -54,7 +47,7 @@ export function generateAgingPremiPDF(
     const body = laporanData.map((row) => {
         // Create an array for the aging values based on the row's bracket
         const agingValues = AGING_RANGE.map((range) =>
-            row.aging_bracket === range ? formatCurrency(row.amount_due) : "-"
+            row.aging_bracket === range ? convertIDR(row.amount_due) : "-"
         );
 
         return [
@@ -63,10 +56,10 @@ export function generateAgingPremiPDF(
             row.nomor_polis,
             row.nama_tertanggung,
             row.jenis_bisnis,
-            formatCurrency(row.premi_gross),
-            formatCurrency(row.discount),
-            formatCurrency(row.biaya_admin_materai),
-            formatCurrency(row.premi_net),
+            convertIDR(row.premi_gross),
+            convertIDR(row.discount),
+            convertIDR(row.biaya_admin_materai),
+            convertIDR(row.premi_net),
             row.nama_perusahaan_asuransi,
             row.jenis_coas,
             `${row.share}%`,
@@ -85,7 +78,7 @@ export function generateAgingPremiPDF(
         const total = laporanData
             .filter(row => row.aging_bracket === range)
             .reduce((sum, row) => sum + (row.amount_due ?? 0), 0);
-        return formatCurrency(total);
+        return convertIDR(total);
     });
 
     // Create the table
@@ -119,10 +112,10 @@ export function generateAgingPremiPDF(
         foot: [ // Add footer with totals
             [
                 { content: 'Total', colSpan: 5, styles: { halign: 'right', fontStyle: 'bold' } },
-                { content: formatCurrency(totalPremiGross), styles: { halign: 'right', fontStyle: 'bold' } },
-                { content: formatCurrency(totalDiscount), styles: { halign: 'right', fontStyle: 'bold' } },
-                { content: formatCurrency(totalBiayaAdmin), styles: { halign: 'right', fontStyle: 'bold' } },
-                { content: formatCurrency(totalPremiNet), styles: { halign: 'right', fontStyle: 'bold' } },
+                { content: convertIDR(totalPremiGross), styles: { halign: 'right', fontStyle: 'bold' } },
+                { content: convertIDR(totalDiscount), styles: { halign: 'right', fontStyle: 'bold' } },
+                { content: convertIDR(totalBiayaAdmin), styles: { halign: 'right', fontStyle: 'bold' } },
+                { content: convertIDR(totalPremiNet), styles: { halign: 'right', fontStyle: 'bold' } },
                 { content: '', colSpan: 3 },
                 ...agingTotals.map(total => (
                     { content: total }

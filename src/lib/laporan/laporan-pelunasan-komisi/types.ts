@@ -15,6 +15,7 @@ export const LaporanPelunasanKomisiRowSchema = z.object({
     jenis_coas: z.string().nullable(),
     share: z.number(),
     amount_paid: z.number(),
+    tanggal_bayar: z.string().date(),
     // amount_due: z.number(),
     status: z.string()
 });

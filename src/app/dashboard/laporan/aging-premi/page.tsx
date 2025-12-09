@@ -49,8 +49,16 @@ export default function Page() {
                 search={search}
             />
             <LaporanFilter
-                handlePDFPreview={async () => { if (await prepareDataForExport()) { handlePDFPreview(); } }}
-                handleExcelPreview={async () => { if (await prepareDataForExport()) { handleExcelPreview(); } }}
+                handlePDFPreview={async () => {
+                    if (await prepareDataForExport()) {
+                        handlePDFPreview();
+                    }
+                }}
+                handleExcelPreview={async () => {
+                    if (await prepareDataForExport()) {
+                        handleExcelPreview();
+                    }
+                }}
             />
             <LaporanAgingPremiTable
                 data={paginatedRowData}

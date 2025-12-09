@@ -1,5 +1,4 @@
 import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
-import { jenis_bisnis } from "@/lib/types";
 import { formatDate, formatDateRange } from "@/lib/utils/formatDate";
 import ExcelJS from "exceljs";
 
@@ -175,10 +174,6 @@ export const generateProduksiExcel = async (
       subtotalRow.getCell("C").alignment = { horizontal: "right" };
     }
 
-    // Add a spacer row between different policy groups, but not after the last one
-    if (index < policyGroups.length - 1) {
-      worksheet.addRow([]);
-    }
   });
 
   // === 5. ADD GRAND TOTAL FOOTER ===

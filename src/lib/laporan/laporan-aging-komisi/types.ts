@@ -20,7 +20,7 @@ export const LaporanAgingKomisiItemSchema = z.object({
 	amount_paid: z.number(),
 	amount_due: z.number(),
 	aging_bracket: z.enum(AGING_RANGE),
-	nomor_kwitansi: z.string(),
+	nomor_kwitansi: z.string().optional().nullable().transform(val => val || " - "),
 	komisi_gross: z.number(),
 	pph: z.number(),
 	komisi_net: z.number(),

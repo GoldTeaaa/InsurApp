@@ -5,10 +5,10 @@ interface ColumnConfig {
     key: string;
     header: string;
     // The formatter is now optional and can be used for more complex cases in the future
-    formatter?: (value: any) => ReactNode;
+    formatter?: (value: string) => ReactNode;
 }
 
-export function excelColumnParser<T extends Record<string, any>>(columns: ColumnConfig[] | undefined) {
+export function excelColumnParser<T extends Record<string, unknown>>(columns: ColumnConfig[] | undefined) {
     if (!columns) return [];
 
     return columns.map((column) => ({

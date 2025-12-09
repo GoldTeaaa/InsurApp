@@ -40,7 +40,7 @@ const kendaraanSchema = z.object({
 });
 
 const healthSchema = z.object({
-  bisnis: z.literal("kesehatan"),
+  bisnis: z.literal("health"),
 });
 const marineSchema = z.object({
   bisnis: z.literal("marine_cargo"),

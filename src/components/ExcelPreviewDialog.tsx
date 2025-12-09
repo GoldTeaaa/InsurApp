@@ -21,7 +21,14 @@ interface ExcelPreviewDialogProps<T> {
     columns: ColumnDefinition<T>[];
 }
 
-export default function ExcelPreviewDialog<T>({ isOpen, onClose, onDownload, data, title, columns }: ExcelPreviewDialogProps<T>) {
+export default function ExcelPreviewDialog<T>({
+    isOpen,
+    onClose,
+    onDownload,
+    data,
+    title,
+    columns
+}: ExcelPreviewDialogProps<T>) {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[90vw] h-[90vh] flex flex-col">

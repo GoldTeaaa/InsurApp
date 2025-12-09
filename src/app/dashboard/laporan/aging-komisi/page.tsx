@@ -1,51 +1,80 @@
-import DateFilter from "@/components/DateFilter";
+'use client';
+import LaporanFilter from "@/components/LaporanFilter";
 import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
-import getLapAgingKomisiData from "@/features/laporan/aging-komisi/actions/getLapAgingKomisiData";
 import LaporanAgingKomisiTable from "@/features/laporan/aging-komisi/LaporanAgingKomisiTable";
-import { AgingKomisiSearchParamsSchema } from "@/lib/laporan/laporan-aging-komisi/types";
-import NormalizeSearchParams from "@/lib/normalizeSearchParams";
-import { RawSearchParams } from "@/lib/types";
-import { JSX } from "react";
+import { LaporanAgingKomisiItem } from "@/lib/laporan/laporan-aging-komisi/types";
+import PDFPreviewDialog from "@/components/PDFPreviewDialog";
+import ExcelPreviewDialog from "@/components/ExcelPreviewDialog";
+import { reportsConfig } from "@/lib/laporan/laporan-options";
+import { excelColumnParser } from "@/lib/utils/excelColumnParser";
+import getLapAgingKomisiData from "@/features/laporan/aging-komisi/actions/getLapAgingKomisiData";
+import useLapAgingKomisiDownload from "@/features/laporan/aging-komisi/actions/useLapAgingKomisiDownload";
+import { useLaporanData } from "@/features/laporan/useLaporanData";
 
-export default async function Page({
-    searchParams
-}: { searchParams: Promise<RawSearchParams> }):Promise<JSX.Element> {
+export default function Page() {
+    const {
+        paginatedRowData,
+        exportRowData,
+        pageCount,
+        search, page, startDate, endDate,
+        prepareDataForExport
+    } = useLaporanData<LaporanAgingKomisiItem>({ fetcher: getLapAgingKomisiData });
 
-    const raw = await searchParams;
-    const params = NormalizeSearchParams(raw);
+    const {
+        pdfPreview,
+        handlePDFPreview,
+        handlePDFDownload,
+        closePDFPreview,
+        isExcelPreviewOpen,
+        handleExcelPreview,
+        closeExcelPreview,
+        handleExcelExport,
+    } = useLapAgingKomisiDownload({
+        rowData: exportRowData,
+        startDate,
+        endDate
+    });
 
-    const parsedParams = AgingKomisiSearchParamsSchema.safeParse(params);
-    if (!parsedParams.success) {
-        throw new Error(parsedParams.error.message);
-    }
+    // Assuming 'aging-komisi' is a key in reportsConfig
+    const reportConfig = reportsConfig["aging-komisi"];
 
-    const search = parsedParams.data.search ?? "";
-    const page = Number(parsedParams.data.page ?? 1);
-    const size = Number(parsedParams.data.size ?? 10);
-
-    const response = await getLapAgingKomisiData({ searchParams: params });
-    if (!response.success) {
-        throw new Error(response.message);
-    }
-    const pageCount = Math.ceil((response.data?.total_count ?? 0) / size);
+    const excelColumns = excelColumnParser(reportConfig.columns);
 
     return (
         <div>
-            <div className="flex justify-between items-center w-full">
-                <Search
-                    placeholder="Cari nomor-polis / nama / asuransi"
-                    search={search ?? ""}
-                />
-            </div>
-            <DateFilter />
+            <Search
+                placeholder="Cari nomor-polis / nama / asuransi"
+                search={search}
+            />
+            <LaporanFilter
+                handlePDFPreview={async () => { if (await prepareDataForExport()) { handlePDFPreview(); } }}
+                handleExcelPreview={async () => { if (await prepareDataForExport()) { handleExcelPreview(); } }}
+            />
             <LaporanAgingKomisiTable
-                data={response.data ? response.data.rows : []}
+                data={paginatedRowData}
             />
             <Pagination
                 page={page}
                 pageCount={pageCount}
             />
+            <div>
+                <PDFPreviewDialog
+                    isOpen={pdfPreview.isOpen}
+                    onClose={closePDFPreview}
+                    onDownload={handlePDFDownload}
+                    pdfDataUrl={pdfPreview.dataUrl}
+                    title="Preview Laporan Aging Komisi"
+                />
+                <ExcelPreviewDialog<LaporanAgingKomisiItem>
+                    isOpen={isExcelPreviewOpen}
+                    onClose={closeExcelPreview}
+                    onDownload={handleExcelExport}
+                    title="Preview Laporan Aging Komisi (Excel)"
+                    data={exportRowData}
+                    columns={excelColumns}
+                />
+            </div>
         </div>
     );
 }

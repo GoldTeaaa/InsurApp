@@ -1,6 +1,10 @@
 import ReportNavBar from "@/lib/laporan/ReportNavBar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+type LayoutProps = {
+    children: React.ReactNode
+}
+
+export default function Layout({ children }: LayoutProps) {
     return (
         <div className="space-y-4">
             <ReportNavBar/>

@@ -49,13 +49,13 @@ export default function PerusahaanForm({
     });
     const [isTransitioning, startTransition] = useTransition();
 
-    // const handleReset = () => {
+    // const handleReset = () => { 
     //     method.reset(defaultPerusahaanForm);
     // }
 
     useEffect(() => {
         if (state.success) {
-            router.push("/dashboard/perusahaan-asuransi");
+            router.back();
             toast.success(state.message);
         }
     }, [state, method, router]);

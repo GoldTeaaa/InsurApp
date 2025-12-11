@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const data = prefill.data ?? notFound();
 
   return (
-    <div className="p-4">
+    <div className="p-4 w-max-md">
       <h1 className="text-xl font-semibold mb-4">Edit Perusahaan Asuransi</h1>
       <PerusahaanAsuransiForm 
         mode="update"

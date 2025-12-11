@@ -20,16 +20,12 @@ export default async function getNasabahCardDetails(
     return { success: false, message: "Failed to fetch nasabah details." };
   }
 
-  console.log("data before PARSE: ", data);
-
   const parsedData = nasabahDetailsSchema.safeParse(data);
 
   if (!parsedData.success) {
     console.error("Zod validation failed:", parsedData.error.flatten());
     return { success: false, message: "Invalid data structure from API." };
   }
-
-  console.log("data after PARSE: ", parsedData.data);
 
   return { success: true, message: "Success", data: parsedData.data };
 }

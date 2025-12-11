@@ -66,6 +66,7 @@ export default function LaporanTable<TData>({
                                             style={{
                                                 position: isPinned ? 'sticky' : 'static',
                                                 left: isPinned === 'left' ? `${header.getStart()}px` : undefined,
+                                                // right: isPinned === 'right' ? `${header.column.getAfter()}px` : undefined,
                                                 zIndex: isPinned ? 1 : 0,
                                             }}
                                         >
@@ -98,6 +99,8 @@ export default function LaporanTable<TData>({
                                                     style={{
                                                         position: isPinned ? 'sticky' : 'static',
                                                         left: isPinned === 'left' ? `${cell.column.getStart()}px` : undefined,
+                                                        right: isPinned === 'right' ? `${cell.column.getAfter()}px` : undefined,
+                                                        zIndex: isPinned ? 1 : 0,
                                                     }}
                                                 >
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

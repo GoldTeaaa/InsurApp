@@ -17,9 +17,7 @@ export default function useLaporanProduksiExporter({
   // To tell the typescript inside the useLaporanExporter
   // that the rowData is an array, we need to use the single
   // LaporanProduksiRow type and can't use the LaporanProduksiTable
-  console.log("rowData: ", rowData);
-  const transformedData = TransformProduksiData(rowData);
-  console.log("transformedData: ", transformedData);
+  // const transformedData = TransformProduksiData(rowData);
 
   return useLaporanExporter<LaporanProduksiRow>({
     rowData,

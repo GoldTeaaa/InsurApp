@@ -6,7 +6,7 @@ export default function Page() {
     return (
         <RouteModal
             title="Tambah Perusahaan Asuransi"
-            className="sm:max-w-[600px]"
+            className="sm:max-w-[900px]"
         >
             <PerusahaanAsuransiForm mode="create" />
         </RouteModal>

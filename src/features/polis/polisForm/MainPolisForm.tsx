@@ -136,7 +136,6 @@ export default function MainPolisForm() {
 
     const next = async () => {
         const output = await trigger(fieldToModify, { shouldFocus: true })
-        console.log("output: ", output)
 
         if (!output) {
             setToastErrors(errors);

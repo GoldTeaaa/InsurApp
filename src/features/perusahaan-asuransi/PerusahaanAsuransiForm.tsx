@@ -70,7 +70,7 @@ export default function PerusahaanForm({
                         formAction(formData);
                     });
                 })}
-                className="max-w-xl mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                className="w-full mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <h2 className="text-lg font-semibold">{mode === "create" ? "Tambah Perusahaan Asuransi" : "Update Perusahaan Asuransi"}</h2>
 
                 <FormTextField<PerusahaanForm>
@@ -95,8 +95,8 @@ export default function PerusahaanForm({
                 />
 
                 <div className="pt-2 flex gap-2">
-                    <Button type="submit" disabled={isPending}>
-                        {isPending ? "Menyimpan..." : "Simpan"}
+                    <Button type="submit" disabled={isPending || isTransitioning}>
+                        {isPending || isTransitioning ? "Menyimpan..." : "Simpan"}
                     </Button>
                     <Link href={"/dashboard/perusahaan-asuransi"}>
                         <Button variant="ghost">

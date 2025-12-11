@@ -4,18 +4,10 @@ import { UpdateInvoice } from "../buttons";
 import { DeleteButton } from "@/components/DeleteButton";
 import { deleteNasabahAction } from "@/features/nasabah/actions/deleteNasabah";
 import { NasabahTableRow } from "@/lib/nasabah/tableType";
-
-function fmt(iso?: string | null) {
-  if (!iso) return "—";
-  try {
-    return new Date(iso).toLocaleString("id-ID", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-  } catch {
-    return iso;
-  }
-}
+import { formatDate } from "@/lib/utils/formatDate";
+import TableAction from "@/components/TableAction";
+import { table } from "console";
+import { TableMetaAction } from "@/lib/perusahaan_asuransi/types/tableActionType";
 
 export const columnNasabah: ColumnDef<NasabahTableRow>[] = [
   {
@@ -60,27 +52,26 @@ export const columnNasabah: ColumnDef<NasabahTableRow>[] = [
   {
     accessorKey: "created_at",
     header: "Dibuat",
-    cell: ({ row }) => fmt(row.original.created_at),
+    cell: ({ row }) => formatDate(row.original.created_at),
   },
   {
     accessorKey: "updated_at",
     header: "Diubah",
-    cell: ({ row }) => fmt(row.original.updated_at),
+    cell: ({ row }) => formatDate(row.original.updated_at),
   },
   {
     id: "actions",
     header: () => <span className="sr-only">Actions</span>,
-    cell: ({ row }) => {
-      const { id } = row.original;
+    cell: ({ row, table }) => {
+      const { handleEdit, handleDelete } = table.options.meta as TableMetaAction;
+      const { id, nama  } = row.original;
       return (
-        <div className="flex justify-end gap-3">
-          <UpdateInvoice id={id} />
-          <DeleteButton
-            id={id}
-            action={deleteNasabahAction}
-            entityName="nasabah"
-          />
-        </div>
+        <TableAction 
+          id={id}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+          item={nama}
+        />
       );
     },
   },

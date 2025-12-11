@@ -16,6 +16,8 @@ import PerusahaanForm from "./NasabahPerusahaanForm";
 import { Button } from "@/components/button";
 import createNasabahAction from "@/features/nasabah/actions/createNasabah";
 import updateNasabahAction from "@/features/nasabah/actions/updateNasabah";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type CreateFormProps = {
     mode: "create";
@@ -30,6 +32,7 @@ type UpdateFormProps = {
 export type NasabahFormProps = CreateFormProps | UpdateFormProps;
 
 export default function NasabahForm(props: NasabahFormProps) {
+    const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [returnMessage, setReturnMessage] = useState('');
     const { mode } = props;
@@ -96,12 +99,14 @@ export default function NasabahForm(props: NasabahFormProps) {
             if(!res.success) {
                 setError('root', { message: res.message ?? 'Gagal menyimpan' });
             } else {
-                setReturnMessage(res.message);
-                const base = mode === 'create' ? 
-                (data.tipe === 'perusahaan' ? defaultPerusahaanFormValues : defaultPribadiFormValues) 
-                : data;
+                // setReturnMessage(res.message);
+                // const base = mode === 'create' ? 
+                // (data.tipe === 'perusahaan' ? defaultPerusahaanFormValues : defaultPribadiFormValues) 
+                // : data;
                 
-                reset(base);
+                // reset(base);
+                router.push('/dashboard/nasabah');
+                toast.success(res.message);
             }
         } catch (e) {
             setError('root', { message: 'Terjadi kesalahan pada server' });

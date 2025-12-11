@@ -1,14 +1,19 @@
 'use server';
 import { supabase } from "~/utils/supabase/client";
-import { revalidatePath } from "next/cache";
+import { ActionReturnState } from "@/lib/types";
 
-export async function deleteNasabahAction(formData: FormData) {
-  console.log("Delete FormData From Server: ", formData);
-  const id = String(formData.get("id") || "");
-  if (!id) throw new Error("Missing id");
+export async function deleteNasabahAction(id: string): Promise<ActionReturnState> {
 
-  const { error } = await supabase.rpc("nasabah_delete_v1", { p_id: id });
-  if (error) throw new Error(error.message);
+  const { data, error } = await supabase.rpc("nasabah_delete_v1", { p_id: id });
+  if (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
   
-  revalidatePath("/dashboard/nasabah"); // adjust to your route
+  return{
+    success: true,
+    message: `Successfully delete ${data[0].full_name}`
+  }
 }

@@ -9,26 +9,30 @@ import { UpdateInvoice, DeleteNasabah } from "../buttons";
 import { columnNasabah } from "./columns";
 import { NasabahTableRow } from "@/lib/nasabah/tableType";
 import { useRouter } from "next/navigation";
-
-function fmt(iso?: string | null) {
-  if (!iso) return "—";
-  try {
-    return new Date(iso).toLocaleString("id-ID", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });   
-  } catch {
-    return iso;
-  }
-}
+import { formatDate } from "@/lib/utils/formatDate";
+import { deleteNasabahAction } from "../actions/deleteNasabah";
+import { useActionState } from "react";
+import { toast } from "sonner";
 
 export default function NasabahTable({
   data
 }: { data: NasabahTableRow[] }) {
   const router = useRouter();
   
-  const rowDetail = (id: string) => {
+  const handleEdit = (id: string) => {
     router.push(`/dashboard/nasabah/${id}/edit`);
+  }
+
+  const handleDelete = async (id: string) => {
+    try{
+      const result = await deleteNasabahAction(id);
+      if(result.success){
+        router.refresh();
+        toast.success(result.message);
+      }
+    }catch(e){
+      console.error(e);
+    }
   }
 
   const table = useReactTable({
@@ -36,7 +40,8 @@ export default function NasabahTable({
     columns: columnNasabah,
     getCoreRowModel: getCoreRowModel(),
     meta:{
-      rowDetail
+      handleEdit,
+      handleDelete
     }
   });
 
@@ -68,7 +73,7 @@ export default function NasabahTable({
                 </div>
                 <div className="pt-3 text-sm text-gray-700">
                   <p className="line-clamp-2">{row.original.alamat ?? ""}</p>
-                  <p className="mt-2 text-xs text-gray-400">Dibuat: {fmt(row.original.created_at)}</p>
+                  <p className="mt-2 text-xs text-gray-400">Dibuat: {formatDate(row.original.created_at)}</p>
                 </div>
                 <div className="flex justify-end gap-2 pt-3">
                   <UpdateInvoice id={row.original.id} />

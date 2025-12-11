@@ -21,6 +21,7 @@ export default function TableAction({
     handleEdit,
     handleDelete
 }: TableActionProps) {
+    console.log('id', id, 'item', item);
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

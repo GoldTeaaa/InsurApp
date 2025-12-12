@@ -7,6 +7,7 @@ import Pagination from "@/components/Pagination";
 import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 import PerusahaanAsuransiTable from "@/features/perusahaan-asuransi/PerusahaanAsuransiTable";
+import { Plus } from "lucide-react";
 
 export default async function Page({ searchParams }: { searchParams: Promise<RawSearchParams> }) {
     const raw = await searchParams;
@@ -34,28 +35,31 @@ export default async function Page({ searchParams }: { searchParams: Promise<Raw
         <div className="w-full p-4">
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">Daftar Perusahaan Asuransi</h1>
-                <div className="w-1/3">
-                    <Search
-                        placeholder='Cari nama / email / kontak / alamat'
-                        search={search}
-                    />
-                </div>
             </div>
-            <Suspense key={`${search}-${page}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
-                <PerusahaanAsuransiTable
-                    data={rows}
+            <div className="flex flex-col gap-4">
+                <div className="flex justify-between">
+                    <div className="w-1/3">
+                        <Search
+                            placeholder='Cari nama / email / kontak / alamat'
+                            search={search}
+                        />
+                    </div>
+                    <Link href={"/dashboard/perusahaan-asuransi/tambah-daftar-asuransi"}>
+                        <button className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 flex items-center">
+                            <Plus />
+                            Tambah Perusahaan
+                        </button>
+                    </Link>
+                </div>
+                <Suspense key={`${search}-${page}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
+                    <PerusahaanAsuransiTable
+                        data={rows}
+                    />
+                </Suspense>
+                <Pagination
+                    page={page}
+                    pageCount={pageCount}
                 />
-            </Suspense>
-            <Pagination
-                page={page}
-                pageCount={pageCount}
-            />
-            <div className="mt-6">
-                <Link href={"/dashboard/perusahaan-asuransi/tambah-daftar-asuransi"}>
-                    <button className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-                        Tambah Perusahaan
-                    </button>
-                </Link>
             </div>
         </div>
     );

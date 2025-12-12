@@ -7,6 +7,7 @@ import getPolisTableData from "@/features/polis/actions/get-polis-table"
 import { polisSearchSchema } from "@/lib/polis/table-types"
 import { RawSearchParams } from "@/lib/types"
 import FilterBox from "@/components/FilterBox"
+import { Plus } from "lucide-react"
 
 export default async function Page({
 	searchParams,
@@ -39,7 +40,12 @@ export default async function Page({
 
 	return (
 		<div className="w-full p-4 space-y-4">
-			<h1 className="text-2xl font-bold">Polis</h1>
+			<div className="flex justify-between items-center">
+				<h1 className="text-2xl font-bold">Polis</h1>
+				<Button className="w-fit" asChild>
+					<Link href={"/dashboard/polis/buat-polis"}> <Plus /> Tambah Polis</Link>
+				</Button>
+			</div>
 			<div className="w-full border border-zinc-300 rounded-md p-4 space-y-4">
 				<FilterBox />
 				<div>
@@ -52,9 +58,6 @@ export default async function Page({
 					<Pagination page={page} pageCount={totalCount} />
 				</div>
 			</div>
-			<Button asChild>
-				<Link href={"/dashboard/polis/buat-polis"}>Tambah Polis</Link>
-			</Button>
 		</div>
 	)
 }

@@ -5,6 +5,7 @@ import Pagination from '@/components/Pagination';
 import NasabahTable from '@/features/nasabah/table/nasabah-table';
 import { NasabahTableSearchParams } from '@/lib/nasabah/type';
 import fetchNasabahPage from '@/features/nasabah/actions/fetch-table-page';
+import { Plus } from 'lucide-react';
 
 export default async function Page({
     searchParams
@@ -29,16 +30,26 @@ export default async function Page({
             <div className="w-full p-4">
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-2xl font-bold">Nasabah</h1>
-                    <div className="w-1/3">
+                </div>
+                <div className="flex justify-between">
+                    <div className='w-1/3'>
                         <Search
                             placeholder='Cari nama / email / kontak / alamat'
                             search={search}
                         />
                     </div>
+                    <Link
+                        href={"/dashboard/nasabah/tambah-nasabah"}
+                    >
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
+                            <Plus />
+                            Tambah Nasabah
+                        </button>
+                    </Link>
                 </div>
                 <Suspense key={`${search}-${page}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
                     <>
-                        <NasabahTable 
+                        <NasabahTable
                             data={rows}
                         />
                         <Pagination
@@ -47,15 +58,6 @@ export default async function Page({
                         />
                     </>
                 </Suspense>
-            </div>
-            <div>
-                <Link
-                    href={"/dashboard/nasabah/tambah-nasabah"}
-                >
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Tambah Nasabah
-                    </button>
-                </Link>
             </div>
         </div>
     );

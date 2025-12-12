@@ -1,3 +1,4 @@
+import FormCard from "@/components/FormCard";
 import DateField from "@/components/DateField";
 import { SelectField } from "@/components/SelectField";
 import TextField from "@/components/TextField";
@@ -9,11 +10,8 @@ export default function PribadiForm() {
     return (
         <div className="space-y-6">
             {/* === Section: Identitas === */}
-            <fieldset className="rounded-lg border border-gray-200 bg-white p-4 sm:p-5">
-                <legend className="-ml-1 px-1 text-sm font-medium text-gray-800">Identitas</legend>
-                <p className="mt-1 text-xs text-gray-500">Lengkapi data identitas nasabah pribadi.</p>
-
-                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <FormCard title="Identitas" description="Lengkapi data identitas nasabah pribadi.">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <TextField<NasabahForm> name="nama" label="Nama Lengkap" />
                     <TextField<NasabahForm>
                         name="nik"
@@ -26,30 +24,28 @@ export default function PribadiForm() {
                     <SelectField<NasabahForm> name="jenis_kelamin" label="Jenis Kelamin" options={GENDER} />
                     <TextField<NasabahForm> name="pekerjaan" label="Pekerjaan" />
                 </div>
-            </fieldset>
-
-            {/* Divider */}
-            <div className="h-px bg-gray-100" />
+            </FormCard>
 
             {/* === Section: Alamat Sesuai KTP === */}
-            <fieldset className="rounded-lg border border-gray-200 bg-white p-4 sm:p-5">
-                <legend className="-ml-1 px-1 text-sm font-medium text-gray-800">Alamat Sesuai KTP</legend>
-                <p className="mt-1 text-xs text-gray-500">Gunakan alamat yang tercantum pada KTP.</p>
-
-                <div className="mt-4 grid grid-cols-1 gap-4">
+            <FormCard title="Alamat Sesuai KTP" description="Gunakan alamat yang tercantum pada KTP.">
+                <div className="grid grid-cols-1 gap-4">
                     <TextField<NasabahForm> name="alamat_ktp" label="Alamat KTP" />
                 </div>
 
-                <div className="mt-4 grid grid-cols-2 gap-4 sm:max-w-md">
-                    <TextField<NasabahForm> name="rt" label="RT" />
-                    <TextField<NasabahForm> name="rw" label="RW" />
-                </div>
-
-                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <TextField<NasabahForm> name="kelurahan_desa" label="Kelurahan/Desa" />
                     <TextField<NasabahForm> name="kecamatan" label="Kecamatan" />
+
+                </div>
+
+                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <TextField<NasabahForm> name="kota_kabupaten" label="Kota/Kabupaten" />
                     <TextField<NasabahForm> name="provinsi" label="Provinsi" />
+                </div>
+                
+                <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-2">
+                    <TextField<NasabahForm> name="rt" label="RT" />
+                    <TextField<NasabahForm> name="rw" label="RW" />
                 </div>
 
                 <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -57,17 +53,11 @@ export default function PribadiForm() {
                     <SelectField<NasabahForm> name="status_perkawinan" label="Status Perkawinan" options={STATUS_PERKAWINAN} />
                     <SelectField<NasabahForm> name="kewarganegaraan" label="Kewarganegaraan" options={KEWARGANEGARAAN} />
                 </div>
-            </fieldset>
-
-            {/* Divider */}
-            <div className="h-px bg-gray-100" />
+            </FormCard>
 
             {/* === Section: Kontak & Alamat Tinggal === */}
-            <fieldset className="rounded-lg border border-gray-200 bg-white p-4 sm:p-5">
-                <legend className="-ml-1 px-1 text-sm font-medium text-gray-800">Kontak & Alamat Tinggal</legend>
-                <p className="mt-1 text-xs text-gray-500">Informasi untuk keperluan komunikasi dan domisili saat ini.</p>
-
-                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <FormCard title="Kontak & Alamat Tinggal" description="Informasi untuk keperluan komunikasi dan domisili saat ini.">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <TextField<NasabahForm>
                         name="contact_1"
                         label="Kontak Utama"
@@ -83,9 +73,9 @@ export default function PribadiForm() {
                 </div>
 
                 <div className="mt-4 grid grid-cols-1 gap-4">
-                    <TextField<NasabahForm> name="alamat" label="Alamat Tinggal"/>
+                    <TextField<NasabahForm> name="alamat" label="Alamat Tinggal" />
                 </div>
-            </fieldset>
+            </FormCard>
         </div>
     );
 }

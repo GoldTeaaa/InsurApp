@@ -14,11 +14,12 @@ export const columnNasabah: ColumnDef<NasabahTableRow>[] = [
     accessorKey: "nama",
     header: "Nama",
     cell: ({row, table}) => {
-      const {rowDetail} = table.options.meta as {rowDetail: (id: string) => void}
+      const {handleEdit} = table.options.meta as TableMetaAction;
+      const {id} = row.original;
 
       return(
         <button
-          onClick={() => rowDetail(row.original.id)}
+          onClick={() => handleEdit(id)}
           className="text-left underline underline-offset-10 decoration-current/20 hover:underline"
         >
           {row.original.nama}

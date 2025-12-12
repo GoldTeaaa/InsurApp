@@ -18,6 +18,7 @@ import createNasabahAction from "@/features/nasabah/actions/createNasabah";
 import updateNasabahAction from "@/features/nasabah/actions/updateNasabah";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Save } from "lucide-react";
 
 type CreateFormProps = {
     mode: "create";
@@ -34,7 +35,6 @@ export type NasabahFormProps = CreateFormProps | UpdateFormProps;
 export default function NasabahForm(props: NasabahFormProps) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [returnMessage, setReturnMessage] = useState('');
     const { mode } = props;
 
     const updateId = mode === "update" ? props.id : "";
@@ -72,21 +72,9 @@ export default function NasabahForm(props: NasabahFormProps) {
         }
     }, [tipe, mode, reset]);
 
-
-    useEffect(() => {
-        if (returnMessage) {
-            const timer = setTimeout(() => {
-                setReturnMessage('');
-            }, 5000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [returnMessage]);
-
     const submit = async (data: NasabahForm) => {
         try {
             setIsSubmitting(true);
-            setReturnMessage('');
             clearErrors('root');
 
             const res = mode === 'create'
@@ -99,12 +87,6 @@ export default function NasabahForm(props: NasabahFormProps) {
             if(!res.success) {
                 setError('root', { message: res.message ?? 'Gagal menyimpan' });
             } else {
-                // setReturnMessage(res.message);
-                // const base = mode === 'create' ? 
-                // (data.tipe === 'perusahaan' ? defaultPerusahaanFormValues : defaultPribadiFormValues) 
-                // : data;
-                
-                // reset(base);
                 router.push('/dashboard/nasabah');
                 toast.success(res.message);
             }
@@ -120,7 +102,7 @@ export default function NasabahForm(props: NasabahFormProps) {
             <form
                 onSubmit={handleSubmit(submit)}
                 aria-busy={isSubmitting}                
-                className="mx-auto mt-8 w-full max-w-2xl md:max-w-3xl rounded-xl border border-gray-200/80 bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur focus-within:ring-2 focus-within:ring-indigo-500/30 transition-shadow"
+                className="mx-auto mt-8 w-full max-w-2xl md:max-w-3xl rounded-xl bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur focus-within:ring-2 focus-within:ring-indigo-500/30 transition-shadow"
             >
                 {/* Header */}
                 <div className="mb-4 sm:mb-6">
@@ -139,17 +121,8 @@ export default function NasabahForm(props: NasabahFormProps) {
                     </div>
                 )}
 
-                {!!returnMessage && (
-                    <div
-                        role="status"
-                        className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm text-emerald-700"
-                    >
-                        {returnMessage}
-                    </div>
-                )}
-
                 {/* Card: Tipe + Placeholder for form sections */}
-                <div className="rounded-lg border border-gray-200 bg-white px-3 py-3 sm:px-4 sm:py-4">
+                <div className="rounded-lg bg-white px-3 py-3 sm:px-4 sm:py-4">
 
                     <div className="mb-4">
                         {mode === 'update' 
@@ -174,7 +147,7 @@ export default function NasabahForm(props: NasabahFormProps) {
                 <div className="mt-5 sm:mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end border-t border-gray-100 pt-4">
                     <Link href="/dashboard/nasabah">
                         <Button 
-                        type="button" 
+                        type="button"  
                         variant="outline">
                             Kembali
                         </Button>
@@ -182,8 +155,10 @@ export default function NasabahForm(props: NasabahFormProps) {
                     <Button
                         type="submit"
                         disabled={isSubmitting || isFormSubmitting || (mode === 'update' && !isDirty)}
+                        className="flex items-center gap-2"
                     >
-                        {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+                        <Save />
+                        {isSubmitting ? 'Menyimpan...' : (mode === 'create' ? 'Simpan' : 'Update')}
                     </Button>
                 </div>
             </form>

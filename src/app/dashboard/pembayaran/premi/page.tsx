@@ -8,7 +8,7 @@ import { PembayaranTableRow } from "@/lib/pembayaran/pembayaran_premi/types";
 import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 
 export default async function Page({ searchParams }: {
-    searchParams : Promise<RawSearchParams>
+    searchParams: Promise<RawSearchParams>
 }) {
     const raw = await searchParams;
     const normalized = NormalizeSearchParams(raw);
@@ -33,11 +33,15 @@ export default async function Page({ searchParams }: {
     return (
         <div>
             <h1 className="text-2xl font-bold mb-4">Pembayaran Premi</h1>
-            <Search
-                placeholder="Cari nomor-polis / nama / asuransi"
-                search={search}
-            />
-            <StatusFilters />
+            <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                <div className="w-full md:w-1/2">
+                    <Search
+                        placeholder="Cari nomor-polis / nama / asuransi"
+                        search={search}
+                    />
+                </div>
+                <StatusFilters />
+            </div>
             <PembayaranTable
                 data={tableData}
             />

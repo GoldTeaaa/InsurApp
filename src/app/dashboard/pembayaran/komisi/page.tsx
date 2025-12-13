@@ -38,11 +38,13 @@ export default async function Page({
         <div>
             <h1 className="text-2xl font-bold mb-4">Detail Komisi</h1>
             <div>
-                <div className="flex justify-between items-center mb-4">
-                    <Search
-                        placeholder="Cari nomor-polis / nama "
-                        search={search}
-                    />
+                <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                    <div className="w-full md:w-1/2">
+                        <Search
+                            placeholder="Cari nomor-polis / nama "
+                            search={search}
+                        />
+                    </div>
                     <StatusFilters />
                 </div>
                 <KomisiPembayaranTable data={tableRowData} />

@@ -1,5 +1,4 @@
 'use client';
-import LaporanProduksiTable from "@/features/laporan/produksi/OLDLaporanProduksiTable";
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
 import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
@@ -15,6 +14,7 @@ import LapProduksiTable from "@/features/laporan/produksi/LapProduksiTable";
 
 // Can't use searchParams because need to have onClick event for download
 export default function Page() {
+
     const {
         paginatedRowData,
         exportRowData,
@@ -25,7 +25,7 @@ export default function Page() {
 
     const {
         pdfPreview,
-        handlePDFPreview,
+        handlePDFPreview, 
         handlePDFDownload,
         closePDFPreview,
         isExcelPreviewOpen,

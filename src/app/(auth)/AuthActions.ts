@@ -3,7 +3,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "~/utils/supabase/server";
 import { signinValues, signupValues } from "./types";
-import { form } from "framer-motion/client";
 
 type ActionState = {
   error?: string | null;

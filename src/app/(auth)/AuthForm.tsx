@@ -8,9 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { signin, signup } from "./actions";
+import { signin, signup } from "./AuthActions";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthFormValues, authSchema, signinDefaultValues, signupDefaultValues } from "./types";

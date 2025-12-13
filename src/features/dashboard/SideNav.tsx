@@ -15,7 +15,7 @@ import NavDropdown from "./NavDropdown";
 import { cn } from "@/lib/utils/clsx";
 import { NavItem } from "@/lib/sideNav/types";
 import { Button } from "@/components/ui/button";
-import { signout } from "@/app/(auth)/actions";
+import { signout } from "@/app/(auth)/AuthActions";
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },

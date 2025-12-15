@@ -1,13 +1,14 @@
 'use server';
 import { laporanProduksiRPCSchema, RPCGetLaporanProduksi } from "@/lib/laporan/laporan-produksi/types";
-import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState, SearchParamsProps } from "@/lib/types";
+import { createClient } from "~/utils/supabase/server";
 
 type ReturnState = ActionReturnState<RPCGetLaporanProduksi>;
 
 export default async function getLaporanProduksiData({
     searchParams
 }: { searchParams: SearchParamsProps }): Promise<ReturnState> {
+    const supabase = await createClient();
 
     const params = await searchParams;
     const search = params?.search ?? "";

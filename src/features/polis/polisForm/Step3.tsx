@@ -3,7 +3,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import TotalPremiDisplay from "./TotalPremiDisplay";
 import TotalSharePercentage from "./TotalSharePercentage";
 import { useEffect, useState } from "react";
-import getPerusahaanList from "../actions/get-perusahaan-list";
+import getPerusahaanList from "../actions/getPerusahaanList";
 import type { ListPerusahaanType } from "@/lib/polis/step3";
 import CoasFields from "./CoasField";
 import PremiKomisiBox from "./PremiKomisiBox";

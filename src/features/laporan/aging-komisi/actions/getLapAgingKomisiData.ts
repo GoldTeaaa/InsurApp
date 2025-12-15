@@ -4,7 +4,7 @@ import {
   type LaporanAgingKomisiRPCPayload,
   LaporanAgingKomisiRPCPayloadSchema,
 } from "@/lib/laporan/laporan-aging-komisi/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState, SearchParamsProps } from "@/lib/types";
 
 type ReturnState = ActionReturnState<LaporanAgingKomisiRPCPayload>;
@@ -14,6 +14,7 @@ export default async function getLapAgingKomisiData({
 }: {
   searchParams: SearchParamsProps;
 }): Promise<ReturnState> {
+  const supabase = await createClient();
   const params = await searchParams;
   const parsedParams = AgingKomisiSearchParamsSchema.safeParse(params);
   if (!parsedParams.success) {

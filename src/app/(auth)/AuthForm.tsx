@@ -44,6 +44,8 @@ export function AuthForm({
       );
       if (res?.error) {
         setResponse({ error: res.error });
+      }else{
+        setResponse({ message: res?.message });
       }
     } catch (error) {
       // The redirect function throws an error, so we need to catch it and ignore it.
@@ -80,8 +82,8 @@ export function AuthForm({
             <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
               {mode === "signup" && (
                 <FormTextField<AuthFormValues>
-                  name="display_name"
-                  label="Display Name"
+                  name="username"
+                  label="User Name"
                   type="text"
                   placeholder="John Doe"
                 />

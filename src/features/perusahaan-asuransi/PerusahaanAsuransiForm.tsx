@@ -8,11 +8,11 @@ import {
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormTextField from "@/components/TextField";
-import { createPerusahaan, type ReturnState } from "./actions/createAction";
+import { createPerusahaan, type ReturnState } from "./actions/createPerusahaan";
 import { Button } from "@/components/button";
 import Link from "next/link";
 import { toast } from "sonner";
-import { updatePerusahaanAction } from "./actions/update-form";
+import { updatePerusahaanAction } from "./actions/updatePerusahaan";
 import { useRouter } from "next/navigation";
 
 type PerusahaanFormProps = | {

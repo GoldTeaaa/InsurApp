@@ -4,7 +4,7 @@ import { createClient } from "~/utils/supabase/server";
 
 type CurrentUser = {
   email?: string;
-  display_name?: string;
+  username?: string;
 };
 
 type ReturnState = ActionReturnState<CurrentUser>;
@@ -27,7 +27,7 @@ export default async function getCurrentUser(): Promise<ReturnState> {
     message: "Successfully retrieved user.",
     data: {
       email: data.user.email,
-      display_name: data.user.user_metadata?.display_name,
+      username: data.user.user_metadata?.username,
     },
   };
 }

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Search from "@/components/Search";
 // import Table from "@/features/perusahaan-asuransi/table-view";
-import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/fetch-table-perusahaan";
+import { fetchPerusahaanPage } from "@/features/perusahaan-asuransi/actions/getTablePerusahaan";
 import Pagination from "@/components/Pagination";
 import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 import NormalizeSearchParams from "@/lib/normalizeSearchParams";

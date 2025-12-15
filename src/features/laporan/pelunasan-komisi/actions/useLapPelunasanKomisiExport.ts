@@ -1,7 +1,7 @@
 import { LaporanPelunasanKomisiRow } from "@/lib/laporan/laporan-pelunasan-komisi/types";
 import useLaporanExporter from "../../useLaporanExporter";
-import generatePelunasanKomisiExcel from "./excel-pelunasan-komisi-generator";
-import generatePelunasanKomisiPDF from "./pdf-pelunasan-komisi-generator";
+import generatePelunasanKomisiExcel from "./exportExcelPelunasanKomisi";
+import generatePelunasanKomisiPDF from "./exportPdfPelunasanKomisi";
 
 interface ExporterProps {
   rowData: LaporanPelunasanKomisiRow[];

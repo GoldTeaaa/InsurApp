@@ -1,6 +1,6 @@
 "use server";
 import { nasabahDetailsSchema, NasabahDetailsType } from "@/lib/polis/step1";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 import z from "zod";
 
@@ -12,6 +12,7 @@ type ReturnState = ActionReturnState<NasabahDetailsType>;
 export default async function getNasabahCardDetails(
   id: Id
 ): Promise<ReturnState> {
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc("polis_card_view_pribadi", {
     p_id: id,
   });

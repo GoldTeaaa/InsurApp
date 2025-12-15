@@ -1,7 +1,7 @@
 "use server";
 
 import { RefinedViewPolisSchema, ViewPolisSchema } from "@/lib/polis/get-types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 import { z } from "zod";
 
@@ -11,6 +11,7 @@ type ReturnState = ActionReturnState<UpdatePolisData>;
 export default async function updatePolis(
   formData: UpdatePolisData
 ): Promise<ReturnState> {
+  const supabase = await createClient();
   const parsedData = RefinedViewPolisSchema.safeParse(formData);
 
   if (!parsedData.success) {

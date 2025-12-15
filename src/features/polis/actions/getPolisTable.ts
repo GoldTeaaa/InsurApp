@@ -1,6 +1,6 @@
 "use server";
 import { ActionReturnState } from "@/lib/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { PolisRow, polisSearchSchema, PolisTableSearchParams } from "@/lib/polis/table-types";
 import { PolisTableRow } from "@/lib/polis/table-types";
 // import { Polis } from "@/lib/polis/create-types";
@@ -12,6 +12,7 @@ export default async function getPolisTableData({
 }: {
   searchParams: PolisTableSearchParams;
 }): Promise<ReturnState> {
+  const supabase = await createClient();
   const params = await searchParams;
 
   const parsedData = polisSearchSchema.safeParse(params).data;

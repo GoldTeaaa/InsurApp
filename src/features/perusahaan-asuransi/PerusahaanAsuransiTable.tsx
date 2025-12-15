@@ -11,7 +11,7 @@ import {
 import { PerusahaanAsuransiColumns } from "./columns";
 import { PerusahaanList } from "@/lib/perusahaan_asuransi/types";
 import { useRouter } from "next/navigation";
-import deletePerusahaanAction from "./actions/delete";
+import deletePerusahaanAction from "./actions/deletePerusahaan";
 import { toast } from "sonner";
 
 export default function PerusahaanAsuransiTable({

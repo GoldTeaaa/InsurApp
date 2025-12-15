@@ -2,11 +2,12 @@
 
 import { ListPerusahaan, type ListPerusahaanType } from "@/lib/polis/step3";
 import { ActionReturnState } from "@/lib/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 
 type ReturnState = ActionReturnState<ListPerusahaanType[]>;
 
 export default async function getPerusahaanList():Promise<ReturnState> {
+    const supabase = await createClient();
 
     const {data, error} = await supabase
     .from("perusahaan_asuransi")

@@ -1,6 +1,6 @@
 import { LaporanAgingKomisiItem } from "@/lib/laporan/laporan-aging-komisi/types";
-import { generateAgingKomisiExcel } from './aging-komisi-excel-generator';
-import { generateAgingKomisiPDF } from './pdf-aging-komisi-generator';
+import { generateAgingKomisiExcel } from './exportExcelAgingKomisi';
+import { generateAgingKomisiPDF } from './exportPdfAgingKomisi';
 import useLaporanExporter from '../../useLaporanExporter';
 
 interface ExporterProps {

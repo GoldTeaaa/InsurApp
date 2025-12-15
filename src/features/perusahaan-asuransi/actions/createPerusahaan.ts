@@ -5,7 +5,7 @@ import {
   perusahaanCreateToRpcSchema,
   type PerusahaanReturnResult,
 } from "@/lib/perusahaan_asuransi/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 
 export type ReturnState = ActionReturnState<PerusahaanReturnResult>;
@@ -14,6 +14,7 @@ export async function createPerusahaan(
   _prevState: ReturnState,
   formData: FormData
 ): Promise<ReturnState> {
+  const supabase = await createClient();
 
   const parsed = perusahaanFormSchema.safeParse(
     Object.fromEntries(formData.entries())

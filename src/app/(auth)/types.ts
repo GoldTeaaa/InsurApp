@@ -10,7 +10,7 @@ export const signinSchema = z.object({
 
 export const signupSchema = z.object({
     mode: z.literal("signup"),
-    display_name: z.string().min(3, "Nama minimal 3 karakter"),
+    username: z.string().min(3, "Nama minimal 3 karakter"),
     email: z.string().email({
         message: "Email tidak valid"
     }),
@@ -31,7 +31,7 @@ export const signinDefaultValues = {
 
 export const signupDefaultValues = {
     mode: "signup" as const,
-    display_name: "",
+    username: "",
     email: "",
     password: ""
 }

@@ -9,7 +9,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/dropdown-menu"
 import { Button } from "@/components/button"
-import deletePolis from "@/features/polis/actions/delete_polis"
+import deletePolis from "@/features/polis/actions/deletePolis"
 import {
     AlertDialog,
     AlertDialogAction,

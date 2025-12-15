@@ -1,7 +1,7 @@
 "use server";
 
 import { updatePembayaranFormSchema, updatePembayaranPremiPayloadSchema } from "@/lib/pembayaran/pembayaran_premi/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 
 type State = {
   success: boolean;
@@ -13,6 +13,7 @@ export default async function updatePembayaranAction(
   prevState: State,
   formData: FormData
 ): Promise<State> {
+  const supabase = await createClient();
   const validatedFields = updatePembayaranFormSchema.safeParse(
     Object.fromEntries(formData.entries())
   );

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import ErrorToast from "@/features/polis/polisForm/ErrorToast";
-import updatePolis from "../actions/update-polis";
+import updatePolis from "../actions/updatePolis";
 
 const BasePolisField = {
     fields: [

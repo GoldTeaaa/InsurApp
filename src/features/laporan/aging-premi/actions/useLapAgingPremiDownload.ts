@@ -1,6 +1,6 @@
 import { LaporanAgingPremiRow } from "@/lib/laporan/laporan-aging-premi/types";
-import { generateAgingPremiPDF } from "@/features/laporan/aging-premi/actions/pdf-aging-premi-generator";
-import { generateAgingPremiExcel } from '@/features/laporan/aging-premi/actions/aging-premi-excel-generator';
+import { generateAgingPremiPDF } from "@/features/laporan/aging-premi/actions/exportPdfAgingPremi";
+import { generateAgingPremiExcel } from '@/features/laporan/aging-premi/actions/exportExcelAgingPremi';
 import useLaporanExporter from '../../useLaporanExporter';
 
 interface ExporterProps {

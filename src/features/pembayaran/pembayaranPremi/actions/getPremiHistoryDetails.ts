@@ -1,6 +1,6 @@
 "use server";
 import { PremiHistoryRow } from "@/lib/pembayaran/pembayaran_premi/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<PremiHistoryRow[]>;
@@ -8,6 +8,7 @@ type ReturnState = ActionReturnState<PremiHistoryRow[]>;
 export default async function getPremiHistoryDetails(
   detailPremiId: string
 ): Promise<ReturnState> {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("pembayaran_history_view")
     .select(

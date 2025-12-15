@@ -1,6 +1,6 @@
 import { NasabahTableRPC, NasabahTableRPCSchema } from "@/lib/nasabah/tableType";
 import { NasabahTableSearchParams } from "@/lib/nasabah/type";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<NasabahTableRPC>
@@ -8,7 +8,8 @@ type ReturnState = ActionReturnState<NasabahTableRPC>
 export default async function fetchNasabahPage({
   searchParams
 }: {searchParams: NasabahTableSearchParams}):Promise<ReturnState> {
-
+  
+  const supabase = await createClient();
   const params = await searchParams;
   const page = Number(params?.page ?? 1);
   const size = Number(params?.size ?? 10);

@@ -1,6 +1,6 @@
 'use server';
 import { GetPolisSchema, ViewPolisSchema } from "@/lib/polis/get-types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 
 const formatDateForInput = (date: string | Date | null | undefined): string => {
@@ -17,6 +17,7 @@ type ReturnState = ActionReturnState<GetPolisSchema>;
 export default async function getPolisDetails(
   id: string
 ): Promise<ReturnState> {
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_polis_details", {
     p_polis_id: id,
   });

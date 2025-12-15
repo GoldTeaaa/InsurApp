@@ -1,5 +1,5 @@
 "use server";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 
 type State = {
     success: boolean;
@@ -7,6 +7,7 @@ type State = {
 };
 
 export default async function deletePembayaranPremi(id: string):Promise<State>{
+    const supabase = await createClient();
     const { data, error } = await supabase.rpc('delete_pembayaran_premi',{
         p_pembayaran_id: id
     })

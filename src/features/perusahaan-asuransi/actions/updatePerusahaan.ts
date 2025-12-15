@@ -3,7 +3,7 @@ import {
     type PerusahaanReturnResult,
     perusahaanUpdateFormSchema
 } from "@/lib/perusahaan_asuransi/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 
 
@@ -14,6 +14,7 @@ export async function updatePerusahaanAction(
   prevState: ReturnState,
   formData: FormData
 ): Promise<ReturnState> {
+  const supabase = await createClient();
 
   const formValues = Object.fromEntries(formData.entries());
   const parsed = perusahaanUpdateFormSchema.safeParse({

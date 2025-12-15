@@ -3,7 +3,7 @@ import {
     type PelunasanPremiRPC, 
     PelunasanPremiRPCSchema 
 } from "@/lib/laporan/laporan-pelunasan-premi/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState, SearchParamsProps } from "@/lib/types";
 
 type ReturnState = ActionReturnState<PelunasanPremiRPC>   
@@ -11,6 +11,7 @@ type ReturnState = ActionReturnState<PelunasanPremiRPC>
 export default async function getPelunasanPremiData({
     searchParams
 }: {searchParams: SearchParamsProps}): Promise<ReturnState> {
+    const supabase = await createClient();
 
     const params = await searchParams;
     const search = params?.search ?? "";

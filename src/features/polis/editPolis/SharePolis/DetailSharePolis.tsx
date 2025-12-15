@@ -6,7 +6,7 @@ import { GetPolisSchema } from "@/lib/polis/get-types";
 // import { getDefaultValues, PolisShare } from "@/lib/polis/create-types";
 import { useEffect, useState } from "react";
 import PremiKomisiBox from "../../polisForm/PremiKomisiBox";
-import getPerusahaanList from "../../actions/get-perusahaan-list";
+import getPerusahaanList from "../../actions/getPerusahaanList";
 import { ListPerusahaanType } from "@/lib/polis/step3";
 import TotalSharePercentage from "../../polisForm/TotalSharePercentage";
 // import { PlusIcon } from "lucide-react";

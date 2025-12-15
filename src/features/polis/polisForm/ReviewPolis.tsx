@@ -1,5 +1,5 @@
-import getNasabahCardDetails from "@/features/polis/actions/get-nasabah-card";
-import getPerusahaanList from "@/features/polis/actions/get-perusahaan-list";
+import getNasabahCardDetails from "@/features/polis/actions/getNasabahForPolisCard";
+import getPerusahaanList from "@/features/polis/actions/getPerusahaanList";
 import { ListPerusahaanType } from "@/lib/polis/step3";
 import { NasabahDetailsType } from "@/lib/polis/step1";
 import { Polis } from "@/lib/polis/create-types";

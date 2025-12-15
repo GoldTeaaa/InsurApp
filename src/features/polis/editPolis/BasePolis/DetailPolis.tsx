@@ -5,7 +5,7 @@ import { Polis } from "@/lib/polis/create-types";
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { ListNasabahType } from "@/lib/polis/step1";
-import getListNasabah from "@/features/polis/actions/get-nasabah-list";
+import getListNasabah from "@/features/polis/actions/getNasabahListForPolisForm";
 import PremiCalculationGroup from "../../polisForm/PremiCalculationGroup";
 import DateField from "@/components/DateField";
 import { SelectField } from "@/components/SelectField";

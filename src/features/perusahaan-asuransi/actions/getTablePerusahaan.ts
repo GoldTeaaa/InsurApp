@@ -1,5 +1,5 @@
 "use server";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import {
   perusahaanListParamsSchema,
   PerusahaanRpcPayload,
@@ -20,6 +20,7 @@ export async function fetchPerusahaanPage({
   sort?: PerusahaanSort;
   size: number;
 }): Promise<ReturnState> {
+  const supabase = await createClient();
   const params = perusahaanListParamsSchema.parse({
     p_search: search? search.trim() : undefined,
     p_page: Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1,

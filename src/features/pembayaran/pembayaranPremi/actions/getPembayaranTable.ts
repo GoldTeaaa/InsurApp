@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState, TableParams } from "@/lib/types";
 import { PembayaranTableRow } from "@/lib/pembayaran/pembayaran_premi/types";
 
@@ -12,6 +12,7 @@ export default async function getPembayaranTableData({
   size,
   status,
 }: TableParams): Promise<ReturnState> {
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc("premi_pembayaran_table", {
     p_search: search,
     p_page: page,

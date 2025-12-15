@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPerusahaanAsuransiById } from "@/features/perusahaan-asuransi/actions/prefill-update-form";
+import { getPerusahaanAsuransiById } from "@/features/perusahaan-asuransi/actions/getPerusahaanForUpdate";
 import PerusahaanAsuransiForm from "@/features/perusahaan-asuransi/PerusahaanAsuransiForm";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {

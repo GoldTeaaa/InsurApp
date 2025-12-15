@@ -1,11 +1,11 @@
 'use server';
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
-import { revalidatePath } from "next/cache";
 
 type ReturnState = ActionReturnState;
 
 export default async function deletePolis({id}: {id: string}):Promise<ReturnState> {
+    const supabase = await createClient();
     const {data, error} = await supabase.rpc('delete_polis',{
         p_polis_id: id
     })

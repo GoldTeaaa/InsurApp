@@ -1,8 +1,8 @@
 
 import { PelunasanPremiRow } from "@/lib/laporan/laporan-pelunasan-premi/types";
 import useLaporanExporter from "../../useLaporanExporter";
-import generatePelunasanPremiExcel from '@/features/laporan/pelunasan-premi/actions/excel-pelunasan-premi-generator';
-import generatePelunasanPremiPDF from "@/features/laporan/pelunasan-premi/actions/pdf-pelunasan-premi-generator";
+import generatePelunasanPremiExcel from '@/features/laporan/pelunasan-premi/actions/exportExcelPelunasanPremi';
+import generatePelunasanPremiPDF from "@/features/laporan/pelunasan-premi/actions/exportPdfPelunasanPremi";
 
 interface ExporterProps {
   rowData: PelunasanPremiRow[];

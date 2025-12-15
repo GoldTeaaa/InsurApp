@@ -1,6 +1,6 @@
 'use server';
 import { NasabahForm, toRpcCreatePerusahaan, toRpcCreatePribadi } from "@/lib/nasabah/type";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 import { redirect } from "next/navigation";
 
@@ -15,6 +15,7 @@ export default async function  updateNasabahAction({
     id,
     formData
 }: Props): Promise<ReturnState> {
+    const supabase = await createClient();
     if(!id) throw new Error("Missing id");
 
     let payload = {};

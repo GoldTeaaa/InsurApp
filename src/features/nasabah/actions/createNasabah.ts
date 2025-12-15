@@ -5,13 +5,14 @@ import {
   toRpcCreatePerusahaan,
 } from "@/lib/nasabah/type";
 import { ActionReturnState } from "@/lib/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 
 type ReturnState = ActionReturnState<NasabahForm>;
 
 export default async function createNasabahAction(
   formData: NasabahForm
 ): Promise<ReturnState> {
+  const supabase = await createClient();
   if (formData.tipe === "perusahaan") {
     const args = toRpcCreatePerusahaan.safeParse(formData);
 

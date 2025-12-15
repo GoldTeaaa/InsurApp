@@ -1,4 +1,4 @@
-import getPolisDetails from "@/features/polis/actions/get-polis-details";
+import getPolisDetails from "@/features/polis/actions/getPolisFormDetails";
 import PolisNotFound from "@/app/dashboard/polis/[id]/edit/notFound";
 import EditPolisForm from "@/features/polis/editPolis/EditPolisForm";
 

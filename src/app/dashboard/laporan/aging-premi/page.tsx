@@ -12,6 +12,7 @@ import { excelColumnParser } from "@/lib/utils/excelColumnParser";
 import getLapAgingPremiData from "@/features/laporan/aging-premi/actions/getLapAgingPremiData";
 import useLapAgingPremiDownload from "@/features/laporan/aging-premi/actions/useLapAgingPremiDownload";
 import { useLaporanData } from "@/features/laporan/useLaporanData";
+import { getSession } from "~/utils/supabase/client";
 
 export default function Page() {
     const {
@@ -36,6 +37,7 @@ export default function Page() {
         startDate,
         endDate
     });
+    console.log('CLIENT JWT: ', getSession());
 
     // Directly access the strongly-typed config, no .find() needed.
     const reportConfig = reportsConfig["aging-premi"];

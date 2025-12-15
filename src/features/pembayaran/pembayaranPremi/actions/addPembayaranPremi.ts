@@ -3,7 +3,7 @@ import {
     addPembayaranPremiFormSchema, 
     addPembayaranPremiPayloadSchema 
 } from "@/lib/pembayaran/pembayaran_premi/types";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 
 type State = {
     success: boolean;
@@ -15,6 +15,7 @@ export async function addPembayaranAction(
     prevState: State,
     formData: FormData
 ): Promise<State> {
+    const supabase = await createClient();
     const validatedFields = addPembayaranPremiFormSchema.safeParse(
         Object.fromEntries(formData.entries())
     );

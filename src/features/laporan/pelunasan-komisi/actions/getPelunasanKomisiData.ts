@@ -1,19 +1,21 @@
+'use server';
 import { LaporanPelunasanKomisiRPCPayload, LaporanPelunasanKomisiRPCSchema } from "@/lib/laporan/laporan-pelunasan-komisi/types";
-import { supabase } from "~/utils/supabase/client";
 import { ActionReturnState, SearchParamsProps } from "@/lib/types";
+import { createClient } from "~/utils/supabase/server";
 
 type ReturnState = ActionReturnState<LaporanPelunasanKomisiRPCPayload>;
 
 export default async function getPelunasanKomisiData({
     searchParams
 }: {searchParams: SearchParamsProps}): Promise<ReturnState> {
+    const supabase = await createClient();
 
     const params = await searchParams;
     const search = params?.search ?? "";
     const page = Number(params?.page ?? 1);
     const size = Number(params?.size ?? 10);
-    const date_from = params?.date_from ? params.date_from : null;
-    const date_to = params?.date_to ? params.date_to : null;
+    const date_from = params?.date_from || null;
+    const date_to = params?.date_to || null;
 
     const {data, error} = await supabase.rpc("get_laporan_pelunasan_komisi", {
         p_search: search,

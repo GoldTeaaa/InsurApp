@@ -1,6 +1,6 @@
 import { LaporanProduksiRow, LaporanProduksiTable } from "@/lib/laporan/laporan-produksi/types";
-import { generateProduksiPDF } from "@/features/laporan/produksi/actions/produksi-pdf-generator";
-import { generateProduksiExcel } from "./produksi-excel-generator";
+import { generateProduksiPDF } from "@/features/laporan/produksi/actions/exportPdfLapProduksi";
+import { generateProduksiExcel } from "./exportExcelLapProduksi";
 import useLaporanExporter from '@/features/laporan/useLaporanExporter';
 import TransformProduksiData from "@/features/laporan/produksi/actions/transform-produksi-data";
 

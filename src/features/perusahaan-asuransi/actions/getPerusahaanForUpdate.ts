@@ -1,5 +1,5 @@
 "use server";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import {
   perusahaanFormSchema,
   type PerusahaanForm,
@@ -11,9 +11,7 @@ type ReturnState = ActionReturnState<PerusahaanForm>;
 export async function getPerusahaanAsuransiById(
   id: string
 ): Promise<ReturnState> {
-  // const { data, error } = await supabase.rpc("perusahaan_asuransi_get_v1", {
-  //   p_id: id
-  // });
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("perusahaan_asuransi")
     .select("*")

@@ -4,12 +4,13 @@ import {
     perusahaanSchema, 
     pribadiSchema 
 } from "@/lib/nasabah/type";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 
 type ReturnState = ActionReturnState<NasabahForm>;
 
 export default async function getNasabahDetails(id: string):Promise<ReturnState> {
+    const supabase = await createClient();
     const {data, error} = await supabase
     .from('initial_update_nasabah_value')
     .select()

@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "~/utils/supabase/server";
-import { signinValues, signupSchema, signupValues } from "./types";
+import { signinValues, signupValues } from "./types";
 
 type ActionState = {
   error?: string | null;
@@ -34,7 +34,7 @@ export async function signup(formData: signupValues): Promise<ActionState> {
   const email = formData.email;
   const password = formData.password;
   const username = formData.username;
-  const origin = headers().get("origin");
+  const origin = (await headers()).get("origin");
 
   const { data, error } = await supabase.auth.signUp({
     email,

@@ -6,7 +6,6 @@ import {
   HomeIcon,
   UsersIcon,
   BuildingOffice2Icon,
-  PlusIcon,
   ChevronDoubleLeftIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -16,6 +15,9 @@ import { cn } from "@/lib/utils/clsx";
 import { NavItem } from "@/lib/sideNav/types";
 import { Button } from "@/components/ui/button";
 import { signout } from "@/app/(auth)/AuthActions";
+import getCurrentUser from "./actions.ts/getCurrentUser";
+import { string } from "zod";
+import { useEffect, useState } from "react";
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
@@ -42,7 +44,21 @@ export default function SideNav({
   isPinned: boolean;
   onPinToggle: () => void;
 }) {
+  const [username, setUsername] = useState<string | undefined>(undefined);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const getUsername = async () => {
+      const user = await getCurrentUser();
+      if(!user.success){
+        setUsername('No user detected');
+      }else{
+        setUsername(user.data?.username);
+      }
+    }
+
+    getUsername();
+  },[])
 
   return (
     <aside className="sticky top-0 flex h-dvh w-full flex-col overflow-y-auto border-r border-zinc-200 bg-white">
@@ -122,6 +138,7 @@ export default function SideNav({
             </Button>
           </form>
         </div>
+        {isOpen && <div>{`Hello ${username}`}</div>}
         v0.1 • Internal
       </div>
     </aside>

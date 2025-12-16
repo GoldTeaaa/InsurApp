@@ -11,7 +11,6 @@ import { NasabahTableRow } from "@/lib/nasabah/tableType";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils/formatDate";
 import { deleteNasabahAction } from "../actions/deleteNasabah";
-import { useActionState } from "react";
 import { toast } from "sonner";
 
 export default function NasabahTable({

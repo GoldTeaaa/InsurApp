@@ -1,3 +1,4 @@
+'use client';
 import SelectSearchField from "@/components/SelectSearchField";
 import { Polis } from "@/lib/polis/create-types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card";

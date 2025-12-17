@@ -1,14 +1,11 @@
 "use client"
-import { useEffect, useState, useRef, JSX } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"
 import { FormProvider, Resolver, useForm, useWatch, FieldErrors, Path } from "react-hook-form";
 import { Button } from "@/components/button";
-import Step1 from "./Step1";
-import Step2 from "./Step2";
-import Step3 from "./Step3";
 import { motion } from 'framer-motion'
-import ReviewPolis from "./ReviewPolis";
-import { getDefaultValues, Polis, PolisSchema } from "@/lib/polis/create-types";
+import { Polis, PolisSchema } from "@/lib/polis/create-types";
+import { getDefaultValues } from "@/lib/polis/defaultValues";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/lib/utils/useDebounce";
 import ErrorToast from "@/features/polis/polisForm/ErrorToast";
@@ -16,50 +13,9 @@ import createPolis from "@/features/polis/actions/createPolis";
 import { toast } from "sonner";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
+import { steps } from "./PolisStep";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
-
-interface StepsProps {
-    id: string,
-    name: string,
-    component: JSX.Element,
-    fields?: (Path<Polis>)[]
-}
-
-const steps: StepsProps[] = [
-    {
-        id: 'Step 1',
-        name: 'Data Nasabah',
-        component: <Step1 />,
-        fields: ['id_nasabah', 'bisnis']
-    },
-    {
-        id: 'Step 2',
-        name: 'Detail Polis',
-        component: <Step2 />,
-        fields: ['nomor_polis', 'total_premi', 'periode_mulai', 'periode_akhir', 'jenis_coas', 'total_sum_insured', 'nilai_rate', 'jenis_rate']
-    },
-    {
-        id: 'Step 3',
-        name: 'Premi & Share',
-        component: <Step3 />,
-        fields: ['shares']
-    },
-    {
-        id: 'Step 4',
-        name: 'Review & Submit',
-        component: <ReviewPolis />
-    }
-]
-
-const useIsFirstRender = () => {
-    const isFirst = useRef(true);
-    if (isFirst.current) {
-        isFirst.current = false;
-        return true;
-    }
-    return isFirst.current;
-}
 
 export default function MainPolisForm() {
     const router = useRouter();
@@ -67,59 +23,73 @@ export default function MainPolisForm() {
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [toastErrors, setToastErrors] = useState<FieldErrors<Polis> | null>(null);
     const [fieldToModify, setFieldToModify] = useState<(Path<Polis>)[]>(steps[currentStep].fields || []);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     const delta = currentStep - previousStep;
-
-    const getInitialValues = () => {
-        try {
-            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-            return savedData ? JSON.parse(savedData) : getDefaultValues("non-coas");
-        } catch (error) {
-            console.error("Failed to parse form data from localStorage", error);
-            return getDefaultValues("non-coas");
-        }
-    };
 
     const methods = useForm<Polis>({
         mode: 'all',
         resolver: zodResolver(PolisSchema) as Resolver<Polis>,
-        defaultValues: getInitialValues(),
+        defaultValues: getDefaultValues('non-coas'),
     });
 
     const {
         control,
         setValue,
+        getValues,
         formState: { isSubmitting, errors },
-        trigger
+        trigger,
+        reset
     } = methods
 
     const watchedValues = useWatch({ control });
     const debouncedWatchedValues = useDebounce(watchedValues, 500);
 
+    // LOCAL STORAGE STARTS HERE
+
+    // Load data from localStorage on mount (Client side only)
+    useEffect(() => {
+        try {
+            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (savedData) {
+                reset(JSON.parse(savedData));
+            }
+        } catch (error) {
+            console.error("Failed to parse form data from localStorage", error);
+        } finally {
+            setIsInitialized(true);
+        }
+    }, [reset]);
+
     // Save to localStorage only when the debounced values change
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(debouncedWatchedValues));
+        if (isInitialized) {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(debouncedWatchedValues));
+        }
+        // We exclude isInitialized from deps to prevent saving stale defaults when the flag flips
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedWatchedValues]);
+
+    // VALIDATIONS STARTS HERE
 
     const [jenisCoas, bisnis] = useWatch({
         control,
         name: ["jenis_coas", "bisnis"],
     })
 
-    const isFirstRender = useIsFirstRender();
-
     useEffect(() => {
-        // Prevent this from running on initial load to keep localStorage values
-        // if (isFirstRender) return;
+        // Check if the current shares structure already matches the selected jenisCoas
+        // This prevents overwriting data loaded from localStorage with defaults
+        const currentShares = getValues('shares');
+        const isCoas = jenisCoas === 'coas';
+        const isArray = Array.isArray(currentShares);
+
+        // If the structure matches the type, assume it's correct (either loaded from storage or already set)
+        if (isCoas === isArray) return;
 
         const newDefaultValues = getDefaultValues(jenisCoas);
-
-        // Use setValue to update a field array. This is the recommended approach
-        // to avoid type conflicts that can occur with reset().
-        // We set shouldValidate to true so changing the dropdown re-validates the shares.
         setValue('shares', newDefaultValues.shares);
-
-    }, [jenisCoas, setValue, isFirstRender]);
+    }, [jenisCoas, setValue, getValues]);
 
     useEffect(() => {
         const fieldsForCurrentStep = steps[currentStep].fields ? [...steps[currentStep].fields] : [];
@@ -239,8 +209,9 @@ export default function MainPolisForm() {
                             type='button'
                             onClick={prev}
                             disabled={currentStep === 0}
-                            className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50'
+                            className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50 flex items-center gap-2'
                         >
+                            <p className="text-2xl">BACK</p>
                             <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 fill='none'
@@ -260,8 +231,9 @@ export default function MainPolisForm() {
                             type='button'
                             onClick={next}
                             disabled={currentStep === steps.length - 1}
-                            className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50'
+                            className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50 flex items-center gap-2'
                         >
+                            <p className="text-2xl">NEXT</p>
                             <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 fill='none'

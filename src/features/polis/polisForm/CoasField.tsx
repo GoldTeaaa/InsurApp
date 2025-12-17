@@ -1,6 +1,7 @@
 import { PlusIcon } from "lucide-react";
 import PremiKomisiBox from "./PremiKomisiBox";
-import { getDefaultValues, PolisCoas } from "@/lib/polis/create-types";
+import { PolisCoas } from "@/lib/polis/create-types";
+import { getDefaultValues } from "@/lib/polis/defaultValues";
 import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { ListPerusahaanType } from "@/lib/polis/step3";

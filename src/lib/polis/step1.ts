@@ -8,7 +8,12 @@ import {
 
 export const ListNasabah = z.object({
     id: z.string().uuid(),
-    value: z.string()
+    nama: z.string()
+}).transform(v =>{ // NEED TO TRANSFORM BECAUSE THE SELECT COMPONENTS HAVE A GENERIC KEY VALUE NAMED "value"
+  return {
+    id: v.id,
+    value: v.nama
+  }
 })
 
   // ======================== GET NASABAH LIST (Used in Polis Form) ========================

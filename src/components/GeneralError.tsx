@@ -6,11 +6,13 @@ import { Button } from "./ui/button";
 
 type GeneralErrorProps = {
   error: Error & { digest?: string };
+  reset: () => void;
   title?: string;
 };
 
 export default function GeneralError({
   error,
+  reset,
   title = "Something went wrong!",
 }: GeneralErrorProps) {
   const router = useRouter();
@@ -22,6 +24,7 @@ export default function GeneralError({
   const handleReset = () => {
     startTransition(() => {
       router.refresh();
+      reset();
     });
   };
 

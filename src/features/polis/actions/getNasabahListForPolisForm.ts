@@ -1,11 +1,12 @@
 "use server";
 import { ListNasabah, type ListNasabahType } from "@/lib/polis/step1";
-import { supabase } from "~/utils/supabase/client";
+import { createClient } from "~/utils/supabase/server";
 
 export default async function getListNasabah(): Promise<ListNasabahType[]> {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("nasabah")
-    .select("id, value:nama")
+    .select("id, nama")
     //   .ilike("full_name", `%${searchTerm}%`)
     .order("nama")
     .limit(100);

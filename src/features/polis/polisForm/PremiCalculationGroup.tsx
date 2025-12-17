@@ -34,7 +34,7 @@ export default function PremiCalculationGroup() {
             <TextField<Polis>
                 name='total_sum_insured'
                 label="Total Sum Insured"
-                type="number"
+                // type="number"
             />
             <p className="mt-1 text-xs text-gray-500 -translate-y-3">
                 {convertIDR(totalSumInsured)}

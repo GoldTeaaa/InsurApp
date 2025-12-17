@@ -10,5 +10,5 @@ export default function Error({
   reset: () => void;
 }) {
   // You can now pass a custom title specific to this route if you want
-  return <GeneralError error={error} reset={reset} title="Error pada data Nasabah" />;
+  return <GeneralError error={error} reset={reset} title="Error pada dataNasabah" />;
 }

@@ -38,7 +38,7 @@ export default async function getPolisDetails(
       message: "Invalid data structure from API.",
     };
   }
-  console.log('parsedData.data: ', parsedData.data);
+  // console.log('parsedData.data: ', parsedData.data);
 
   const formattedData = {
     ...parsedData.data,

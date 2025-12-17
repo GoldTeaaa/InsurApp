@@ -46,7 +46,7 @@ export default async function Page({
 					<Link href={"/dashboard/polis/buat-polis"}> <Plus /> Tambah Polis</Link>
 				</Button>
 			</div>
-			<div className="w-full border border-zinc-300 rounded-md p-4 space-y-4">
+			<div className="p-4 space-y-4">
 				<FilterBox />
 				<div>
 					<Suspense key={tableKey} fallback={<div className="text-center p-8">Loading polis data...</div>}>

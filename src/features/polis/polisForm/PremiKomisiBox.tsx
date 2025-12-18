@@ -15,10 +15,10 @@ type PremiInputBoxProps = {
     editMode?: boolean
 };
 
-export default function PremiKomisiBox({ 
-    baseName, 
-    onRemove, 
-    perusahaanList ,
+export default function PremiKomisiBox({
+    baseName,
+    onRemove,
+    perusahaanList,
     editMode
 }: PremiInputBoxProps) {
     const [_premiNetExceeded, setPremiNetExceeded] = useState(false);
@@ -88,18 +88,20 @@ export default function PremiKomisiBox({
                     <TrashIcon className="h-5 w-5" />
                 </button>
             )}
-            <SelectSearchField<Polis>
-                name={fieldName('id_perusahaan_asuransi')}
-                label={"Asuransi Penanggung"}
-                options={perusahaanList}
-            />
-            {isCoas && (
-                <TextField<Polis>
-                    name={fieldName('persentase_share')}
-                    label="Persentase Share (%)"
-                    type="number"
+            <div className="space-y-4">
+                <SelectSearchField<Polis>
+                    name={fieldName('id_perusahaan_asuransi')}
+                    label={"Asuransi Penanggung"}
+                    options={perusahaanList}
                 />
-            )}
+                {isCoas && (
+                    <TextField<Polis>
+                        name={fieldName('persentase_share')}
+                        label="Persentase Share (%)"
+                        type="number"
+                    />
+                )}
+            </div>
             <div className="space-y-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div className="space-y-4">
                     <PremiInputBox

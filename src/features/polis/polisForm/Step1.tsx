@@ -15,6 +15,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { SelectField } from "@/components/SelectField";
 import KendaraanForm from "./kendaraan/KendaraanForm";
+import { PlusIcon } from "lucide-react";
+import Link from "next/link";
 
 function DetailItem({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: React.ReactNode }) {
     if (!value) return null;
@@ -105,6 +107,26 @@ export default function Step1() {
                         label='Nasabah'
                         options={nasabahList}
                     />
+                </div>
+                <div className="mt-4 rounded-lg border border-dashed border-gray-300 p-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50">
+                                <UserIcon className="h-6 w-6 text-gray-400" />
+                            </div>
+                            <div className="text-sm">
+                                <p className="font-medium text-gray-900">Nasabah tidak ditemukan?</p>
+                                <p className="text-gray-500">Buat data nasabah baru untuk melanjutkan.</p>
+                            </div>
+                        </div>
+                        <Link
+                            href="/dashboard/nasabah/tambah-nasabah"
+                            className="group flex items-center gap-2 rounded-md bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
+                        >
+                            <PlusIcon className="h-4 w-4 transition-transform group-hover:scale-110" />
+                            Tambah Nasabah
+                        </Link>
+                    </div>
                 </div>
                 <div>
                     {loadingDetails && <p className="mt-6 text-sm text-gray-500">Loading details...</p>}

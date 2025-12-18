@@ -19,7 +19,7 @@ export default async function createPolis(
   }
   const args = parsedData.data;
   console.log("args: ", args);
-  console.log("args SHARES: ", args.shares);
+  // console.log("args SHARES: ", args.shares);
 
   if (formData.jenis_coas === "non-coas") {
     const { data, error } = await supabase.rpc("create_non_coas_polis", {

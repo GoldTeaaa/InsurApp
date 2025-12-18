@@ -48,9 +48,9 @@ export default function Step3() {
                 Detail Premi & Share Polis{' '}
                 <span className="font-bold text-sky-600">{showCoasFields ? "Coas" : "Non-Coas"}</span>
             </h2>
-            <>
+            <div className="space-y-4">
                 <TotalPremiDisplay />
-            </>
+            </div>
             {loading && <p className="text-sm text-gray-500">Memuat data perusahaan...</p>}
             <div className="space-y-4">
                 {showCoasFields ? (

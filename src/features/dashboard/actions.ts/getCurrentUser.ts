@@ -20,7 +20,7 @@ export default async function getCurrentUser(): Promise<ReturnState> {
       message: error?.message || "User not found or not authenticated.",
     };
   }
-  console.log("JWT: ", await supabase.auth.getSession());
+  // console.log("JWT: ", await supabase.auth.getSession());
 
   return {
     success: true,

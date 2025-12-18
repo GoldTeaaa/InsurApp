@@ -46,8 +46,8 @@ export default function KomisiInputBox({ fieldName, premiGross, baseName }: Komi
                 name={fieldName('detail_komisi.komisi_net')}
                 label="Komisi Net"
             />
-            <p className="mt-1 text-xs text-gray-500">
-                {convertIDR(komisiNet as number)}
+            <p className="mt-1 text-base">
+                Total Komisi: <span className="font-bold">{convertIDR(Number(komisiNet))}</span>                
             </p>
         </div>
     );

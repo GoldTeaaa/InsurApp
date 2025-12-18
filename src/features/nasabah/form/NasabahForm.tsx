@@ -87,7 +87,7 @@ export default function NasabahForm(props: NasabahFormProps) {
             if(!res.success) {
                 setError('root', { message: res.message ?? 'Gagal menyimpan' });
             } else {
-                router.push('/dashboard/nasabah');
+                router.back();
                 toast.success(res.message);
             }
         } catch (e) {

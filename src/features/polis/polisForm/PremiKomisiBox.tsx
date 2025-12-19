@@ -52,7 +52,7 @@ export default function PremiKomisiBox({
         const discountAmount = Number(discount) || 0;
 
         const net = gross - discountAmount + admin;
-        if (net > totalPremi) {
+        if (net > totalPremi + admin) {
             setPremiNetExceeded(true);
             setValue(fieldName('detail_premi.premi_net'), "Premi exceeded", { shouldValidate: true });
         } else {

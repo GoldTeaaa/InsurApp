@@ -5,6 +5,7 @@ import { Label } from "./ui/label";
 type Props<T extends FieldValues> = {
     name: Path<T>;
     label: string;
+    must?: boolean;
     type?: "text" | "number" | "hidden" | "password" | "hidden";
     placeholder?: string;
     step?: string;
@@ -16,7 +17,7 @@ type Props<T extends FieldValues> = {
 }
 
 export default function FormTextField<T extends FieldValues>({
-    name, label, placeholder, type, step, readOnly, disabled, value, ...props
+    name, label, placeholder, type, step, readOnly, disabled, value, must, ...props
 }: Props<T>) {
     const { control } = useFormContext();
 
@@ -27,7 +28,9 @@ export default function FormTextField<T extends FieldValues>({
             render={({ field, fieldState: { error } }) => (
                 <div>
                     <div className="grid gap-2">
-                        <Label htmlFor={name}>{type === "hidden" ? "" : label}</Label>
+                        <Label htmlFor={name}>
+                            {type === "hidden" ? "" : label}{must && <span className="text-red-600">*</span>}
+                        </Label>
 
                         {readOnly && <p className="text-blue-600 text-sm mt-1">Tidak bisa diubah</p>}
                         <Input

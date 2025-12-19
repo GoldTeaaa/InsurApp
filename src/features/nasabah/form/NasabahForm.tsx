@@ -78,13 +78,13 @@ export default function NasabahForm(props: NasabahFormProps) {
             clearErrors('root');
 
             const res = mode === 'create'
-                    ? await createNasabahAction(data)
-                    : await updateNasabahAction({
-                        id: updateId,
-                        formData: data 
-                    });
+                ? await createNasabahAction(data)
+                : await updateNasabahAction({
+                    id: updateId,
+                    formData: data
+                });
 
-            if(!res.success) {
+            if (!res.success) {
                 setError('root', { message: res.message ?? 'Gagal menyimpan' });
             } else {
                 router.back();
@@ -101,7 +101,7 @@ export default function NasabahForm(props: NasabahFormProps) {
         <FormProvider {...methods}>
             <form
                 onSubmit={handleSubmit(submit)}
-                aria-busy={isSubmitting}                
+                aria-busy={isSubmitting}
                 className="mx-auto mt-8 w-full max-w-2xl md:max-w-3xl rounded-xl bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur focus-within:ring-2 focus-within:ring-indigo-500/30 transition-shadow"
             >
                 {/* Header */}
@@ -125,9 +125,9 @@ export default function NasabahForm(props: NasabahFormProps) {
                 <div className="rounded-lg bg-white px-3 py-3 sm:px-4 sm:py-4">
 
                     <div className="mb-4">
-                        {mode === 'update' 
-                        ? <div className="text-xs text-red-500">Tipe nasabah tidak dapat diubah saat update.</div>
-                        : <div className="mb-1.5 text-s font-medium text-gray-600">Tipe Nasabah</div>
+                        {mode === 'update'
+                            ? <div className="text-xs text-red-500">Tipe nasabah tidak dapat diubah saat update.</div>
+                            : <div className="mb-1.5 text-s font-medium text-gray-600">Tipe Nasabah</div>
                         }
                         <RadioField<NasabahForm>
                             name="tipe"
@@ -145,13 +145,13 @@ export default function NasabahForm(props: NasabahFormProps) {
 
                 {/* Button */}
                 <div className="mt-5 sm:mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end border-t border-gray-100 pt-4">
-                    <Link href="/dashboard/nasabah">
-                        <Button 
-                        type="button"  
-                        variant="outline">
-                            Kembali
-                        </Button>
-                    </Link>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => router.back()}
+                    >
+                        Kembali
+                    </Button>
                     <Button
                         type="submit"
                         disabled={isSubmitting || isFormSubmitting || (mode === 'update' && !isDirty)}

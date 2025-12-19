@@ -19,10 +19,12 @@ export default function KendaraanForm() {
                 name="bisnis_details.jenis_kendaraan"
                 label="Jenis Kendaraan"
                 options={jenis_kendaraan}
+                must={true}
             />
             <FormTextField<Polis>
                 name="bisnis_details.plat_nomor"
                 label="Plat Nomor"
+                must={true}
             />
         </div>
     )

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { JENIS_BISNIS, JENIS_COAS, JENIS_KENDARAAN } from "../types";
+import { insertKendaraanSchema } from "../kendaraan/types";
 
 const COAS_ROLE = z.enum(["leader", "member"]);
 const JENIS_RATE = z.enum(["mille", "percent"]);
@@ -33,10 +34,8 @@ export const PolisShareSchema = z.object({
   detail_komisi: DetailKomisiSchema,
 });
 
-const kendaraanSchema = z.object({
+const kendaraanSchema = insertKendaraanSchema.extend({
   bisnis: z.literal("kendaraan"),
-  jenis_kendaraan: JENIS_KENDARAAN,
-  plat_nomor: z.string().min(3, "Plat nomor wajib diisi"),
 });
 
 const healthSchema = z.object({
@@ -49,7 +48,12 @@ const propertySchema = z.object({
   bisnis: z.literal("properti"),
 });
 
-const businessDetailsSchema = z.discriminatedUnion("bisnis", [kendaraanSchema, healthSchema, marineSchema, propertySchema]);
+const businessDetailsSchema = z.discriminatedUnion("bisnis", [
+  kendaraanSchema,
+  healthSchema,
+  marineSchema,
+  propertySchema,
+]);
 
 export const basePolisObjectSchema = z.object({
   nomor_polis: noPolis,
@@ -75,7 +79,44 @@ export const basePolisObjectSchema = z.object({
     })
   ),
   bisnis_details: businessDetailsSchema,
-  // detail_bisnis: z.record(z.any()).optional(), // May be remove later
+  detail_bisnis: z.record(z.any()).optional(), // May be remove later
+});
+
+const basePolisSchema = basePolisObjectSchema.superRefine((data, ctx) => {
+  // 1) periode checks
+  // Ensure both dates are valid before comparing
+  if (
+    data.periode_mulai instanceof Date &&
+    data.periode_akhir instanceof Date
+  ) {
+    if (data.periode_akhir <= data.periode_mulai) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Periode akhir harus setelah periode mulai",
+        path: ["periode_akhir"],
+      });
+    }
+  }
+
+  // 2) total_premi should not exceed total_sum_insured
+  // We add a small tolerance for floating point inaccuracies
+  if (data.total_premi > data.total_sum_insured + 1e-9) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Total premi tidak boleh melebihi Total Sum Insured.",
+      path: ["total_premi"],
+    });
+  }
+
+  if (data.bisnis === "kendaraan") {
+    if (!data.bisnis_details) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Detail kendaraan wajib diisi.",
+        path: ["bisnis_details"],
+      });
+    }
+  }
 });
 
 // NON-COAS: single share object
@@ -96,6 +137,7 @@ export type PolisCoas = z.infer<typeof coasSchema>;
 
 export const PolisSchema = z
   .discriminatedUnion("jenis_coas", [coasSchema, nonCoasSchema])
+  .and(basePolisSchema) // Re-apply the base refinements after extending
   .superRefine((data, ctx) => {
     // Helper to sum premi_net from shares (handles single object or array)
     const getSharesArray = () =>
@@ -112,26 +154,6 @@ export const PolisSchema = z
           code: "custom",
           message: "Periode akhir harus setelah periode mulai",
           path: ["periode_akhir"],
-        });
-      }
-    }
-
-    // 2) total_premi should not exceed total_sum_insured
-    // We add a small tolerance for floating point inaccuracies
-    if (data.total_premi > data.total_sum_insured + 1e-9) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Total premi tidak boleh melebihi Total Sum Insured.",
-        path: ["total_premi"],
-      });
-    }
-
-    if (data.bisnis === "kendaraan") {
-      if (!data.bisnis_details) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Detail kendaraan wajib diisi.",
-          path: ["bisnis_details"],
         });
       }
     }

@@ -4,12 +4,14 @@ type Props<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   options: readonly string[];
+  must?: boolean;
 };
 
 export function SelectField<T extends FieldValues>({
   name,
   label,
   options,
+  must
 }: Props<T>) {
   const { control } = useFormContext<T>();
 
@@ -19,7 +21,7 @@ export function SelectField<T extends FieldValues>({
       name={name}
       render={({ field, fieldState: { error } }) => (
         <div className="flex flex-col space-y-1">
-          <label>{label}</label>
+          <label>{label}{must && <span className="text-red-500"> *</span>}</label>
           <select
             name={field.name}
             value={field.value ?? ""}

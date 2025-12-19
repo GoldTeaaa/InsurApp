@@ -13,6 +13,7 @@ export default async function updatePolis(
 ): Promise<ReturnState> {
   const supabase = await createClient();
   const parsedData = RefinedViewPolisSchema.safeParse(formData);
+  console.log("parsed Update Data: ", parsedData);
 
   if (!parsedData.success) {
     return {

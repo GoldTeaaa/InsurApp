@@ -14,9 +14,10 @@ import {
     UserIcon,
 } from "@heroicons/react/24/outline";
 import { SelectField } from "@/components/SelectField";
-import KendaraanForm from "./kendaraan/KendaraanForm";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
+import KendaraanSelectOrCreate from "../kendaraan/KendaraanSelectOrCreate";
+import KendaraanForm from "../kendaraan/KendaraanForm";
 
 function DetailItem({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: React.ReactNode }) {
     if (!value) return null;
@@ -145,6 +146,7 @@ export default function Step1() {
             />
             {bisnis === "kendaraan" && (
                 <div className="border-t border-gray-200 pt-6">
+                    {/* <KendaraanSelectOrCreate /> */}
                     <KendaraanForm />
                 </div>
             )}

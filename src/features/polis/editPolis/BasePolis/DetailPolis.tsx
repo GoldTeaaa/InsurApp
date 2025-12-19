@@ -9,7 +9,7 @@ import getListNasabah from "@/features/polis/actions/getNasabahListForPolisForm"
 import PremiCalculationGroup from "../../polisForm/PremiCalculationGroup";
 import DateField from "@/components/DateField";
 import { SelectField } from "@/components/SelectField";
-import KendaraanForm from "../../polisForm/kendaraan/KendaraanForm";
+import KendaraanForm from "../../kendaraan/KendaraanForm";
 
 export default function DetailPolis() {
     const [loadingDetails, setLoadingDetails] = useState(false);

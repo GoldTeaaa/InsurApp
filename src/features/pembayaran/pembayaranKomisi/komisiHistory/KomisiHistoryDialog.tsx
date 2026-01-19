@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import getHistoryPembayaranKomisi from "../actions/getHistoryPembayaranKomisi";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/button";
-import HistoryRowDetailPreview from "./HistoryRowDetailPreview";
+import PembayaranHistoryRowDetailPreview from "./HistoryPembayaranRowDetailPreview";
 import { komisiTableRowData } from "@/lib/pembayaran/pembayaran_komisi/types";
 
 type Props = {
@@ -30,6 +30,7 @@ export default function KomisiHistoryDialog({
         queryFn: () => getHistoryPembayaranKomisi({ detailKomisiId })
     })
 
+    console.log("data: ", data);
     const tableHistoryData = data?.success ? (data.data ?? []) : [];
 
     return (
@@ -46,7 +47,8 @@ export default function KomisiHistoryDialog({
                     </div>
                 ) : (
                     <div>
-                        <HistoryRowDetailPreview
+                        <PembayaranHistoryRowDetailPreview
+                            type="komisi"
                             data={detailKomisiData}
                         />
                         <KomisiHistoryTable

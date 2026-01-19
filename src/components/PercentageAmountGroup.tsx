@@ -83,7 +83,7 @@ export default function PercentageAmountGroup({
 
         const gross = Number(baseValue) || 0;
         const newAmount = (gross * newPercentage) / 100;
-        const value = newAmount.toFixed(percentagePrecision || 0);
+        const value = newAmount.toFixed(percentagePrecision ?? 0);
         setValue(amountFieldName, value, { shouldValidate: true, shouldDirty: true });
     };
 

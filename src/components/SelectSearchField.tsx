@@ -18,6 +18,7 @@ type Props<T extends FieldValues> = {
   options: options[];
   placeholder?: string;
   className?: string;
+  must?: boolean
 };
 
 export default function SelectSearchField<T extends FieldValues>({
@@ -26,6 +27,7 @@ export default function SelectSearchField<T extends FieldValues>({
   options,
   placeholder,
   className,
+  must
 }: Props<T>) {
   const { control } = useFormContext<T>();
   const [open, setOpen] = useState(false);
@@ -56,7 +58,7 @@ export default function SelectSearchField<T extends FieldValues>({
 
         return (
           <div className={`flex flex-col space-y-1 ${className ?? ""}`} ref={rootRef}>
-            <label className="text-sm font-medium">{label}</label>
+            <label className="text-sm font-medium">{label} {must && <span className="text-red-500">*</span>}  </label>
 
             <div className="relative">
               <div className="relative">

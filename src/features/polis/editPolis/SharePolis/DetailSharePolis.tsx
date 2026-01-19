@@ -52,7 +52,7 @@ export default function DetailSharePolis() {
     // const canAddMoreShares = jenisCoas === 'coas' || fields.length === 0;
 
     return (
-        <div className="space-y-6 rounded-lg border border-gray-200 p-6">
+        <div /**className="space-y-6 rounded-lg border border-gray-200 p-6"*/>
             <div>
                 {fields.length > 1 && (
                     <div>

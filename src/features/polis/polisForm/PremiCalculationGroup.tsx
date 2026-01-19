@@ -25,7 +25,7 @@ export default function PremiCalculationGroup() {
             calculatedPremi = tsi * (rate / 100); // Percent (%)
         }
 
-        setValue("total_premi", calculatedPremi, { shouldValidate: true, shouldDirty: true });
+        setValue("total_premi", Number(calculatedPremi.toFixed(2)), { shouldValidate: true, shouldDirty: true });
     }, [totalSumInsured, nilaiRate, jenisRate, setValue]);
 
     return (
@@ -35,7 +35,7 @@ export default function PremiCalculationGroup() {
                 name='total_sum_insured'
                 label="Total Sum Insured"
                 // type="number"
-            />
+            />  
             <p className="mt-1 text-xs text-gray-500 -translate-y-3">
                 {convertIDR(totalSumInsured)}
             </p>

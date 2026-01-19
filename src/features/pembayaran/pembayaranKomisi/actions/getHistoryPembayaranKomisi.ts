@@ -19,6 +19,9 @@ export default async function getHistoryPembayaranKomisi({
     .eq("detail_komisi_id", detailKomisiId)
     .order("tanggal_bayar", {ascending: false})
 
+    console.log("Data from server: ", data);
+    console.log("Detail komisi id: ", detailKomisiId);
+
     if(error){
         return {
             success: false,

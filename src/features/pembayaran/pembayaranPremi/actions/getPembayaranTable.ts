@@ -20,10 +20,13 @@ export default async function getPembayaranTableData({
     p_status: status,
   });
 
-  if (error) return {
-    success: false,
-    message: error.message,
-  };
+  if (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
 
   return {
     success: true,

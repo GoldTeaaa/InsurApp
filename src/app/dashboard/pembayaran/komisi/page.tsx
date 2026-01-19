@@ -36,7 +36,7 @@ export default async function Page({
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4">Detail Komisi</h1>
+            <h1 className="text-2xl font-bold mb-4">Pembayaran Komisi</h1>
             <div>
                 <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                     <div className="w-full md:w-1/2">

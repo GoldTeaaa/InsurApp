@@ -7,7 +7,7 @@ import { CARA_BAYAR } from "@/lib/types";
 export default function BasePembayaranKomisiForm() {
 
     return (
-        <div>
+        <div className="space-y-4">
             <DateField<PembayaranKomisiInputForm>
                 name="tanggal_bayar"
                 label="Tanggal Bayar"

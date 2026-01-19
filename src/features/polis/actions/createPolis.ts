@@ -27,12 +27,29 @@ export default async function createPolis(
     });
     if (error) console.error(error);
     else console.log(data);
+    if (data.status !== "ok") {
+      return {
+        success: false,
+        message: data.message,
+      };
+    }
   } else if (formData.jenis_coas === "coas") {
     const { data, error } = await supabase.rpc("create_coas_polis", {
       payload: args,
     });
-    if (error) console.error(error);
-    else console.log(data);
+    if (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    } else console.log(data);
+
+    if (data.status !== "ok") {
+      return {
+        success: false,
+        message: data.message,
+      };
+    }
   }
 
   return {

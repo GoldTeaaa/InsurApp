@@ -27,7 +27,7 @@ export default function DiscountInputGroup({ baseName }: Props) {
             percentagePlaceholder="e.g., 10"
             minPercentage={0}
             maxPercentage={100}
-            // percentagePrecision={3}
+            percentagePrecision={2}
         />
     );
 }

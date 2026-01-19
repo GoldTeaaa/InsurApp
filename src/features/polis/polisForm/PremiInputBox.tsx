@@ -52,6 +52,8 @@ export default function PremiInputBox({ fieldName, isCoas, baseName }: PremiInpu
             <CalculatedTextField<Polis>
                 name={fieldName('detail_premi.premi_net')}
                 label="Premi Net (Calculated)"
+                type="number"
+                step="0.01"
             />
             <p>Total Premi: <span className="font-semibold">{convertIDR(Number(premiNet))}</span></p>
         </div>

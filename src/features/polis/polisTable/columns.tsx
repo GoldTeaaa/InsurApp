@@ -5,6 +5,7 @@ import PolisDropdown from "@/features/polis/polisTable/dropdown"
 import AsuransiPenanggungCell from "./AsuransiPenanggungCell"
 import { JenisBisnis } from "@/lib/types"
 import { PolisRow } from "@/lib/polis/table-types"
+import Link from "next/link"
 
 function dateFormater(dateString: string) {
 	const date = new Date(dateString)
@@ -24,6 +25,14 @@ export function getColumns(jenis_bisnis?: JenisBisnis): ColumnDef<PolisRow>[] {
 		{
 			accessorKey: "nomor_polis",
 			header: "Nomor Polis",
+			cell: ({ row }) => {
+				const id = row.original.id;
+				return (
+					<Link href={`/dashboard/polis/${id}/edit`}>
+						{row.getValue("nomor_polis")}
+					</Link>
+				)
+			}
 		},
 		{
 			accessorKey: "jenis_coas",

@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import ErrorToast from "@/features/polis/polisForm/ErrorToast";
 import updatePolis from "../actions/updatePolis";
+import { toast} from "sonner";
 
 const BasePolisField = {
     fields: [
@@ -35,18 +36,20 @@ export default function EditPolisForm({ data }: { data: GetPolisSchema }) {
         defaultValues: data,
     });
 
+    const { handleSubmit } = methods;
+
     const {
         formState: { isDirty, errors }
     } = methods;
 
     const onSubmit: SubmitHandler<GetPolisSchema> = async (formData) => { 
-        console.log("Form data to save:", formData);
-
         const res = await updatePolis(formData);
         if(!res.success){
+            toast.error(res.message);
             return;
         }
 
+        toast.success(res.message);
         router.push('/dashboard/polis');
     };
 
@@ -64,7 +67,7 @@ export default function EditPolisForm({ data }: { data: GetPolisSchema }) {
         <FormProvider {...methods}>
             <ErrorToast errors={toastErrors} onClose={() => setToastErrors(null)} />
             <form
-                onSubmit={methods.handleSubmit(onSubmit, onInvalid)}
+                onSubmit={handleSubmit(onSubmit, onInvalid)}
                 className="max-w-6xl mx-auto mt-8 space-y-6"
             >
                 <div className="space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">

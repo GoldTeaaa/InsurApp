@@ -82,6 +82,7 @@ export default function Step1() {
             if (selectedNasabahId) {
                 setLoadingDetails(true);
                 const result = await getNasabahCardDetails(selectedNasabahId);
+                console.log("nasabah details", result);
                 if (result.success) {
                     setNotFound(false);
                     setNasabahDetails(result.data ?? null);
@@ -107,6 +108,7 @@ export default function Step1() {
                         name='id_nasabah'
                         label='Nasabah'
                         options={nasabahList}
+                        must={true}
                     />
                 </div>
                 <div className="mt-4 rounded-lg border border-dashed border-gray-300 p-4">
@@ -143,6 +145,7 @@ export default function Step1() {
                 name='bisnis'
                 label="Bisnis"
                 options={["kendaraan", "health"]}
+                must={true}
             />
             {bisnis === "kendaraan" && (
                 <div className="border-t border-gray-200 pt-6">

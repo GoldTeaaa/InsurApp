@@ -133,6 +133,8 @@ export default function MainPolisForm() {
 
     const submit = async (data: Polis) => {
         const res = await createPolis(data);
+        console.log("Submit FORM");
+
         if (res.success) {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success('Polis Berhasil Ditambahkan')
@@ -193,7 +195,8 @@ export default function MainPolisForm() {
                         {currentStep === steps.length - 1 && (
                             <div className="mt-8 flex justify-end">
                                 <Button
-                                    type="submit" disabled={isSubmitting}
+                                    type="submit" 
+                                    disabled={isSubmitting}
                                 >
                                     {isSubmitting ? (
                                         <span className="flex items-center gap-2">Submitting...</span>

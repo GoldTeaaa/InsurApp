@@ -64,7 +64,7 @@ export default function PremiKomisiBox({
         const total = Number(totalPremi) || 0;
         const persentase = Number(persentaseShare) || 0;
 
-        const gross = total * (persentase / 100);
+        const gross = (total * (persentase / 100)).toFixed(2);
         setValue(fieldName('detail_premi.premi_gross'), gross, { shouldValidate: true, shouldDirty: true });
     }, [totalPremi, persentaseShare, setValue, fieldName]);
 

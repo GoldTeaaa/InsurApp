@@ -13,24 +13,30 @@ export default async function updatePolis(
 ): Promise<ReturnState> {
   const supabase = await createClient();
   const parsedData = RefinedViewPolisSchema.safeParse(formData);
-  console.log("parsed Update Data: ", parsedData);
+  // console.log("parsed Update Data : ", parsedData);
 
   if (!parsedData.success) {
-    return {
+    return {  
       success: false,
       message: "Invalid data format.",
       errors: parsedData.error.flatten().fieldErrors,
     };
   }
 
-  console.log("Updated Polis Data:", parsedData.data);
+  console.log("Payload for UPDATE:", parsedData.data);
+  console.log("Shares Payload for UPDATE:", parsedData.data.shares);
+
+  // console.log("Updated Polis Data Shares:", parsedData.data.shares);
   const { data, error } = await supabase.rpc("update_polis_details", {
     payload: parsedData.data,
   });
+  // console.log("Updated Polis Data:", data);
+
   if (error) {
+    console.error(error);
     return {
       success: false,
-      message: "Failed to update polis details.",
+      message: 'Failed to update polis details.',
     };
   }
 

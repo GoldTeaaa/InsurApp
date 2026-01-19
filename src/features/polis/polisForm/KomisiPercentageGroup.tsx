@@ -16,7 +16,7 @@ export default function KomisiPercentageGroup({ baseName, premiGross }: Props) {
             percentageLabel="Komisi (%)"
             amountLabel="Komisi Gross (Amount)"
             percentagePlaceholder="e.g., 15"
-            // percentagePrecision={2}
+            percentagePrecision={2}
         />
     );
 }

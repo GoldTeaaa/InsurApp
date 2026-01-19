@@ -14,10 +14,11 @@ type Props<T extends FieldValues> = {
     readOnly?: boolean;
     disabled?: boolean;
     value?: string;
-}
+    precision?: number;
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function FormTextField<T extends FieldValues>({
-    name, label, placeholder, type, step, readOnly, disabled, value, must, ...props
+    name, label, placeholder, type, step, readOnly, disabled, value, must, precision,...props
 }: Props<T>) {
     const { control } = useFormContext();
 
@@ -58,6 +59,7 @@ export default function FormTextField<T extends FieldValues>({
                                 "focus:border-blue-600 focus:ring-1 focus:ring-blue-600",
                                 "disabled:cursor-not-allowed disabled:opacity-50",
                             ].join(" ")}
+                            {...props}
                         />
                         {error && <p className="text-red-600">{error.message}</p>}
                     </div>

@@ -68,7 +68,7 @@ export default function PembayaranKomisiInputForm({
 
     if (showConfirmation) {
         return (
-            <div className="p-4 border rounded-lg bg-gray-50">
+            <div className="p-4 border rounded-lg bg-gray-50 space-y-4">
                 <h3 className="text-lg font-semibold mb-4">Konfirmasi
                     <span className="text-blue-600">{mode === "edit" ? " Edit " : " Tambah "}</span>
                      Pembayaran

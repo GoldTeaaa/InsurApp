@@ -16,7 +16,7 @@ export const ViewBasePolisSchema = basePolisObjectSchema.extend({
 
 const nonCoasSchema = ViewBasePolisSchema.extend({
   jenis_coas: z.literal("non-coas"),
-  shares: z.array(ViewPolisShareSchema).max(1, "Polis non-coas harus hanya satu anggota."),
+  shares: z.array(ViewPolisShareSchema).max(1, "Polis non-coas maksimal hanya satu share."),
 });
 
 const coasSchema = ViewBasePolisSchema.extend({

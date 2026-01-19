@@ -12,16 +12,16 @@ type ReturnState = ActionReturnState<NasabahDetailsType>;
 export default async function getNasabahCardDetails(
   id: Id
 ): Promise<ReturnState> {
+
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("polis_card_view_pribadi", {
     p_id: id,
   });
+  
   if (error) {
     console.error(error);
     return { success: false, message: "Failed to fetch nasabah details." };
   }
-
-  console.log("data before PARSE: ", data);
 
   const parsedData = nasabahDetailsSchema.safeParse(data);
 

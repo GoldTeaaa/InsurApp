@@ -10,8 +10,7 @@ import {
 import PremiHistoryTable from "./PremiHistoryTable";
 import { Button } from "@/components/button";
 import { PembayaranTableRow } from "@/lib/pembayaran/pembayaran_premi/types";
-import { getStatusClass } from "@/lib/utils/getStatusBadge";
-import { formatCurrencyIDR } from "@/lib/utils/formatCurrencyIDR";
+import PembayaranHistoryRowDetailPreview from "../../pembayaranKomisi/komisiHistory/HistoryPembayaranRowDetailPreview";
 
 type PremiHistoryDialogProps = {
   id: string;
@@ -35,29 +34,13 @@ export default function PremiHistoryDialog({ id, isOpen, onOpenChange, onAddNew,
           </DialogTitle>
           {rowData && (
             <DialogDescription asChild>
-              <div className="pt-2 text-sm text-slate-700 space-y-1">
-                <p><span className="font-semibold">Nomor Polis:</span> {rowData.nomor_polis}</p>
-                <p>
-                  <span className="font-semibold">Total Premi:</span> {formatCurrencyIDR(rowData.amount)}
-                </p>
-                <p>
-                  <span className="font-semibold">Total Sudah Dibayar:</span> {formatCurrencyIDR(rowData.total_paid)}
-                </p>
-                <p className="flex items-center">
-                  <span className="font-semibold">Sisa Harus Dibayar:</span>
-                  <span className={`ml-2 font-bold text-base ${rowData.remaining === 0 ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                    {rowData.remaining === 0 ?
-                      "Sudah Lunas" : formatCurrencyIDR(rowData.remaining)}
-                  </span>
-                </p>
-                <p>
-                  <span className="font-semibold">Status:</span>
-                  <span className={getStatusClass(rowData.status)}>{rowData.status.replace('_', ' ')}</span>
-                </p>
-              </div>
+              <PembayaranHistoryRowDetailPreview
+                type="premi"
+                data={rowData}
+              />
             </DialogDescription>
-          )}
+          )
+          }
         </DialogHeader>
 
         <div className="py-4">

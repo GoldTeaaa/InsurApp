@@ -35,17 +35,17 @@ export const PolisShareSchema = z.object({
 });
 
 const kendaraanSchema = insertKendaraanSchema.extend({
-  bisnis: z.literal("kendaraan"),
+  bisnis: z.literal(JENIS_BISNIS.Enum.kendaraan),
 });
 
 const healthSchema = z.object({
-  bisnis: z.literal("health"),
+  bisnis: z.literal(JENIS_BISNIS.enum.health),
 });
 const marineSchema = z.object({
-  bisnis: z.literal("marine_cargo"),
+  bisnis: z.literal(JENIS_BISNIS.enum.marine),
 });
 const propertySchema = z.object({
-  bisnis: z.literal("properti"),
+  bisnis: z.literal(JENIS_BISNIS.enum.property),
 });
 
 const businessDetailsSchema = z.discriminatedUnion("bisnis", [

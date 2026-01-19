@@ -9,6 +9,7 @@ const baseDefault = {
   periode_mulai: undefined,
   periode_akhir: undefined,
   detail_bisnis: {},
+  bisnis_details: { bisnis: undefined },
 };
 
 const emptyDetailPremi = {

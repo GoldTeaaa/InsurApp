@@ -78,6 +78,15 @@ export default function MainPolisForm() {
     })
 
     useEffect(() => {
+        if (bisnis) {
+            const currentDetails = getValues('bisnis_details');
+            if (currentDetails?.bisnis !== bisnis) {
+                setValue('bisnis_details', { bisnis });
+            }
+        }
+    }, [bisnis, setValue, getValues]);
+
+    useEffect(() => {
         // Check if the current shares structure already matches the selected jenisCoas
         // This prevents overwriting data loaded from localStorage with defaults
         const currentShares = getValues('shares');
@@ -144,6 +153,10 @@ export default function MainPolisForm() {
         }
     }
 
+    const onError = (errors: FieldErrors<Polis>) => {
+        setToastErrors(errors);
+    }
+
     return (
         <FormProvider {...methods} >
             <ErrorToast
@@ -184,7 +197,7 @@ export default function MainPolisForm() {
                         ))}
                     </ol>
                 </nav>
-                <form onSubmit={methods.handleSubmit(submit)} className="max-w-4xl mx-auto space-y-6 p-4">
+                <form onSubmit={methods.handleSubmit(submit, onError)} className="max-w-4xl mx-auto space-y-6 p-4">
                     <motion.div
                         key={currentStep} // Add key to ensure motion triggers on step change
                         initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}

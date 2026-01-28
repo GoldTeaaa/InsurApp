@@ -15,8 +15,9 @@ export default async function  updateNasabahAction({
     id,
     formData
 }: Props): Promise<ReturnState> {
-    const supabase = await createClient();
     if(!id) throw new Error("Missing id");
+
+    const supabase = await createClient();
 
     let payload = {};
 
@@ -47,7 +48,12 @@ export default async function  updateNasabahAction({
         ...payload
     });
     
-    if(error) throw new Error(error.message);
+    if(error){
+        return{
+            success: false,
+            message: error.message
+        }
+    }
     
     redirect("/dashboard/nasabah")
     // return{

@@ -34,23 +34,30 @@ export const PolisShareSchema = z.object({
   detail_komisi: DetailKomisiSchema,
 });
 
-const kendaraanSchema = insertKendaraanSchema.extend({
+export const kendaraanSchema = insertKendaraanSchema.extend({
   bisnis: z.literal(JENIS_BISNIS.Enum.kendaraan),
 });
 
-const healthSchema = z.object({
+export const healthSchema = z.object({
   bisnis: z.literal(JENIS_BISNIS.enum.health),
 });
-const marineSchema = z.object({
+
+export const lifeSchema = z.object({
+  bisnis: z.literal(JENIS_BISNIS.enum.life),
+});
+
+export const marineSchema = z.object({
   bisnis: z.literal(JENIS_BISNIS.enum.marine),
 });
-const propertySchema = z.object({
+
+export const propertySchema = z.object({
   bisnis: z.literal(JENIS_BISNIS.enum.property),
 });
 
 const businessDetailsSchema = z.discriminatedUnion("bisnis", [
   kendaraanSchema,
   healthSchema,
+  lifeSchema,
   marineSchema,
   propertySchema,
 ]);

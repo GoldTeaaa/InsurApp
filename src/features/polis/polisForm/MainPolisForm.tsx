@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { FormProvider, Resolver, useForm, useWatch, FieldErrors, Path } from "react-hook-form";
 import { Button } from "@/components/button";
 import { motion } from 'framer-motion'
-import { Polis, PolisSchema } from "@/lib/polis/create-types";
+import { kendaraanSchema, healthSchema, lifeSchema, marineSchema, propertySchema, Polis, PolisSchema } from "@/lib/polis/create-types";
 import { getDefaultValues } from "@/lib/polis/defaultValues";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/lib/utils/useDebounce";
@@ -16,6 +16,30 @@ import { ArrowLeftIcon } from "lucide-react";
 import { steps } from "./PolisStep";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
+
+const getBisnisDetailsDefaultValue = (bisnis : string) => {
+    switch(bisnis){
+        case 'kendaraan':
+            return {
+                bisnis: 'kendaraan',
+                plat_nomor: '',
+                jenis_kendaraan: 'mobil',
+                merk: '',
+                model: '',
+                tahun: undefined
+            };
+        case 'health':
+            return { bisnis: 'health' };
+        case 'life':
+            return { bisnis: 'life' };
+        case 'marine':
+            return { bisnis: 'marine' };
+        case 'property':
+            return { bisnis: 'property' };
+        default:
+            return {bisnis}
+    }
+}
 
 export default function MainPolisForm() {
     const router = useRouter();
@@ -81,7 +105,7 @@ export default function MainPolisForm() {
         if (bisnis) {
             const currentDetails = getValues('bisnis_details');
             if (currentDetails?.bisnis !== bisnis) {
-                setValue('bisnis_details', { bisnis });
+                setValue('bisnis_details', getBisnisDetailsDefaultValue(bisnis) as Polis['bisnis_details']);
             }
         }
     }, [bisnis, setValue, getValues]);

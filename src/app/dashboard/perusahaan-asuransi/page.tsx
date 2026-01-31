@@ -8,6 +8,7 @@ import { RawSearchParams, SearchParamsSchema } from "@/lib/types";
 import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 import PerusahaanAsuransiTable from "@/features/perusahaan-asuransi/PerusahaanAsuransiTable";
 import { Plus } from "lucide-react";
+import PerusahaanCard from "@/features/perusahaan-asuransi/PerusahaanCard";
 
 export default async function Page({ searchParams }: { searchParams: Promise<RawSearchParams> }) {
     const raw = await searchParams;
@@ -61,6 +62,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Raw
                     pageCount={pageCount}
                 />
             </div>
+            <PerusahaanCard />
         </div>
     );
 }

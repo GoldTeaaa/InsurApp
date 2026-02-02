@@ -9,6 +9,7 @@ import NormalizeSearchParams from "@/lib/normalizeSearchParams";
 import PerusahaanAsuransiTable from "@/features/perusahaan-asuransi/PerusahaanAsuransiTable";
 import { Plus } from "lucide-react";
 import PerusahaanCard from "@/features/perusahaan-asuransi/PerusahaanCard";
+import fetchPerusahaanCard from "@/features/perusahaan-asuransi/actions/fetchPerusahaanCard";
 
 export default async function Page({ searchParams }: { searchParams: Promise<RawSearchParams> }) {
     const raw = await searchParams;
@@ -32,6 +33,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<Raw
     const rows = res.data?.rows ?? [];
     const pageCount = Math.ceil((res.data?.total_count ?? 0) / size);
 
+    const card = await fetchPerusahaanCard(search);
+    if (!card.success) {
+        throw new Error(card.message);
+    }
+
+    const cardData = card.data ?? [];
+
     return (
         <div className="w-full p-4">
             <div className="flex justify-between items-center mb-4">
@@ -52,7 +60,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<Raw
                         </button>
                     </Link>
                 </div>
-                <Suspense key={`${search}-${page}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
+                {/* REMOVE TABLE AND REPLACED WITH CARDS */}
+                {/* <Suspense key={`${search}-${page}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
                     <PerusahaanAsuransiTable
                         data={rows}
                     />
@@ -60,9 +69,21 @@ export default async function Page({ searchParams }: { searchParams: Promise<Raw
                 <Pagination
                     page={page}
                     pageCount={pageCount}
-                />
+                /> */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {cardData.map((item) => (
+                        <Link 
+                            key={item.id} 
+                            href={`/dashboard/perusahaan-asuransi/${item.id}/edit`}
+                            className="block h-full"
+                        >
+                            <PerusahaanCard
+                                cardData={item}
+                            />
+                        </Link>
+                    ))}
+                </div>
             </div>
-            <PerusahaanCard />
         </div>
     );
 }

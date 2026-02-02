@@ -1,25 +1,37 @@
 "use server";
 import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
-import { PerusahaanCardType } from "@/lib/perusahaan_asuransi/types/perusahaan-card-data";
+import { ListOfPerusahaanCardSchema, PerusahaanCardListType } from "@/lib/perusahaan_asuransi/types/perusahaan-card-data";
 
-type ReturnState = ActionReturnState<PerusahaanCardType>;
+type ReturnState = ActionReturnState<PerusahaanCardListType>;
 
-export default async function fetchPerusahaanCard(): Promise<ReturnState> {
+export default async function fetchPerusahaanCard(
+    search: string | null
+): Promise<ReturnState> {
     const supabase = await createClient();
 
-    const {data, error} = await supabase.rpc('perusahaan_asuransi_card');
+    const {data, error} = await supabase
+    .from('perusahaan_asuransi_card')
+    .select('*')
+    .ilike('nama', `%${search}%`);
 
     if(error) return{
         success: false,
         message: error.message
     }
 
-    console.log("data: ", data);
+    const parsedData = ListOfPerusahaanCardSchema.safeParse(data);
+
+    if(!parsedData.success) return{
+        success: false,
+        message: parsedData.error.message
+    }
+
+    // console.log("data: ", parsedData);
 
     return {
         success: true,
         message: "Success",
-        data
+        data: parsedData.data
     }
 }

@@ -61,6 +61,7 @@ export const perusahaanFormSchema = z.object({
   kontak_1: nonEmptyKontak,
   kontak_2: optionalText,
 });
+
 export type PerusahaanForm = z.infer<typeof perusahaanFormSchema>;
 
 export const defaultPerusahaanForm: PerusahaanForm = {

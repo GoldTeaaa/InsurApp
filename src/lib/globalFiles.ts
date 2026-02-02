@@ -1,0 +1,1 @@
+export const defaultPerusahaanImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKDvbGs5KSuVIll5qLjRALjnTvXletu7aiVQ&s';

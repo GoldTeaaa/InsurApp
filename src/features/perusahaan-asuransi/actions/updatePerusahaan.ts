@@ -28,6 +28,8 @@ export async function updatePerusahaanAction(
     };
   }
 
+  console.log("parsed.data: ", parsed.data);
+
   const {nama, email, alamat, kontak_1, kontak_2} = parsed.data;
 
   const {data, error} = await supabase.rpc('perusahaan_asuransi_update_v1', {

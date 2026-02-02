@@ -91,7 +91,7 @@ export default function NasabahForm(props: NasabahFormProps) {
                 toast.success(res.message);
             }
         } catch (e) {
-            setError('root', { message: (e as Error).message ?? 'Gagal menyimpan' });
+            setError('root', { message: 'Terjadi kesalahan pada server' });
         } finally {
             setIsSubmitting(false);
         }

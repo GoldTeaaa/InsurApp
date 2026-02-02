@@ -11,13 +11,17 @@ type ReturnState = ActionReturnState<PerusahaanForm>;
 export async function getPerusahaanAsuransiById(
   id: string
 ): Promise<ReturnState> {
+
   const supabase = await createClient();
+  
   const { data, error } = await supabase
     .from("perusahaan_asuransi")
     .select("*")
     .eq("id", id)
     .filter("deleted_at", "is", null)
-    .limit(1);
+    .single();
+    // Limit still return array, use single to return single  object
+    //.limit(1);
     
   if (error) {
     return {
@@ -26,7 +30,18 @@ export async function getPerusahaanAsuransiById(
     };
   }
 
-  const parsedData = perusahaanFormSchema.safeParse(data[0]);
+  if (!data) {
+    return {
+      success: true,
+      message: "Data not found",
+    };
+  }
+
+  console.log("id: ", id);
+  console.log("data: ", data);
+
+  const parsedData = perusahaanFormSchema.safeParse(data);
+  
   if (!parsedData.success) {
     return {
       success: false,

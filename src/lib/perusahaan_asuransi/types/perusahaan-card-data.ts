@@ -7,4 +7,7 @@ export const PerusahaanCardDataSchema = z.object({
     jumlah_polis_aktif: z.number(),
 })
 
+export const ListOfPerusahaanCardSchema = z.array(PerusahaanCardDataSchema);
+
 export type PerusahaanCardType = z.infer<typeof PerusahaanCardDataSchema>;
+export type PerusahaanCardListType = z.infer<typeof ListOfPerusahaanCardSchema>;

@@ -2,11 +2,11 @@
 import { createClient } from "~/utils/supabase/server";
 import {
   perusahaanFormSchema,
-  type PerusahaanForm,
+  type PerusahaanFormType,
 } from "@/lib/perusahaan_asuransi/types";
 import { ActionReturnState } from "@/lib/types";
 
-type ReturnState = ActionReturnState<PerusahaanForm>;
+type ReturnState = ActionReturnState<PerusahaanFormType>;
 
 export async function getPerusahaanAsuransiById(
   id: string

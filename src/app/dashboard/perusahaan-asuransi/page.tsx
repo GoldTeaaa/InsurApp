@@ -70,7 +70,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Raw
                     page={page}
                     pageCount={pageCount}
                 /> */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-15">
                     {cardData.map((item) => (
                         <Link 
                             key={item.id} 

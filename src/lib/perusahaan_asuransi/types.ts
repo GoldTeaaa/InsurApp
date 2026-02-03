@@ -41,6 +41,8 @@ export const perusahaanRpcPayloadSchema = z.object({
   rows: perusahaanListSchema,
   total_count: z.number(),
 })
+
+
 export type PerusahaanRow = z.infer<typeof perusahaanRowSchema>;
 export type PerusahaanList = z.infer<typeof perusahaanListSchema>;
 export type PerusahaanRpcPayload = z.infer<typeof perusahaanRpcPayloadSchema>;
@@ -50,7 +52,7 @@ export type PerusahaanRpcPayload = z.infer<typeof perusahaanRpcPayloadSchema>;
 
 const nonEmpty3 = z.string().min(3, "Nama minimal 3 karakter");
 const validEmail = z.string().email("Email tidak valid");
-const nonEmptyKontak = z.string().min(5, "Kontak minimal 10 karakter");
+const nonEmptyKontak = z.string().min(9, "Kontak minimal 9 karakter").max(15, "Kontak maksimal 15 karakter");
 const optionalText = z.string().optional().nullable();
 const optionalEmail = validEmail.nullable().optional();
 
@@ -62,9 +64,9 @@ export const perusahaanFormSchema = z.object({
   kontak_2: optionalText,
 });
 
-export type PerusahaanForm = z.infer<typeof perusahaanFormSchema>;
+export type PerusahaanFormType = z.infer<typeof perusahaanFormSchema>;
 
-export const defaultPerusahaanForm: PerusahaanForm = {
+export const defaultPerusahaanForm: PerusahaanFormType = {
   nama: "",
   email: "",
   alamat: "",
@@ -77,7 +79,7 @@ export const perusahaanCreateRpcParamsSchema = z.object({
   p_nama: nonEmpty3,
   p_email: optionalEmail,
   p_alamat: optionalText,
-  p_kontak_1: optionalText,
+  p_kontak_1: nonEmptyKontak,
   p_kontak_2: optionalText,
 });
 export type PerusahaanCreateParams = z.infer<typeof perusahaanCreateRpcParamsSchema>;
@@ -87,7 +89,7 @@ export const perusahaanCreateToRpcSchema = perusahaanFormSchema
     p_nama: v.nama.trim(),
     p_email: v.email ?? null,
     p_alamat: v.alamat ?? null,
-    p_kontak_1: v.kontak_1 ?? null,
+    p_kontak_1: v.kontak_1.trim(),
     p_kontak_2: v.kontak_2 ?? null,
   }))
   .pipe(perusahaanCreateRpcParamsSchema);
@@ -96,6 +98,7 @@ export const perusahaanReturnResultSchema = z.object({
   id: z.string().uuid(),
   nama_asuransi: z.string(),
 });
+
 export const perusahaanCreateResultArraySchema = z.array(perusahaanReturnResultSchema).min(1);
 export type PerusahaanReturnResult = z.infer<typeof perusahaanReturnResultSchema>;
 
@@ -125,4 +128,3 @@ export const perusahaanUpdateFormSchema = z.object({
 });
 
 export type PerusahaanUpdateFormValues = z.infer<typeof perusahaanUpdateFormSchema>;
-

@@ -15,3 +15,8 @@ export type PerusahaanCardListType = z.infer<typeof ListOfPerusahaanCardSchema>;
 
 // Perusahaan Asuransi Details
 
+export const PerusahaanStatCardDataSchema = PerusahaanCardDataSchema.extend({
+    // TODO: add more stats
+})
+
+export type PerusahaanStatCardType = z.infer<typeof PerusahaanStatCardDataSchema>;

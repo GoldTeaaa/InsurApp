@@ -21,6 +21,7 @@ export default function InfoCard({
                 {/* Left Section: Company Logo Avatar */}
                 <div className="shrink-0">
                     <div className="h-20 w-20 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400">
+                        {/* TODO: Replace with company logo */}
                         <Building2 className="h-10 w-10" />
                     </div>
                 </div>

@@ -74,7 +74,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Raw
                     {cardData.map((item) => (
                         <Link 
                             key={item.id} 
-                            href={`/dashboard/perusahaan-asuransi/${item.id}/edit`}
+                            href={`/dashboard/perusahaan-asuransi/${item.id}/`}
                             className="block h-full"
                         >
                             <PerusahaanCard

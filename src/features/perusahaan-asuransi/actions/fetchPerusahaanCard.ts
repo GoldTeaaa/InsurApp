@@ -11,7 +11,7 @@ export default async function fetchPerusahaanCard(
     const supabase = await createClient();
 
     const {data, error} = await supabase
-    .from('perusahaan_asuransi_card')
+    .from('v_perusahaan_asuransi_card')
     .select('*')
     .ilike('nama', `%${search}%`);
 

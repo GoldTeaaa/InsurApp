@@ -3,7 +3,7 @@ import { useActionState, useEffect, useTransition } from "react";
 import {
     perusahaanFormSchema,
     defaultPerusahaanForm,
-    type PerusahaanForm
+    type PerusahaanFormType
 } from "@/lib/perusahaan_asuransi/types";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,10 +22,10 @@ type PerusahaanFormProps = | {
 } | {
     mode: "update";
     id: string;
-    prefillData: PerusahaanForm;
+    prefillData: PerusahaanFormType;
 }
 
-export default function PerusahaanForm({
+export default function PerusahaanFormType({
     mode,
     id,
     prefillData
@@ -33,7 +33,7 @@ export default function PerusahaanForm({
     const defaultValues = prefillData || defaultPerusahaanForm;
     const router = useRouter();
 
-    const method = useForm<PerusahaanForm>({
+    const method = useForm<PerusahaanFormType>({
         mode: 'all',
         resolver: zodResolver(perusahaanFormSchema),
         defaultValues: defaultValues
@@ -73,23 +73,23 @@ export default function PerusahaanForm({
                 className="max-w-xl mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <h2 className="text-lg font-semibold">{mode === "create" ? "Tambah Perusahaan Asuransi" : "Update Perusahaan Asuransi"}</h2>
 
-                <FormTextField<PerusahaanForm>
+                <FormTextField<PerusahaanFormType>
                     name='nama'
                     label="Nama Asuransi"
                 />
-                <FormTextField<PerusahaanForm>
+                <FormTextField<PerusahaanFormType>
                     name='email'
                     label="Email"
                 />
-                <FormTextField<PerusahaanForm>
+                <FormTextField<PerusahaanFormType>
                     name='alamat'
                     label="Alamat Perusahaan"
                 />
-                <FormTextField<PerusahaanForm>
+                <FormTextField<PerusahaanFormType>
                     name='kontak_1'
                     label="Kontak 1"
                 />
-                <FormTextField<PerusahaanForm>
+                <FormTextField<PerusahaanFormType>
                     name='kontak_2'
                     label="Kontak 2"
                 />
@@ -98,11 +98,9 @@ export default function PerusahaanForm({
                     <Button type="submit" disabled={isPending}>
                         {isPending ? "Menyimpan..." : "Simpan"}
                     </Button>
-                    <Link href={"/dashboard/perusahaan-asuransi"}>
-                        <Button variant="ghost">
-                            Cancel
-                        </Button>
-                    </Link>
+                    <Button onClick={() => router.back()} variant="ghost">
+                        Cancel
+                    </Button>
                 </div>
 
                 {(!state.success && state.message) && (

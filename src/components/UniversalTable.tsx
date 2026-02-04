@@ -9,15 +9,17 @@ import {
     TableRow,
 } from "@/components/table";
 
-interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
+interface DataTableProps<TData> {
+    columns: ColumnDef<TData>[]
     data: TData[]
+    noResultText?: string
 }
 
-export default function UniversalTable<TData, TValue>({
+export default function UniversalTable<TData>({
     columns,
     data,
-}: DataTableProps<TData, TValue>) {
+    noResultText
+}: DataTableProps<TData>) {
     const table = useReactTable({
         data,
         columns,
@@ -62,7 +64,7 @@ export default function UniversalTable<TData, TValue>({
                     ) : (
                         <TableRow>
                             <TableCell colSpan={columns.length} className="h-24 text-center">
-                                No results.
+                                {noResultText ?? "No results."}
                             </TableCell>
                         </TableRow>
                     )}

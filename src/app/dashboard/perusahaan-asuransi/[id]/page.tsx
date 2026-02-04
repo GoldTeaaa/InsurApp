@@ -2,11 +2,10 @@ import { getPerusahaanAsuransiById } from "@/features/perusahaan-asuransi/action
 import InfoCard from "@/features/perusahaan-asuransi/detail-page/InfoCard";
 import { notFound } from "next/navigation";
 import StatCard from "@/features/perusahaan-asuransi/detail-page/StatCard";
-import { ArrowLeft, Building, Building2 } from "lucide-react";
-import { Button } from "@/components/button";
-import router from "next/navigation";
+import { Building, Building2 } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import { getTotalPolisForPerusahaanWithId } from "@/features/perusahaan-asuransi/actions/getStatForPerusahaan";
+import ListNasabahInPerusahaanAsuransiTable from "@/features/perusahaan-asuransi/detail-page/ListNasabahTable";
 
 type PageProps = {
     params: Promise<{ id: string }>
@@ -46,18 +45,24 @@ export default async function Page({
                     kontak_1={kontak_1}
                     kontak_2={kontak_2}
                 />
-                <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex flex-row gap-4">
                     <StatCard
                         title="Total Polis Aktif"
                         value={jumlah_polis_aktif ?? 0}
                         icon={Building2}
+                        className="w-full"
                     />
                     <StatCard
                         title="Total Polis Keseluruhan"
                         value={total_polis ?? 0}
                         icon={Building}
+                        className="w-full"
                     />
                 </div>
+                        <ListNasabahInPerusahaanAsuransiTable
+                            id_perusahaan_asuransi={id}
+                        />
+                    
             </div>
         </div>
     );

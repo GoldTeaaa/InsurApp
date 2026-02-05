@@ -16,7 +16,6 @@ import { NavItem } from "@/lib/sideNav/types";
 import { Button } from "@/components/ui/button";
 import { signout } from "@/app/(auth)/AuthActions";
 import getCurrentUser from "./actions.ts/getCurrentUser";
-import { string } from "zod";
 import { useEffect, useState } from "react";
 
 const NAV_ITEMS: NavItem[] = [
@@ -77,10 +76,6 @@ export default function SideNav({
             />
           </button>
         )}
-      </div>
-
-      <div>
-
       </div>
 
       <nav className="space-y-1 px-2 py-4">

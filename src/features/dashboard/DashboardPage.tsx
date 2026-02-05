@@ -5,9 +5,7 @@ import { FileText, Users, DollarSign, ShieldAlert } from 'lucide-react';
 
 export default async function DashboardPage(){
     const response = await getCurrentUser();
-
-    console.log('response: ', response);
-
+    
     if(!response.success) return <p>{response.message}</p>
 
     // Mock data for dashboard stats - in a real app, this would come from your backend.

@@ -9,7 +9,7 @@ type ReturnState = ActionReturnState<{
   hard: boolean
 }>;
 
-export default async function deletePerusahaanAction(id: string): Promise<ReturnState> {
+export default async function deletePerusahaanAsuransiAction(id: string): Promise<ReturnState> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("perusahaan_asuransi_delete", {
     // p_hard,

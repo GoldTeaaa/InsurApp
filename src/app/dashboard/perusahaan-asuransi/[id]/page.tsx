@@ -18,22 +18,23 @@ export default async function Page({
     const { id } = await params;
 
     const infoCardData = await getPerusahaanAsuransiById(id);
-    
+
     if (!infoCardData.success) {
         throw new Error(infoCardData.message);
     };
-    
+
     const statData = await getTotalPolisForPerusahaanWithId(id);
 
-    if(!statData.success) {
+    if (!statData.success) {
         throw new Error(statData.message);
     }
 
-    const { total_polis, jumlah_polis_aktif } = statData.data ?? {undefined};
+    const { total_polis, jumlah_polis_aktif } = statData.data ?? { undefined };
     const { nama, email, alamat, kontak_1, kontak_2 } = infoCardData.data ?? notFound();
 
     return (
         <div className="w-full">
+
             <BackButton />
 
             <div className="flex flex-col gap-y-4">
@@ -59,10 +60,9 @@ export default async function Page({
                         className="w-full"
                     />
                 </div>
-                        <ListNasabahInPerusahaanAsuransiTable
-                            id_perusahaan_asuransi={id}
-                        />
-                    
+                <ListNasabahInPerusahaanAsuransiTable
+                    id_perusahaan_asuransi={id}
+                />
             </div>
         </div>
     );

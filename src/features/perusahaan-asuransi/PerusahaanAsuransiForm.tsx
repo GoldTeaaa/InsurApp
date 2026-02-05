@@ -10,12 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormTextField from "@/components/TextField";
 import { createPerusahaan, type ReturnState } from "./actions/createPerusahaan";
 import { Button } from "@/components/button";
-import Link from "next/link";
 import { toast } from "sonner";
 import { updatePerusahaanAction } from "./actions/updatePerusahaan";
 import { useRouter } from "next/navigation";
 
-type PerusahaanFormProps = | {
+type PerusahaanFormProps = (| {
     mode: "create";
     id?: never;
     prefillData?: never;
@@ -23,12 +22,21 @@ type PerusahaanFormProps = | {
     mode: "update";
     id: string;
     prefillData: PerusahaanFormType;
-}
+}) & {
+    formId?: string;
+    hideButtons?: boolean;
+    onSuccess?: () => void;
+    className?: string;
+};
 
 export default function PerusahaanFormType({
     mode,
     id,
-    prefillData
+    prefillData,
+    formId,
+    hideButtons,
+    onSuccess,
+    className
 }: PerusahaanFormProps) {
     const defaultValues = prefillData || defaultPerusahaanForm;
     const router = useRouter();
@@ -55,14 +63,19 @@ export default function PerusahaanFormType({
 
     useEffect(() => {
         if (state.success) {
-            router.back();
+            if (onSuccess) {
+                onSuccess();
+            } else {
+                router.back();
+            }
             toast.success(state.message);
         }
-    }, [state, method, router]);
+    }, [state, method, router, onSuccess]);
 
     return (
         <FormProvider {...method}>
             <form
+                id={formId}
                 onSubmit={handleSubmit((data) => {
                     const formData = new FormData();
                     Object.entries(data).forEach(([key, value]) => formData.append(key, value as string));
@@ -70,8 +83,9 @@ export default function PerusahaanFormType({
                         formAction(formData);
                     });
                 })}
-                className="max-w-xl mx-auto mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-                <h2 className="text-lg font-semibold">{mode === "create" ? "Tambah Perusahaan Asuransi" : "Update Perusahaan Asuransi"}</h2>
+                className={`max-w-xl mx-auto mt-8 space-y-4 ${className || ''}`}>
+                {/* <h2 className="text-lg font-semibold">{mode === "create" ? "Tambah Perusahaan Asuransi" : "Update Perusahaan Asuransi"}</h2> */}
+                <h2 className="text-lg font-semibold">{mode === "create" ? "Tambah Perusahaan Asuransi" : null}</h2>
 
                 <FormTextField<PerusahaanFormType>
                     name='nama'
@@ -94,14 +108,16 @@ export default function PerusahaanFormType({
                     label="Kontak 2"
                 />
 
-                <div className="pt-2 flex gap-2">
-                    <Button type="submit" disabled={isPending}>
-                        {isPending ? "Menyimpan..." : "Simpan"}
-                    </Button>
-                    <Button onClick={() => router.back()} variant="ghost">
-                        Cancel
-                    </Button>
-                </div>
+                {!hideButtons && (
+                    <div className="pt-2 flex gap-2">
+                        <Button type="submit" disabled={isPending}>
+                            {isPending ? "Menyimpan..." : "Simpan"}
+                        </Button>
+                        <Button onClick={() => router.back()} variant="ghost">
+                            Cancel
+                        </Button>
+                    </div>
+                )}
 
                 {(!state.success && state.message) && (
                     <p className={`text-sm ${state.success ? 'text-green-600' : 'text-red-600'}`}>

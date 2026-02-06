@@ -12,7 +12,9 @@ type ReturnState = ActionReturnState<NasabahForm>;
 export default async function createNasabahAction(
   formData: NasabahForm
 ): Promise<ReturnState> {
+  
   const supabase = await createClient();
+
   if (formData.tipe === "perusahaan") {
     const args = toRpcCreatePerusahaan.safeParse(formData);
 

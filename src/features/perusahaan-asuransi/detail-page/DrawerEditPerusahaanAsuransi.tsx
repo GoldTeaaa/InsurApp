@@ -1,6 +1,6 @@
 'use client';
 import { Button } from "@/components/button";
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { Drawer, DrawerClose, DrawerContent, DrawerOverlay, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Pencil } from "lucide-react";
 import PerusahaanAsuransiForm from "../PerusahaanAsuransiForm";
 import { PerusahaanFormType } from "@/lib/perusahaan_asuransi/types";
@@ -30,7 +30,8 @@ export default function DrawerEditPerusahaanAsuransi({
                         Edit
                     </Button>
                 </DrawerTrigger>
-                <DrawerContent className="sm:max-w-xl">
+                <DrawerOverlay className="bg-black/50 backdrop-blur"/>
+                <DrawerContent className="fixed right-0 top-0 h-full w-[480px] max-w-[25vw]">
                     <DrawerHeader>
                         <DrawerTitle>Edit {data.nama}</DrawerTitle>
                     </DrawerHeader>
@@ -49,7 +50,7 @@ export default function DrawerEditPerusahaanAsuransi({
                         />
                     </div>
                     <DrawerFooter>
-                        <Separator className="my-4"/>
+                        <Separator className="my-4" />
                         <div className="flex justify-end gap-2">
                             <DrawerClose asChild>
                                 <Button variant="outline">Cancel</Button>

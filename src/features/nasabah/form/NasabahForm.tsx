@@ -19,6 +19,7 @@ import updateNasabahAction from "@/features/nasabah/actions/updateNasabah";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Save } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 type CreateFormProps = {
     mode: "create";
@@ -30,12 +31,18 @@ type UpdateFormProps = {
     initialData: NasabahForm;
 };
 
-export type NasabahFormProps = CreateFormProps | UpdateFormProps;
+type SharedFormProps = {
+    formId?: string;
+    hideButtons?: boolean;
+    onSuccess?: () => void;
+}
+
+export type NasabahFormProps = (CreateFormProps | UpdateFormProps) & SharedFormProps;
 
 export default function NasabahForm(props: NasabahFormProps) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { mode } = props;
+    const { mode, formId, hideButtons, onSuccess } = props;
 
     const updateId = mode === "update" ? props.id : "";
     const initialData = mode === "update" ? props.initialData : defaultPribadiFormValues;
@@ -87,8 +94,13 @@ export default function NasabahForm(props: NasabahFormProps) {
             if (!res.success) {
                 setError('root', { message: res.message ?? 'Gagal menyimpan' });
             } else {
-                router.back();
-                toast.success(res.message);
+                if(onSuccess){
+                    onSuccess();
+                    toast.success(res.message ?? 'Berhasil menyimpan');
+                }else{
+                    toast.success(res.message ?? 'Berhasil menyimpan');
+                    router.back();
+                }
             }
         } catch (e) {
             setError('root', { message: 'Terjadi kesalahan pada server' });
@@ -100,16 +112,17 @@ export default function NasabahForm(props: NasabahFormProps) {
     return (
         <FormProvider {...methods}>
             <form
+                id={formId}
                 onSubmit={handleSubmit(submit)}
                 aria-busy={isSubmitting}
-                className="mx-auto mt-8 w-full max-w-2xl md:max-w-3xl rounded-xl bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur focus-within:ring-2 focus-within:ring-indigo-500/30 transition-shadow"
+                className="mx-auto mt-8 w-full max-w-2xl md:max-w-3xl "
             >
                 {/* Header */}
-                <div className="mb-4 sm:mb-6">
+                {/* <div className="mb-4 sm:mb-6">
                     <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
                         {mode === 'create' ? 'Tambah Nasabah' : 'Update Nasabah'}
                     </h2>
-                </div>
+                </div> */}
 
                 {/* Alerts */}
                 {!!errors.root?.message && (
@@ -122,12 +135,12 @@ export default function NasabahForm(props: NasabahFormProps) {
                 )}
 
                 {/* Card: Tipe + Placeholder for form sections */}
-                <div className="rounded-lg bg-white px-3 py-3 sm:px-4 sm:py-4">
+                {/* <div className="rounded-lg bg-white px-3 py-3 sm:px-4 sm:py-4"> */}
 
-                    <div className="mb-4">
+                    <div className="mb-4 gap-4 px-6">
                         {mode === 'update'
                             ? <div className="text-xs text-red-500">Tipe nasabah tidak dapat diubah saat update.</div>
-                            : <div className="mb-1.5 text-s font-medium text-gray-600">Tipe Nasabah</div>
+                            : <div className="mb-1.5 text-s font-bold">Tipe Nasabah</div>
                         }
                         <RadioField<NasabahForm>
                             name="tipe"
@@ -137,30 +150,35 @@ export default function NasabahForm(props: NasabahFormProps) {
                         />
                     </div>
 
+                    <Separator />
+
                     <div className="mt-4 grid grid-cols-1 gap-4">
                         {tipe === 'pribadi' && <PribadiForm />}
                         {tipe === 'perusahaan' && <PerusahaanForm />}
                     </div>
-                </div>
+                {/* </div> */}
+
 
                 {/* Button */}
-                <div className="mt-5 sm:mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end border-t border-gray-100 pt-4">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => router.back()}
-                    >
-                        Kembali
-                    </Button>
-                    <Button
-                        type="submit"
-                        disabled={isSubmitting || isFormSubmitting || (mode === 'update' && !isDirty)}
-                        className="flex items-center gap-2"
-                    >
-                        <Save />
-                        {isSubmitting ? 'Menyimpan...' : (mode === 'create' ? 'Simpan' : 'Update')}
-                    </Button>
-                </div>
+                {!hideButtons && (
+                    <div className="mt-5 sm:mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end border-t border-gray-100 pt-4">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => router.back()}
+                        >
+                            Kembali
+                        </Button>
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting || isFormSubmitting || (mode === 'update' && !isDirty)}
+                            className="flex items-center gap-2"
+                        >
+                            <Save />
+                            {isSubmitting ? 'Menyimpan...' : (mode === 'create' ? 'Simpan' : 'Update')}
+                        </Button>
+                    </div>
+                )}
             </form>
         </FormProvider>
     );

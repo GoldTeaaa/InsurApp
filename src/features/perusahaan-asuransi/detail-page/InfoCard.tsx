@@ -89,7 +89,7 @@ export default function InfoCard({
                             {kontak_1 && (
                                 <div className="flex items-center gap-1.5">
                                     <Phone className="h-4 w-4 text-slate-400" />
-                                    <span>{kontak_1}</span> {kontak_2 && <span> / {kontak_2}</span>}
+                                    <span>{kontak_1}</span> {   kontak_2 && <span> / {kontak_2}</span>}
                                 </div>
                             )}
                         </div>

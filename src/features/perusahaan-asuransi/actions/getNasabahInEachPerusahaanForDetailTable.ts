@@ -28,7 +28,7 @@ export default async function getNasabahInEachPerusahaanForDetailTable({
     };
   }
 
-  console.log('list nasabah pada perusahaan: ', data, 'dengan id: ', id_perusahaan_asuransi);
+  // console.log('list nasabah pada perusahaan: ', data, 'dengan id: ', id_perusahaan_asuransi);
 
   const parsedData = ListOfNasabahInPerusahaanTableCardSchema.safeParse(data);
 

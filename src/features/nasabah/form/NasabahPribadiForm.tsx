@@ -4,6 +4,7 @@ import { SelectField } from "@/components/SelectField";
 import TextField from "@/components/TextField";
 import { AGAMA, GENDER, NasabahForm, STATUS_PERKAWINAN } from "@/lib/nasabah/type";
 import { KEWARGANEGARAAN } from "@/lib/nasabah/types";
+import { Separator } from "@/components/ui/separator";
 
 export default function PribadiForm() {
 
@@ -25,6 +26,8 @@ export default function PribadiForm() {
                     <TextField<NasabahForm> name="pekerjaan" label="Pekerjaan" />
                 </div>
             </FormCard>
+
+            <Separator />
 
             {/* === Section: Alamat Sesuai KTP === */}
             <FormCard title="Alamat Sesuai KTP" description="Gunakan alamat yang tercantum pada KTP.">
@@ -54,6 +57,8 @@ export default function PribadiForm() {
                     <SelectField<NasabahForm> name="kewarganegaraan" label="Kewarganegaraan" options={KEWARGANEGARAAN} />
                 </div>
             </FormCard>
+
+            <Separator />
 
             {/* === Section: Kontak & Alamat Tinggal === */}
             <FormCard title="Kontak & Alamat Tinggal" description="Informasi untuk keperluan komunikasi dan domisili saat ini.">

@@ -6,6 +6,7 @@ import NasabahTable from '@/features/nasabah/table/nasabah-table';
 import { NasabahTableSearchParams } from '@/lib/nasabah/type';
 import fetchNasabahPage from '@/features/nasabah/actions/fetch-table-page';
 import { Plus } from 'lucide-react';
+import AddNasabahDrawer from '@/features/nasabah/AddNasabahDrawer';
 
 export default async function Page({
     searchParams
@@ -38,14 +39,17 @@ export default async function Page({
                             search={search}
                         />
                     </div>
-                    <Link
+                    {/* <Link
                         href={"/dashboard/nasabah/tambah-nasabah"}
                     >
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
                             <Plus />
                             Tambah Nasabah
                         </button>
-                    </Link>
+                    </Link> */}
+
+                    <AddNasabahDrawer/>
+                    
                 </div>
                 <Suspense key={`${search}-${page}`} fallback={<div className="mt-6 text-sm text-gray-500">Loading…</div>}>
                     <>

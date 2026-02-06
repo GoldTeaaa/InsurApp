@@ -37,8 +37,8 @@ export async function getPerusahaanAsuransiById(
     };
   }
 
-  console.log("id: ", id);
-  console.log("data: ", data);
+  // console.log("id: ", id);
+  // console.log("data: ", data);
 
   const parsedData = perusahaanFormSchema.safeParse(data);
   

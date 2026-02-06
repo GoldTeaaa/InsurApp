@@ -6,15 +6,18 @@ export async function deleteNasabahAction(id: string): Promise<ActionReturnState
   
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("nasabah_delete_v1", { p_id: id });
+
   if (error) {
     return {
       success: false,
       message: error.message,
     };
   }
+
+  console.log("Delete Nasabah Return Data: ", data);
   
   return{
     success: true,
-    message: `Successfully delete ${data[0].full_name}`
+    message: `Successfully delete ${data[0].nama}`
   }
 }

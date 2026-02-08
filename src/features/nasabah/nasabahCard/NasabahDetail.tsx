@@ -6,13 +6,16 @@ import NasabahStatCard from "./NasabahStatCard";
 import { deleteNasabahAction } from "../actions/deleteNasabah";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { NasabahFormType } from "@/lib/nasabah/type";
 
 type Props = {
-    id: string
+    id: string;
+    initialData: NasabahFormType;
 }
 
 export default function NasabahDetail({
-    id
+    id,
+    initialData
 }: Props) {
 
     const router = useRouter();
@@ -39,6 +42,7 @@ export default function NasabahDetail({
         <div className="mx-auto w-[60%] grid grid-cols-1 gap-4">
             <NasabahProfileCard 
                 id={id}
+                data={initialData}
                 handleDelete={handleDelete}
             />
             <div className="grid grid-cols-[6fr_4fr] gap-4">

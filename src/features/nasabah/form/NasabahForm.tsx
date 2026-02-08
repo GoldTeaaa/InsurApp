@@ -1,11 +1,10 @@
 'use client';
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
     TIPE,
     defaultPribadiFormValues,
     formSchema,
-    type NasabahForm,
+    type NasabahFormType,
     defaultPerusahaanFormValues,
 } from "@/lib/nasabah/type";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -28,7 +27,7 @@ type CreateFormProps = {
 type UpdateFormProps = {
     mode: "update";
     id: string;
-    initialData: NasabahForm;
+    initialData: NasabahFormType;
 };
 
 type SharedFormProps = {
@@ -37,9 +36,9 @@ type SharedFormProps = {
     onSuccess?: () => void;
 }
 
-export type NasabahFormProps = (CreateFormProps | UpdateFormProps) & SharedFormProps;
+export type NasabahFormTypeProps = (CreateFormProps | UpdateFormProps) & SharedFormProps;
 
-export default function NasabahForm(props: NasabahFormProps) {
+export default function NasabahFormType(props: NasabahFormTypeProps) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { mode, formId, hideButtons, onSuccess } = props;
@@ -47,7 +46,7 @@ export default function NasabahForm(props: NasabahFormProps) {
     const updateId = mode === "update" ? props.id : "";
     const initialData = mode === "update" ? props.initialData : defaultPribadiFormValues;
 
-    const methods = useForm<NasabahForm>({
+    const methods = useForm<NasabahFormType>({
         mode: "all",
         resolver: zodResolver(formSchema),
         defaultValues: initialData,
@@ -79,7 +78,7 @@ export default function NasabahForm(props: NasabahFormProps) {
         }
     }, [tipe, mode, reset]);
 
-    const submit = async (data: NasabahForm) => {
+    const submit = async (data: NasabahFormType) => {
         try {
             setIsSubmitting(true);
             clearErrors('root');
@@ -142,7 +141,7 @@ export default function NasabahForm(props: NasabahFormProps) {
                             ? <div className="text-xs text-red-500">Tipe nasabah tidak dapat diubah saat update.</div>
                             : <div className="mb-1.5 text-s font-bold">Tipe Nasabah</div>
                         }
-                        <RadioField<NasabahForm>
+                        <RadioField<NasabahFormType>
                             name="tipe"
                             label=""
                             options={TIPE}

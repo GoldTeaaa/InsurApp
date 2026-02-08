@@ -22,6 +22,7 @@ export default async function EditPage({ params }: {params : Promise<{id: string
       />
       <NasabahDetail 
         id={id}
+        initialData={detail.data as NasabahFormType}
       />
     </div>
   );

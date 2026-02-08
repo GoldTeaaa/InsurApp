@@ -1,4 +1,3 @@
-'use server';
 import DeleteDialog from "@/components/DeleteDialog";
 import {
   Card,
@@ -8,23 +7,21 @@ import {
 } from "@/components/ui/card";
 import NasabahEditDrawer from "./NasabahEditDrawer";
 import { User } from "lucide-react";
-import getNasabahDetails from "../actions/getNasabahDetails";
+import { NasabahFormType } from "@/lib/nasabah/type";
 
 type Props = {
   id: string;
-  name?: string;
-  joinedAt?: string;
+  data: NasabahFormType;
   handleDelete: (id: string) => void
 }
 
-export default async function NasabahProfileCard({
+export default function NasabahProfileCard({
   id,
-  name = "Nama Nasabah",
-  joinedAt = "Bergabung sejak...",  
+  data,
   handleDelete
 }: Props) {
 
-  // const initialUpdateData = await getNasabahDetails(id);  
+  const { nama } = data;
 
   return (
     <Card>
@@ -35,14 +32,14 @@ export default async function NasabahProfileCard({
               <User className="h-6 w-6 text-gray-500" />
             </div>
             <div className="flex flex-col gap-1">
-              <CardTitle>{name}</CardTitle>
-              <CardDescription>{joinedAt}</CardDescription>
+              <CardTitle>{nama}</CardTitle>
+              <CardDescription>Bergabung pada tanggal...</CardDescription>
             </div>
           </div>
           <div className="flex flex-row gap-2">
-            <NasabahEditDrawer 
+            <NasabahEditDrawer
               id={id}
-              // updateData={initialUpdateData.data}
+              updateData={data}
             />
             <DeleteDialog
               id={id}

@@ -1,14 +1,15 @@
 'use server';
-import { NasabahForm, toRpcCreatePerusahaan, toRpcCreatePribadi } from "@/lib/nasabah/type";
+import { NasabahFormType, toRpcCreatePerusahaan, toRpcCreatePribadi } from "@/lib/nasabah/type";
 import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
-import { redirect } from "next/navigation";
 
-type ReturnState = ActionReturnState<NasabahForm>;
+type ReturnState = ActionReturnState<{
+    nama: string
+}>;
 
 type Props = {
     id: string;
-    formData: NasabahForm;
+    formData: NasabahFormType;
 };
 
 export default async function  updateNasabahAction({
@@ -40,8 +41,6 @@ export default async function  updateNasabahAction({
         }
         payload = parsedPerusahaanData.data;
     }
-    console.log('update id', id)
-    console.log("payload: ", payload);
 
     const { data, error } = await supabase.rpc("update_nasabah", {
         p_update_id: id,
@@ -51,13 +50,13 @@ export default async function  updateNasabahAction({
     if(error){
         return{
             success: false,
-            message: error.message
+            message: error.message,
         }
     }
-    
-    redirect("/dashboard/nasabah")
-    // return{
-    //     success: true,
-    //     message: "Success"
-    // }
+
+    return {
+        success: true,
+        message: "Success",
+        data: data,
+    }
 }

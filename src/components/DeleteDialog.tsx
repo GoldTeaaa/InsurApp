@@ -1,3 +1,4 @@
+'use client';
 import { Button } from "@/components/button";
 import { Dialog, DialogContent, DialogDescription, DialogOverlay, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
 import { Trash2 } from "lucide-react";
@@ -18,7 +19,7 @@ export default function DeleteDialog({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="bg-red-1 00 hover:bg-red-200 text-red-900">
+                <Button className="bg-red-500 hover:bg-red-600 text-white shadow-sm transition-colors">
                     <Trash2 className="mr-2 h-4 w-4" />
                     Delete
                 </Button>

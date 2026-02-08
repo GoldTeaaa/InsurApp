@@ -82,9 +82,9 @@ export const formSchema = z.discriminatedUnion("tipe", [
 ]);
 
 export type BaseForm = z.infer<typeof baseSchema>;
-export type NasabahForm = z.infer<typeof formSchema>;
+export type NasabahFormType = z.infer<typeof formSchema>;
 
-export const defaultPribadiFormValues: NasabahForm = {
+export const defaultPribadiFormValues: NasabahFormType = {
   tipe: "pribadi",
   nama: "",
   contact_1: "",
@@ -110,7 +110,7 @@ export const defaultPribadiFormValues: NasabahForm = {
   kewarganegaraan: null,
 };
 
-export const defaultPerusahaanFormValues: NasabahForm = {
+export const defaultPerusahaanFormValues: NasabahFormType = {
   tipe: "perusahaan",
   nama: "",
   contact_1: "",

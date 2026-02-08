@@ -1,13 +1,13 @@
 'use server';
 import { 
-    type NasabahForm, 
+    type NasabahFormType, 
     perusahaanSchema, 
     pribadiSchema 
 } from "@/lib/nasabah/type";
 import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 
-type ReturnState = ActionReturnState<NasabahForm>;
+type ReturnState = ActionReturnState<NasabahFormType>;
 
 export default async function getNasabahDetails(id: string):Promise<ReturnState> {
     const supabase = await createClient();

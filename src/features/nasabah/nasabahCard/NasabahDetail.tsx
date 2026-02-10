@@ -47,7 +47,9 @@ export default function NasabahDetail({
             <div className="grid grid-cols-[6fr_4fr] gap-4">
                 <NasabahStatCard />
                 
-                <NasabahPersonalDetailCard />
+                <NasabahPersonalDetailCard
+                    data = {initialData}
+                />
             </div>
         </div>
     );

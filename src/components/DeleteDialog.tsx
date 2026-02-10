@@ -1,5 +1,5 @@
 'use client';
-import { Button } from "@/components/button";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogOverlay, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";

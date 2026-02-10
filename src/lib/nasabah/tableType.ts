@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const NasabahTableRow = z.object({
-  id: z.string(),
+  nasabah_id: z.string(),
   tipe: z.string(),
   nama: z.string(),
   contact_1: z.string(),
@@ -9,7 +9,8 @@ export const NasabahTableRow = z.object({
   email: z.string().email().nullable(),
   alamat: z.string().nullable(),
   created_at: z.string(),
-  updated_at: z.string(),
+  // updated_at: z.string(),
+  jumlah_polis: z.number(),
 });
 
 export const NasabahTableRowsSchema = z.array(NasabahTableRow);

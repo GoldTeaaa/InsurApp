@@ -1,6 +1,5 @@
 'use client';
 import NasabahPersonalDetailCard from "./NasabahPersonalDetailCard";
-import NasabahMainTableCard from "./NasabahMainTableCard";
 import NasabahProfileCard from "./NasabahProfileCard";
 import NasabahStatCard from "./NasabahStatCard";
 import { deleteNasabahAction } from "../actions/deleteNasabah";
@@ -39,7 +38,7 @@ export default function NasabahDetail({
     }
 
     return (
-        <div className="mx-auto w-[60%] grid grid-cols-1 gap-4">
+        <div className="mx-auto grid grid-cols-1 gap-4">
             <NasabahProfileCard 
                 id={id}
                 data={initialData}
@@ -50,7 +49,6 @@ export default function NasabahDetail({
                 
                 <NasabahPersonalDetailCard />
             </div>
-            <NasabahMainTableCard />
         </div>
     );
 }

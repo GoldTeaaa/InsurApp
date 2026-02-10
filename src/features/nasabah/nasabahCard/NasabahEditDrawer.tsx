@@ -42,6 +42,9 @@ export default function NasabahEditDrawer({
                     initialData={initialData}
                     formId={formId}
                     hideButtons={true}
+                    onSuccess={
+                        () => setOpen(false)
+                    }
                 />
 
                 <DrawerFooter>

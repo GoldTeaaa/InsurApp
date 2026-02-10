@@ -1,12 +1,9 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { UpdateInvoice } from "../buttons";
-import { DeleteButton } from "@/components/DeleteButton";
-import { deleteNasabahAction } from "@/features/nasabah/actions/deleteNasabah";
+
 import { NasabahTableRow } from "@/lib/nasabah/tableType";
 import { formatDate } from "@/lib/utils/formatDate";
-import TableAction from "@/components/TableAction";
-import { table } from "console";
+import TableAction from "@/components/table/TableAction";
 import { TableMetaAction } from "@/lib/perusahaan_asuransi/types/tableActionType";
 
 export const columnNasabah: ColumnDef<NasabahTableRow>[] = [
@@ -15,14 +12,15 @@ export const columnNasabah: ColumnDef<NasabahTableRow>[] = [
     header: "Nama",
     cell: ({row, table}) => {
       const {handleEdit} = table.options.meta as TableMetaAction;
-      const {id} = row.original;
+      const {nasabah_id, created_at} = row.original;
 
       return(
         <button
-          onClick={() => handleEdit(id)}
-          className="text-left underline underline-offset-10 decoration-current/20 hover:underline"
+          onClick={() => handleEdit(nasabah_id)}
+          className="flex flex-col items-start text-left hover:underline decoration-current/20"
         >
-          {row.original.nama}
+          <span className="font-medium">{row.original.nama}</span>
+          <span className="text-xs text-gray-500 font-normal">Terdaftar Sejak {formatDate(created_at)}</span>
         </button>
       )
     }
@@ -51,24 +49,18 @@ export const columnNasabah: ColumnDef<NasabahTableRow>[] = [
     ),
   },
   {
-    accessorKey: "created_at",
-    header: "Dibuat",
-    cell: ({ row }) => formatDate(row.original.created_at),
-  },
-  {
-    accessorKey: "updated_at",
-    header: "Diubah",
-    cell: ({ row }) => formatDate(row.original.updated_at),
+    accessorKey: "jumlah_polis",
+    header: "Jumlah Polis",
   },
   {
     id: "actions",
     header: () => <span className="sr-only">Actions</span>,
     cell: ({ row, table }) => {
       const { handleEdit, handleDelete } = table.options.meta as TableMetaAction;
-      const { id, nama  } = row.original;
+      const { nasabah_id, nama  } = row.original;
       return (
         <TableAction 
-          id={id}
+          id={nasabah_id}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
           item={nama}

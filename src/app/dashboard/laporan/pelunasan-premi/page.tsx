@@ -1,7 +1,7 @@
 'use client';
 import ExcelPreviewDialog from "@/components/ExcelPreviewDialog";
 import LaporanFilter from "@/components/LaporanFilter";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/table/Pagination";
 import PDFPreviewDialog from "@/components/PDFPreviewDialog";
 import getPelunasanPremiData from "@/features/laporan/pelunasan-premi/actions/getPelunasanPremiData";
 import useLapPelunasanPremiExport from "@/features/laporan/pelunasan-premi/actions/useLapPelunasanPremiExport";

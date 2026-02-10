@@ -1,7 +1,7 @@
-    import { Card, CardContent } from "@/components/card";
+    // import { Card, CardContent } from "@/components/card";
     import getNasabahInEachPerusahaanForDetailTable from "../actions/getNasabahInEachPerusahaanForDetailTable";
     import { listNasabahInPerusahaanColumns } from "./ListNasabahInPerusahaancolumns";
-    import UniversalTable from "@/components/UniversalTable";
+    import UniversalTable from "@/components/table/UniversalTable";
 
     type Props = {
         id_perusahaan_asuransi: string
@@ -20,14 +20,14 @@
         const nasabahListData = rawNasabahListData.data ?? [];
 
         return (
-            <Card>
-                <CardContent className="p-0">
+            // <Card>
+            //     <CardContent className="p-0">
                     <UniversalTable
                         data={nasabahListData}
                         columns={listNasabahInPerusahaanColumns}
                         noResultText="Tidak ada nasabah pada perusahaan ini"
                     />
-                </CardContent>
-            </Card>
+            //     </CardContent>
+            // </Card>
         )
     }

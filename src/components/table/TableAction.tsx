@@ -7,7 +7,7 @@ import {
 } from "@/components/dropdown-menu";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import DeleteConfirmationMenuItem from "./DeleteConfirmationMenuItem";
+import DeleteConfirmationMenuItem from "../DeleteConfirmationMenuItem";
 import { TableMetaAction } from "@/lib/perusahaan_asuransi/types/tableActionType";
 
 type TableActionProps = {

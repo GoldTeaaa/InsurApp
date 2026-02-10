@@ -1,7 +1,7 @@
 'use client';
 
 import LaporanFilter from "@/components/LaporanFilter";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/table/Pagination";
 import Search from "@/components/Search";
 import LaporanAgingPremiTable from "@/features/laporan/aging-premi/LaporanAgingPremiTable";
 import { LaporanAgingPremiRow } from "@/lib/laporan/laporan-aging-premi/types";

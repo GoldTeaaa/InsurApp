@@ -1,7 +1,7 @@
 import { PerusahaanRow } from "@/lib/perusahaan_asuransi/types";
 import { ColumnDef } from "@tanstack/react-table";
 // import { DeletePerusahaanAsuransi, UpdatePerusahaanAsuransi } from "./buttons";
-import TableAction from "@/components/TableAction";
+import TableAction from "@/components/table/TableAction";
 import { TableMetaAction } from "@/lib/perusahaan_asuransi/types/tableActionType";
 
 

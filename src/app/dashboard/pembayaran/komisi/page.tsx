@@ -1,4 +1,4 @@
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/table/Pagination";
 import Search from "@/components/Search";
 import getPembayaranKomisiTableData from "@/features/pembayaran/pembayaranKomisi/actions/getPembayaranKomisiTableData";
 import KomisiPembayaranTable from "@/features/pembayaran/pembayaranKomisi/KomisiPembayaranTable";

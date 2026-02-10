@@ -33,7 +33,7 @@ type UpdateFormProps = {
 type SharedFormProps = {
     formId?: string;
     hideButtons?: boolean;
-    onSuccess?: () => void;
+    onSuccess: () => void;
 }
 
 export type NasabahFormTypeProps = (CreateFormProps | UpdateFormProps) & SharedFormProps;
@@ -93,13 +93,9 @@ export default function NasabahFormType(props: NasabahFormTypeProps) {
             if (!res.success) {
                 setError('root', { message: res.message ?? 'Gagal menyimpan' });
             } else {
-                if(onSuccess){
-                    onSuccess();
-                    toast.success(res.message ?? 'Berhasil menyimpan');
-                }else{
-                    toast.success(res.message ?? 'Berhasil menyimpan');
-                    router.back();
-                }
+                onSuccess();
+                toast.success(res.message ?? 'Berhasil menyimpan');
+                router.refresh();
             }
         } catch (e) {
             setError('root', { message: 'Terjadi kesalahan pada server' });
@@ -136,25 +132,25 @@ export default function NasabahFormType(props: NasabahFormTypeProps) {
                 {/* Card: Tipe + Placeholder for form sections */}
                 {/* <div className="rounded-lg bg-white px-3 py-3 sm:px-4 sm:py-4"> */}
 
-                    <div className="mb-4 gap-4 px-6">
-                        {mode === 'update'
-                            ? <div className="text-xs text-red-500">Tipe nasabah tidak dapat diubah saat update.</div>
-                            : <div className="mb-1.5 text-s font-bold">Tipe Nasabah</div>
-                        }
-                        <RadioField<NasabahFormType>
-                            name="tipe"
-                            label=""
-                            options={TIPE}
-                            disabled={mode === 'update'}
-                        />
-                    </div>
+                <div className="mb-4 gap-4 px-6">
+                    {mode === 'update'
+                        ? <div className="text-xs text-red-500">Tipe nasabah tidak dapat diubah saat update.</div>
+                        : <div className="mb-1.5 text-s font-bold">Tipe Nasabah</div>
+                    }
+                    <RadioField<NasabahFormType>
+                        name="tipe"
+                        label=""
+                        options={TIPE}
+                        disabled={mode === 'update'}
+                    />
+                </div>
 
-                    <Separator />
+                <Separator />
 
-                    <div className="mt-4 grid grid-cols-1 gap-4">
-                        {tipe === 'pribadi' && <PribadiForm />}
-                        {tipe === 'perusahaan' && <PerusahaanForm />}
-                    </div>
+                <div className="mt-4 grid grid-cols-1 gap-4">
+                    {tipe === 'pribadi' && <PribadiForm />}
+                    {tipe === 'perusahaan' && <PerusahaanForm />}
+                </div>
                 {/* </div> */}
 
 

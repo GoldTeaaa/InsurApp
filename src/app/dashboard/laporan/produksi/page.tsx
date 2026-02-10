@@ -1,6 +1,6 @@
 'use client';
 import Search from "@/components/Search";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/table/Pagination";
 import { LaporanProduksiRow } from "@/lib/laporan/laporan-produksi/types";
 import PDFPreviewDialog from "@/components/PDFPreviewDialog";
 import LaporanFilter from "@/components/LaporanFilter";

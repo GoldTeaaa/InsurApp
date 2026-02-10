@@ -18,7 +18,7 @@ export default function NasabahTable({
   const router = useRouter();
   
   const handleEdit = (id: string) => {
-    router.push(`/dashboard/nasabah/${id}/edit`);
+    router.push(`/dashboard/nasabah/${id}`);
   }
 
   const handleDelete = async (id: string) => {
@@ -74,8 +74,8 @@ export default function NasabahTable({
                   <p className="mt-2 text-xs text-gray-400">Dibuat: {formatDate(row.original.created_at)}</p>
                 </div>
                 <div className="flex justify-end gap-2 pt-3">
-                  <UpdateInvoice id={row.original.id} />
-                  <DeleteNasabah id={row.original.id} />
+                  <UpdateInvoice id={row.original.nasabah_id} />
+                  <DeleteNasabah id={row.original.nasabah_id} />
                 </div>
               </div>
             ))}

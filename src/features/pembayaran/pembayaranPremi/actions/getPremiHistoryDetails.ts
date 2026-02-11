@@ -9,10 +9,11 @@ export default async function getPremiHistoryDetails(
   detailPremiId: string
 ): Promise<ReturnState> {
   const supabase = await createClient();
+
   const { data, error } = await supabase
-    .from("pembayaran_history_view")
+    .from("pembayaran_premi_history_view")
     .select(
-      "detail_premi_id, nomor_polis, amount_paid, tanggal_bayar, cara_bayar, rekening_bank, ref_no, pembayaran_id"
+      "detail_premi_id, nomor_polis, amount_paid, tanggal_bayar, cara_bayar, rekening_bank, ref_no, pembayaran_premi_id"
     )
     .eq("detail_premi_id", detailPremiId)
     .order("tanggal_bayar", { ascending: false });
@@ -23,6 +24,8 @@ export default async function getPremiHistoryDetails(
       message: error.message,
     };
   }
+
+  console.log("history pembayaran premi data: ", data);
 
   return {
     success: true,

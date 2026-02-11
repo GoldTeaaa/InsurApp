@@ -23,7 +23,7 @@ export type PembayaranTableRow = {
 
 export type PremiHistoryRow = {
   detail_premi_id: string;
-  pembayaran_id: string;
+  pembayaran_premi_id: string;
   nomor_polis: string;
   amount_paid: number;
   tanggal_bayar: string;
@@ -69,7 +69,7 @@ export const defaultAddPembayaranPremiForm: AddPembayaranPremiForm = {
 export const updatePembayaranFormSchema = addPembayaranPremiFormSchema;
 
 export const updatePembayaranPremiPayloadSchema = updatePembayaranFormSchema.extend({
-  pembayaran_id: z.string().uuid(),
+  pembayaran_premi_id: z.string().uuid(),
 })
 
 export type UpdatePembayaranPremiPayload = z.infer<typeof updatePembayaranPremiPayloadSchema>;

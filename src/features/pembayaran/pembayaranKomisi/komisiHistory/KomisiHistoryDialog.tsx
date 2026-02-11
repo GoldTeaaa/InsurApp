@@ -30,7 +30,6 @@ export default function KomisiHistoryDialog({
         queryFn: () => getHistoryPembayaranKomisi({ detailKomisiId })
     })
 
-    console.log("data: ", data);
     const tableHistoryData = data?.success ? (data.data ?? []) : [];
 
     return (

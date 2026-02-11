@@ -8,8 +8,8 @@ export default async function EditPolisPage({ params }: {params : Promise<{id: s
     // If the fetch was not successful or data is missing, show the not found page.
     if (!result.success || !result.data) return <PolisNotFound message={result.message}/>;
 
-    console.log("result.data: ", result.data);
-    console.log("result.data.shares: ", result.data.shares);
+    // console.log("result.data: ", result.data);
+    // console.log("result.data.shares: ", result.data.shares);
 
     return (
         <div className="">

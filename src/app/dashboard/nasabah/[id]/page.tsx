@@ -2,7 +2,6 @@ import TableShell from '@/components/table/TableShell';
 import UniversalTable from '@/components/table/UniversalTable';
 import getNasabahPolisList from '@/features/nasabah/actions/getNasabahPolisList';
 import { defaultDetailPolisNasabahColumn } from '@/features/nasabah/nasabahCard/defaultDetailPolisNasabahColumn';
-import NasabahMainTableCard from '@/features/nasabah/nasabahCard/NasabahMainTableCard';
 import { notFound } from 'next/navigation';
 
 

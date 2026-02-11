@@ -4,9 +4,7 @@ import {
     flexRender,
     useReactTable,
 } from "@tanstack/react-table";
-import { useCallback, useEffect, useState } from "react";
-import getPremiHistoryDetails from "../actions/getPremiHistoryDetails";
-import deletePembayaranPremi from "../actions/deletePembayaranPremi";
+import { useCallback, useState } from "react";
 import {
     Table,
     TableBody,
@@ -22,33 +20,24 @@ import PremiFormDialog from "../PremiFormDialog";
 import DeletePembayaranPremiAlertDialog from "./DeletePembayaranPremiAlertDialog";
 
 type PremiHistoryTableProps = {
-    detailPremiId: string;
     onEditSuccess: () => void;
     onDeleteSuccess: () => void;
+    premiHistoryData: PremiHistoryRow[]
 };
 
-export default function PremiHistoryTable({ detailPremiId, onEditSuccess, onDeleteSuccess }: PremiHistoryTableProps) {
-    const [data, setData] = useState<PremiHistoryRow[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+export default function PremiHistoryTable({  
+    onEditSuccess, 
+    onDeleteSuccess,
+    premiHistoryData 
+}: PremiHistoryTableProps) {
+
     const [isDeleting, setIsDeleting] = useState(false);
     const [editingPremiId, setEditingPremiId] = useState<string | null>(null);
     const [deletingPremiId, setDeletingPremiId] = useState<string | null>(null);
     const [pembayaranPremiToEdit, setPembayaranPremiToEdit] = useState<AddPembayaranPremiForm | undefined>(undefined);
 
-    const refetchData = useCallback(async () => {
-        const result = await getPremiHistoryDetails(detailPremiId);
-        if (result.success && result.data) {
-            setData(result.data);
-        }
-    }, [detailPremiId]);
-
-    useEffect(() => {
-        setIsLoading(true);
-        refetchData().finally(() => setIsLoading(false));
-    }, [refetchData]);
-
     const handleOpenEditDialog = useCallback((premiId: string) => {
-        const premi = data.find(p => p.pembayaran_id === premiId);
+        const premi = premiHistoryData.find(p => p.pembayaran_premi_id === premiId);
         if (premi) {
             const parseResult = addPembayaranPremiFormSchema.safeParse(premi);
             if (parseResult.success) {
@@ -56,10 +45,9 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess, onDele
                 setEditingPremiId(premiId);
             }
         }
-    }, [data]);
+    }, [premiHistoryData]);
 
     const handleEditSuccess = async () => {
-        await refetchData();
         onEditSuccess(); // Propagate success to parent to refresh its data
         setEditingPremiId(null);
         setPembayaranPremiToEdit(undefined);
@@ -70,7 +58,7 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess, onDele
     };
 
     const table = useReactTable({
-        data,
+        data: premiHistoryData,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
@@ -99,10 +87,10 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess, onDele
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {isLoading || isDeleting ? (
+                    {isDeleting ? (
                         <TableRow>
                             <TableCell colSpan={columns.length} className="h-24 text-center">
-                                Loading...
+                                Deleting...
                             </TableCell>
                         </TableRow>
                     ) : table.getRowModel().rows?.length ? (
@@ -156,7 +144,6 @@ export default function PremiHistoryTable({ detailPremiId, onEditSuccess, onDele
                     }}
                     onDeleteSuccess={async () => {
                         setDeletingPremiId(null);
-                        await refetchData();
                         onEditSuccess();
                     }}
                 />

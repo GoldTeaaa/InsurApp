@@ -28,7 +28,6 @@ export default async function getPolisDetails(
       message : error.message
     }
   }
-  console.log('before parse', data);
 
   const parsedData = ViewPolisSchema.safeParse(data);
   if (!parsedData.success) {

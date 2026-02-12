@@ -56,7 +56,7 @@ export const columns : ColumnDef<PremiHistoryRow>[] = [
             } = table.options.meta as ActionProps
             return (
                 <EditOrDeletePremiDropdown
-                    pembayaranPremiId={pembayaran.pembayaran_id}
+                    pembayaranPremiId={pembayaran.pembayaran_premi_id}
                     onEdit={onEdit}
                     onDelete={onDelete}
                 />

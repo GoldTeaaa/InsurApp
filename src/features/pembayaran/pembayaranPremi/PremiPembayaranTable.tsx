@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { flexRender, getCoreRowModel, useReactTable, TableMeta } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { columns } from "@/features/pembayaran/pembayaranPremi/columns";
 import { PembayaranTableRow } from '@/lib/pembayaran/pembayaran_premi/types';

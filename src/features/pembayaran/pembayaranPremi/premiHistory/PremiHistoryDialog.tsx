@@ -44,8 +44,6 @@ export default function PremiHistoryDialog({
 
   const tablePremiHistoryData = premiHistoryData?.success ? (premiHistoryData.data ?? []) : [];
 
-  console.log("premiHistoryData: ", premiHistoryData);
-
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="bg-white sm:max-w-3xl">

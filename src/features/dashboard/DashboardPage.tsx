@@ -1,12 +1,13 @@
 import getCurrentUser from "@/features/dashboard/actions.ts/getCurrentUser";
-import StatCard  from "@/app/dashboard/StatCard";
+import StatCard from "@/app/dashboard/StatCard";
 import { RecentPolicies } from "@/app/dashboard/RecentPolicies";
-import { FileText, Users, DollarSign, ShieldAlert } from 'lucide-react';
+import { FileText, Users, DollarSign, ShieldAlert, PlusIcon } from 'lucide-react';
+import { Button } from "@/components/button";
 
-export default async function DashboardPage(){
+export default async function DashboardPage() {
     const response = await getCurrentUser();
-    
-    if(!response.success) return <p>{response.message}</p>
+
+    if (!response.success) return <p>{response.message}</p>
 
     // Mock data for dashboard stats - in a real app, this would come from your backend.
     const stats = {
@@ -21,34 +22,34 @@ export default async function DashboardPage(){
             <div className="flex items-center justify-between space-y-2">
                 <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
                 <div className="flex items-center space-x-2">
-                    {/* This could be a button to add a new policy, client, etc. */}
-                    <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2">
-                        Add New Policy
-                    </button>
+                    <Button>
+                        <span>Tambah Nasabah</span>
+                        <PlusIcon className="ml-2 h-4 w-4" />
+                    </Button>
                 </div>
             </div>
 
             <div className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <StatCard 
+                    <StatCard
                         title="Active Policies"
                         value={stats.activePolicies.toString()}
                         icon={<FileText className="h-4 w-4 text-muted-foreground" />}
                         description="Total active insurance policies"
                     />
-                    <StatCard 
+                    <StatCard
                         title="Total Premium (YTD)"
                         value={`$${stats.totalPremium.toLocaleString()}`}
                         icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
                         description="+5.2% from last month"
                     />
-                    <StatCard 
+                    <StatCard
                         title="Open Claims"
                         value={stats.openClaims.toString()}
                         icon={<ShieldAlert className="h-4 w-4 text-muted-foreground" />}
                         description="Claims requiring attention"
                     />
-                    <StatCard 
+                    <StatCard
                         title="New Clients (This Month)"
                         value={`+${stats.newClients}`}
                         icon={<Users className="h-4 w-4 text-muted-foreground" />}

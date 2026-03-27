@@ -37,13 +37,14 @@ export default async function getPolisDetails(
       message: "Invalid data structure from API.",
     };
   }
-  // console.log('parsedData.data: ', parsedData.data);
 
   const formattedData = {
     ...parsedData.data,
     periode_mulai: formatDateForInput(parsedData.data.periode_mulai),
     periode_akhir: formatDateForInput(parsedData.data.periode_akhir),
   };
+
+  console.log('Formatted Update Data: ', parsedData.data);
 
   return {
     success: true,

@@ -33,16 +33,19 @@ export default async function Page({
 
                     <AddNasabahDrawer />
                 </div>
-                <TableShell
-                    search={
+                <div className='flex flex-col gap-2'>
+                    <div className='w-lg'>
                         <Search
                             placeholder='Cari nama / email / kontak / alamat'
                             search={search}
                         />
-                    }
-                    table={<NasabahTable data={rows} />}
-                    pagination={<Pagination page={page} pageCount={pageCount} />}
-                />
+
+                    </div>
+                    <TableShell
+                        table={<NasabahTable data={rows} />}
+                        pagination={<Pagination page={page} pageCount={pageCount} />}
+                    />
+                </div>
             </div>
         </div>
     );

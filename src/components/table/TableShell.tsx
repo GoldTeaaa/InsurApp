@@ -1,23 +1,18 @@
 'use client';
 interface TableShellProps {
     table: React.ReactNode;
-    search?: React.ReactNode;
     pagination?: React.ReactNode;
     filter?: React.ReactNode;
 }
 
 export default function TableShell({
-    search,
-    table,
     pagination,
+    table,
     filter
 }: TableShellProps) {
     return (
         <div className="w-full rounded-lg border border-gray-200 bg-white shadow-sm">
             <div className="flex flex-col gap-4 p-4 md:flex-row md:items-center md:justify-between border-b border-gray-100">
-                <div className="w-full md:max-w-sm">
-                    {search}
-                </div>
                 {filter && (
                     <div className="flex items-center gap-2">
                         {filter}

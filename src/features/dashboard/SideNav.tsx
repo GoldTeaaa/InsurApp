@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils/clsx";
 import { NavItem } from "@/lib/sideNav/types";
 import { Button } from "@/components/ui/button";
 import { signout } from "@/app/(auth)/AuthActions";
-import getCurrentUser from "./actions.ts/getCurrentUser";
+import getCurrentUser from "./actions/getCurrentUser";
 import { useEffect, useState } from "react";
 
 const NAV_ITEMS: NavItem[] = [

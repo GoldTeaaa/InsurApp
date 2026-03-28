@@ -8,6 +8,7 @@ import { polisSearchSchema } from "@/features/polis/schema/table-types"
 import { RawSearchParams } from "@/lib/types"
 import FilterBox from "@/components/FilterBox"
 import { Plus } from "lucide-react"
+import PolisStatCard from "@/features/polis/PolisStatCard"
 
 export default async function Page({
 	searchParams,
@@ -46,8 +47,26 @@ export default async function Page({
 					<Link href={"/dashboard/polis/buat-polis"}> <Plus /> Tambah Polis</Link>
 				</Button>
 			</div>
+			<div className="flex flex-row">
+				<div>
+					<FilterBox />
+				</div>
+				<div className="flex flex-row">
+					<PolisStatCard
+						title="Total Polis"
+						value={data.length}
+					/>
+					<PolisStatCard
+						title="Polis Aktif"
+						value={data.filter((polis) => polis.status === "aktif").length}
+					/>
+					<PolisStatCard
+						title="Polis Tidak Aktif"
+						value={data.filter((polis) => polis.status === "tidak_aktif").length}
+					/>
+				</div>
+			</div>
 			<div className="p-4 space-y-4">
-				<FilterBox />
 				<div>
 					<Suspense key={tableKey} fallback={<div className="text-center p-8">Loading polis data...</div>}>
 						<PolisTable

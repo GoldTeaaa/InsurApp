@@ -1,7 +1,7 @@
 import { Path, useFormContext, useWatch } from "react-hook-form";
-import { Polis, PolisShare } from "@/lib/polis/create-types";
+import { Polis, PolisShare } from "@/features/polis/schema/create-types";
 import { useCallback, useEffect, useState } from "react";
-import { ListPerusahaanType } from "@/lib/polis/step3";
+import { ListPerusahaanType } from "@/features/polis/schema/step3";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import PremiInputBox from "./PremiInputBox";
 import KomisiInputBox from "./KomisiInputBox";

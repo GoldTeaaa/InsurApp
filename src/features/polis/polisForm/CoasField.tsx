@@ -1,10 +1,10 @@
 import { PlusIcon } from "lucide-react";
 import PremiKomisiBox from "./PremiKomisiBox";
-import { PolisCoas } from "@/lib/polis/create-types";
-import { getDefaultValues } from "@/lib/polis/defaultValues";
+import { PolisCoas } from "@/features/polis/schema/create-types";
+import { getDefaultValues } from "@/features/polis/schema/defaultValues";
 import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { ListPerusahaanType } from "@/lib/polis/step3";
+import { ListPerusahaanType } from "@/features/polis/schema/step3";
 
 export default function CoasFields({ perusahaanList }: { perusahaanList: ListPerusahaanType[] }) {
     const {

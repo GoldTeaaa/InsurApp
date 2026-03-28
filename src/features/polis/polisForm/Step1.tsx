@@ -1,10 +1,10 @@
 'use client';
 import SelectSearchField from "@/components/SelectSearchField";
-import { Polis } from "@/lib/polis/create-types";
+import { Polis } from "@/features/polis/schema/create-types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card";
 import { useEffect, useState } from "react";
 import getListNasabah from "@/features/polis/actions/getNasabahListForPolisForm";
-import type { ListNasabahType, NasabahDetailsType } from "@/lib/polis/step1";
+import type { ListNasabahType, NasabahDetailsType } from "@/features/polis/schema/step1";
 import { useFormContext, useWatch } from "react-hook-form";
 import getNasabahCardDetails from "@/features/polis/actions/getNasabahForPolisCard";
 import {

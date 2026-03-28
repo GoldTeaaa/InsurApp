@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { SelectField } from "@/components/SelectField"
 import FormTextField from "@/components/TextField"
-import { Polis } from "@/lib/polis/create-types"
+import { Polis } from "@/features/polis/schema/create-types"
 import { jenis_kendaraan } from "@/lib/types"
 import { formatPlatNomor } from "@/lib/utils/formatPlatNomor"
 

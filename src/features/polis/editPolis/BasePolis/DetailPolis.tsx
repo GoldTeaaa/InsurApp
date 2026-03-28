@@ -1,10 +1,10 @@
 'use client';
 import SelectSearchField from "@/components/SelectSearchField";
 import TextField from "@/components/TextField";
-import { Polis } from "@/lib/polis/create-types";
+import { Polis } from "@/features/polis/schema/create-types";
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { ListNasabahType } from "@/lib/polis/step1";
+import { ListNasabahType } from "@/features/polis/schema/step1";
 import getListNasabah from "@/features/polis/actions/getNasabahListForPolisForm";
 import PremiCalculationGroup from "../../polisForm/PremiCalculationGroup";
 import DateField from "@/components/DateField";

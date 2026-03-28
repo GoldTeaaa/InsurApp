@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import PolisDropdown from "@/features/polis/polisTable/dropdown"
 import AsuransiPenanggungCell from "./AsuransiPenanggungCell"
 import { JenisBisnis } from "@/lib/types"
-import { PolisRow } from "@/lib/polis/table-types"
+import { PolisRow } from "@/features/polis/schema/table-types"
 import Link from "next/link"
 
 function dateFormater(dateString: string) {

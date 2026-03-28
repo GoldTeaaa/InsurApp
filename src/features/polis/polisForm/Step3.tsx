@@ -1,10 +1,10 @@
-import { Polis } from "@/lib/polis/create-types";
+import { Polis } from "@/features/polis/schema/create-types";
 import { useFormContext, useWatch } from "react-hook-form";
 import TotalPremiDisplay from "./TotalPremiDisplay";
 import TotalSharePercentage from "./TotalSharePercentage";
 import { useEffect, useState } from "react";
 import getPerusahaanList from "../actions/getPerusahaanList";
-import type { ListPerusahaanType } from "@/lib/polis/step3";
+import type { ListPerusahaanType } from "@/features/polis/schema/step3";
 import CoasFields from "./CoasField";
 import PremiKomisiBox from "./PremiKomisiBox";
 

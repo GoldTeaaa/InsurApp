@@ -12,7 +12,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/table"
-import { PolisRow } from "@/lib/polis/table-types"
+import { PolisRow } from "@/features/polis/schema/table-types"
 import { getColumns } from "@/features/polis/polisTable/columns"
 import { JenisBisnis } from "@/lib/types"
 

@@ -1,5 +1,5 @@
 import FormTextField from "@/components/TextField";
-import { type Polis } from "@/lib/polis/create-types";
+import { type Polis } from "@/features/polis/schema/create-types";
 import DateField from "@/components/DateField";
 import PremiCalculationGroup from "./PremiCalculationGroup";
 import { RadioField } from "@/components/RadioField";

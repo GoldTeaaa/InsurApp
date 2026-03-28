@@ -7,7 +7,7 @@ import { Button } from "@/components/button";
 import getKendaraanList from "../actions/getKendaraanList";
 import { KendaraanListType } from "@/lib/kendaraan/types";
 import { useFormContext, useWatch } from "react-hook-form";
-import { Polis } from "@/lib/polis/create-types";
+import { Polis } from "@/features/polis/schema/create-types";
 
 export default function KendaraanSelectOrCreate() {
 

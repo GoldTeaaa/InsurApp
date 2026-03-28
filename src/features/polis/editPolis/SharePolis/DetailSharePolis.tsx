@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/button";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { GetPolisSchema } from "@/lib/polis/get-types";
+import { GetPolisSchema } from "@/features/polis/schema/get-types";
 // import { getDefaultValues, PolisShare } from "@/lib/polis/create-types";
 import { useEffect, useState } from "react";
 import PremiKomisiBox from "../../polisForm/PremiKomisiBox";
 import getPerusahaanList from "../../actions/getPerusahaanList";
-import { ListPerusahaanType } from "@/lib/polis/step3";
+import { ListPerusahaanType } from "@/features/polis/schema/step3";
 import TotalSharePercentage from "../../polisForm/TotalSharePercentage";
 // import { PlusIcon } from "lucide-react";
 

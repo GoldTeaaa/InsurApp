@@ -1,6 +1,6 @@
 "use server";
 
-import { RefinedViewPolisSchema, ViewPolisSchema } from "@/lib/polis/get-types";
+import { RefinedViewPolisSchema, ViewPolisSchema } from "@/features/polis/schema/get-types";
 import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 import { z } from "zod";

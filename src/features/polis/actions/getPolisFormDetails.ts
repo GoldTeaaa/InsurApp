@@ -1,5 +1,5 @@
 'use server';
-import { GetPolisSchema, ViewPolisSchema } from "@/lib/polis/get-types";
+import { GetPolisSchema, ViewPolisSchema } from "@/features/polis/schema/get-types";
 import { createClient } from "~/utils/supabase/server";
 import { ActionReturnState } from "@/lib/types";
 

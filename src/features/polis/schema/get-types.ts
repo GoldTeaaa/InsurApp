@@ -1,7 +1,7 @@
 import {
   basePolisObjectSchema,
   PolisShareSchema,
-} from "@/lib/polis/create-types";
+} from "@/features/polis/schema/create-types";
 import z from "zod";
 
 export const ViewPolisShareSchema = PolisShareSchema.extend({

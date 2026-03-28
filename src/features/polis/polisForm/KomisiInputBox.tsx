@@ -1,5 +1,5 @@
 import CalculatedTextField from "@/components/CalculatedTextField";
-import { Polis, PolisShare } from "@/lib/polis/create-types";
+import { Polis, PolisShare } from "@/features/polis/schema/create-types";
 import { Path, useFormContext, useWatch, FieldValue } from "react-hook-form";
 import { useEffect } from "react";
 import KomisiPercentageGroup from "./KomisiPercentageGroup";

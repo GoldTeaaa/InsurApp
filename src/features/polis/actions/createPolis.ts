@@ -1,7 +1,7 @@
 "use server";
 import { ActionReturnState } from "@/lib/types";
 import { createClient } from "~/utils/supabase/server";
-import { PolisSchema, type Polis } from "@/lib/polis/create-types";
+import { PolisSchema, type Polis } from "@/features/polis/schema/create-types";
 
 type ReturnState = ActionReturnState<Polis>;
 

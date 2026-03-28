@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch, Path } from "react-hook-form";
-import { Polis } from "@/lib/polis/create-types";
+import { Polis } from "@/features/polis/schema/create-types";
 import TextField from "@/components/TextField";
 import UncontrolledTextField from "@/components/UncontrolledTextField";
 import { convertIDR } from "@/lib/utils/convertIDR";

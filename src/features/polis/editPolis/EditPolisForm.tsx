@@ -1,5 +1,5 @@
 'use client';
-import { GetPolisSchema, RefinedViewPolisSchema } from "@/lib/polis/get-types";
+import { GetPolisSchema, RefinedViewPolisSchema } from "@/features/polis/schema/get-types";
 import { FormProvider, useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import DetailPolis from "./BasePolis/DetailPolis";
 import DetailSharePolis from "./SharePolis/DetailSharePolis";

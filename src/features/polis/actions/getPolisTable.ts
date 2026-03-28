@@ -1,8 +1,8 @@
 "use server";
 import { ActionReturnState } from "@/lib/types";
 import { createClient } from "~/utils/supabase/server";
-import { PolisRow, polisSearchSchema, PolisTableSearchParams } from "@/lib/polis/table-types";
-import { PolisTableRow } from "@/lib/polis/table-types";
+import { PolisRow, polisSearchSchema, PolisTableSearchParams } from "@/features/polis/schema/table-types";
+import { PolisTableRow } from "@/features/polis/schema/table-types";
 // import { Polis } from "@/lib/polis/create-types";
 
 type ReturnState = ActionReturnState<PolisTableRow>;

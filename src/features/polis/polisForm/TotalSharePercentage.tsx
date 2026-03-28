@@ -1,5 +1,5 @@
-import { ListPerusahaanType } from "@/lib/polis/step3";
-import { Polis } from "@/lib/polis/create-types";
+import { ListPerusahaanType } from "@/features/polis/schema/step3";
+import { Polis } from "@/features/polis/schema/create-types";
 import { useEffect } from "react";
 import { useFormContext, useWatch, useFormState } from "react-hook-form";
 

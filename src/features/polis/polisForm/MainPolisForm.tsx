@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation"
 import { FormProvider, Resolver, useForm, useWatch, FieldErrors, Path } from "react-hook-form";
 import { Button } from "@/components/button";
 import { motion } from 'framer-motion'
-import { kendaraanSchema, healthSchema, lifeSchema, marineSchema, propertySchema, Polis, PolisSchema } from "@/lib/polis/create-types";
-import { getDefaultValues } from "@/lib/polis/defaultValues";
+import { kendaraanSchema, healthSchema, lifeSchema, marineSchema, propertySchema, Polis, PolisSchema } from "@/features/polis/schema/create-types";
+import { getDefaultValues } from "@/features/polis/schema/defaultValues";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/lib/utils/useDebounce";
 import ErrorToast from "@/features/polis/polisForm/ErrorToast";

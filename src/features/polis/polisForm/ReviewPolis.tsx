@@ -1,8 +1,8 @@
 import getNasabahCardDetails from "@/features/polis/actions/getNasabahForPolisCard";
 import getPerusahaanList from "@/features/polis/actions/getPerusahaanList";
-import { ListPerusahaanType } from "@/lib/polis/step3";
-import { NasabahDetailsType } from "@/lib/polis/step1";
-import { Polis } from "@/lib/polis/create-types";
+import { ListPerusahaanType } from "@/features/polis/schema/step3";
+import { NasabahDetailsType } from "@/features/polis/schema/step1";
+import { Polis } from "@/features/polis/schema/create-types";
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { convertIDR } from "@/lib/utils/convertIDR";

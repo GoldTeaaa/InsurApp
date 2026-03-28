@@ -1,6 +1,6 @@
 'use server';
 
-import { ListPerusahaan, type ListPerusahaanType } from "@/lib/polis/step3";
+import { ListPerusahaan, type ListPerusahaanType } from "@/features/polis/schema/step3";
 import { ActionReturnState } from "@/lib/types";
 import { createClient } from "~/utils/supabase/server";
 

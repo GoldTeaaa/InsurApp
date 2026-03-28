@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from "react-hook-form";
-import { Polis } from "@/lib/polis/create-types";
+import { Polis } from "@/features/polis/schema/create-types";
 import PercentageAmountGroup from "@/components/PercentageAmountGroup";
 
 type Props = {

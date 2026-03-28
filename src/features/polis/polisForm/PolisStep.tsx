@@ -1,4 +1,4 @@
-import { Polis } from "@/lib/polis/create-types"
+import { Polis } from "@/features/polis/schema/create-types"
 import { JSX } from "react"
 import { Path } from "react-hook-form"
 import Step1 from "./Step1"

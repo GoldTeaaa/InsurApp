@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { JENIS_BISNIS, JENIS_COAS } from "../types";
-import { insertKendaraanSchema } from "../kendaraan/types";
+import { JENIS_BISNIS, JENIS_COAS } from "../../../lib/types";
+import { insertKendaraanSchema } from "../../../lib/kendaraan/types";
 
 const COAS_ROLE = z.enum(["leader", "member"]);
 const JENIS_RATE = z.enum(["mille", "percent"]);

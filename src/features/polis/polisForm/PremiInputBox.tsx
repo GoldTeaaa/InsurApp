@@ -1,6 +1,6 @@
 import { Path, useFormContext, useWatch } from "react-hook-form";
-import { Polis, PolisShare } from "@/lib/polis/create-types";
-import { ListPerusahaanType } from "@/lib/polis/step3";
+import { Polis, PolisShare } from "@/features/polis/schema/create-types";
+import { ListPerusahaanType } from "@/features/polis/schema/step3";
 import TextField from "@/components/TextField";
 import CalculatedTextField from "@/components/CalculatedTextField";
 import DiscountInputGroup from "./DiscountInputGroup";

@@ -9,6 +9,7 @@ import { RawSearchParams } from "@/lib/types"
 import FilterBox from "@/components/FilterBox"
 import { Plus } from "lucide-react"
 import PolisStatCard from "@/features/polis/PolisStatCard"
+import getPolisCardStats from "@/features/polis/actions/getPolisCardStats"
 
 export default async function Page({
 	searchParams,
@@ -39,6 +40,14 @@ export default async function Page({
 	// The key for Suspense ensures it re-renders when search or pagination changes.
 	const tableKey = `${search}-${page}-${size}`
 
+	const cardProps = await getPolisCardStats();
+
+	if (!cardProps.success) {
+		throw new Error(cardProps.message);
+	}
+
+	const cardData = cardProps.data;
+
 	return (
 		<div className="w-full p-4 space-y-4">
 			<div className="flex justify-between items-center">
@@ -47,23 +56,18 @@ export default async function Page({
 					<Link href={"/dashboard/polis/buat-polis"}> <Plus /> Tambah Polis</Link>
 				</Button>
 			</div>
-			<div className="flex flex-row">
-				<div>
+			<div className="flex flex-col md:flex-row gap-4">
+				<div className="w-full md:w-4/5">
 					<FilterBox />
 				</div>
-				<div className="flex flex-row">
-					<PolisStatCard
-						title="Total Polis"
-						value={data.length}
-					/>
-					<PolisStatCard
-						title="Polis Aktif"
-						value={data.filter((polis) => polis.status === "aktif").length}
-					/>
-					<PolisStatCard
-						title="Polis Tidak Aktif"
-						value={data.filter((polis) => polis.status === "tidak_aktif").length}
-					/>
+				<div className="w-full md:w-1/5 flex flex-row gap-2">
+					{[
+						{ title: "Total Polis", value: cardData?.total_semua_polis ?? 0 },
+						{ title: "Polis Aktif", value: cardData?.total_polis_aktif ?? 0 },
+						{ title: "Polis Tidak Aktif", value: cardData?.total_polis_tidak_aktif ?? 0 },
+					].map((stat) => (
+						<PolisStatCard key={stat.title} title={stat.title} value={stat.value} />
+					))}
 				</div>
 			</div>
 			<div className="p-4 space-y-4">

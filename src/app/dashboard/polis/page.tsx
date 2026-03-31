@@ -10,6 +10,7 @@ import FilterBox from "@/components/FilterBox"
 import { Plus } from "lucide-react"
 import PolisStatCard from "@/features/polis/PolisStatCard"
 import getPolisCardStats from "@/features/polis/actions/getPolisCardStats"
+import PolisFilterBox from "@/features/polis/polisTable/PolisFilterBox"
 
 export default async function Page({
 	searchParams,
@@ -58,7 +59,9 @@ export default async function Page({
 			</div>
 			<div className="flex flex-col md:flex-row gap-4">
 				<div className="w-full md:w-4/5">
-					<FilterBox />
+					{/* <FilterBox />
+					 */}
+					<PolisFilterBox/>
 				</div>
 				<div className="w-full md:w-1/5 flex flex-row gap-2">
 					{[

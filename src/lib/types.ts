@@ -9,15 +9,18 @@ export const jenis_bisnis = [
   "property",
   "marine",
 ] as const;
+
 export const JENIS_BISNIS = z.enum(jenis_bisnis);
 
 export type JenisBisnis = z.infer<typeof JENIS_BISNIS>;
 
 export const jenis_kendaraan = ["mobil", "motor"] as const;
-export type JenisKendaraan = z.infer<typeof JENIS_KENDARAAN>;
 export const JENIS_KENDARAAN = z.enum(jenis_kendaraan);
+export type JenisKendaraan = z.infer<typeof JENIS_KENDARAAN>;
 
-export const JENIS_COAS = z.enum(["coas", "non-coas"]);
+export const jenis_coas = ["coas", "non-coas"] as const;
+export const JENIS_COAS = z.enum(jenis_coas);
+export type JenisCoasType = z.infer<typeof JENIS_COAS>;
 
 export const CARA_BAYAR = [
   "cash", 

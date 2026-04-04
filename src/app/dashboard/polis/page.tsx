@@ -4,9 +4,8 @@ import PolisTable from "@/features/polis/polisTable/PolisTable"
 import { Button } from "@/components/button"
 import Pagination from "@/components/table/Pagination"
 import getPolisTableData from "@/features/polis/actions/getPolisTable"
-import { polisSearchSchema } from "@/features/polis/schema/table-types"
+import { PolisRow, polisSearchSchema } from "@/features/polis/schema/table-types"
 import { RawSearchParams } from "@/lib/types"
-import FilterBox from "@/components/FilterBox"
 import { Plus } from "lucide-react"
 import PolisStatCard from "@/features/polis/PolisStatCard"
 import getPolisCardStats from "@/features/polis/actions/getPolisCardStats"
@@ -17,6 +16,7 @@ export default async function Page({
 }: {
 	searchParams: Promise<RawSearchParams>
 }) {
+
 	const raw = await searchParams;
 
 	const parsed = polisSearchSchema.safeParse(raw);
@@ -30,13 +30,10 @@ export default async function Page({
 	const size = Number(params?.size ?? 10)
 	const jenis_bisnis = params?.jenis_bisnis ?? null
 
+	
 	const res = await getPolisTableData({ searchParams: params });
-	if (!res.success) {
-		throw new Error(res.message)
-	}
-
-	const data = res.data?.rows ?? [];
-	const totalCount = Math.ceil((res.data?.total_count ?? 0) / size);
+	const tableData : PolisRow[] = res.success ? res.data?.rows ?? [] : [];
+	const totalCount : number= res.success ? res.data?.total_count ?? 0 : 0;
 
 	// The key for Suspense ensures it re-renders when search or pagination changes.
 	const tableKey = `${search}-${page}-${size}`
@@ -57,7 +54,7 @@ export default async function Page({
 					<Link href={"/dashboard/polis/buat-polis"}> <Plus /> Tambah Polis</Link>
 				</Button>
 			</div>
-			<div className="flex flex-col md:flex-row gap-4">
+			<div className="flex flex-col items-stretch md:flex-row gap-4">
 				<div className="w-full md:w-4/5">
 					{/* <FilterBox />
 					 */}
@@ -77,7 +74,7 @@ export default async function Page({
 				<div>
 					<Suspense key={tableKey} fallback={<div className="text-center p-8">Loading polis data...</div>}>
 						<PolisTable
-							data={data}
+							data={tableData}
 							jenis_bisnis={jenis_bisnis!}
 						/>
 					</Suspense>

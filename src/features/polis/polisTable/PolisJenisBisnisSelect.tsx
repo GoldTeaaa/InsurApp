@@ -2,9 +2,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/u
 import { jenis_bisnis } from "@/lib/types";
 import { SelectValue } from "@radix-ui/react-select";
 
-export default function PolisJenisBisnisSelect() {
+type Props = {
+    onChange: (value: string) => void;
+}
+
+export default function PolisJenisBisnisSelect({
+    onChange
+} : Props) {
     return (
-        <Select>
+        <Select onValueChange={(value) => {
+            onChange(value);
+            console.log("selected value for jenis_bisnis: ", value);
+        }}>
             <SelectTrigger className="w-full">        
                 <SelectValue placeholder="Pilih Jenis Bisnis"/>
             </SelectTrigger>

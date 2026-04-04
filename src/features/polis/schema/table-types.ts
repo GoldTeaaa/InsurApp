@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { JENIS_BISNIS, JenisKendaraan, SearchParamsSchema } from "@/lib/types";
+import { JENIS_BISNIS, JENIS_COAS, JenisKendaraan, SearchParamsSchema } from "@/lib/types";
 
 // FOR PRODUCTION, USE DISCRIMINATED UNION FOR BISNIS TYPE AND MATCH IT WITH THE RPC RESPONSE
 export type PolisRow = {
@@ -24,6 +24,7 @@ export type PolisTableRow = {
 export const polisSearchSchema = SearchParamsSchema.extend({
   plat_nomor: z.string().optional(),
   jenis_bisnis: JENIS_BISNIS.optional(),
+  jenis_coas: JENIS_COAS.optional(),
 }).omit({status: true});
 
 export type PolisTableSearchParams = z.infer<typeof polisSearchSchema>

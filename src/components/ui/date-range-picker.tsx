@@ -13,18 +13,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useEffect } from "react"
 
 type Props = {
   name: string
+  onChangeDateFrom: (value: string ) => void;
+  onChangeDateTo: (value: string ) => void;
 }
 
 export function DatePickerWithRange({
-  name
-}:Props) {
+  name,
+  onChangeDateFrom,
+  onChangeDateTo
+}: Props) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), 0, 20),
     to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
   })
+
+  useEffect(() => {
+    onChangeDateFrom(date?.from ? format(date?.from, "yyyy-MM-dd") : "")
+    onChangeDateTo(date?.to ? format(date?.to, "yyyy-MM-dd") : "")
+  }, [date])
 
   return (
     <Field className="w-full">

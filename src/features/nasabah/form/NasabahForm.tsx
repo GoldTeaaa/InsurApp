@@ -38,12 +38,12 @@ type SharedFormProps = {
 
 export type NasabahFormTypeProps = (CreateFormProps | UpdateFormProps) & SharedFormProps;
 
-export default function NasabahFormType(props: NasabahFormTypeProps) {
+export default function NasabahForm(props: NasabahFormTypeProps) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { mode, formId, hideButtons, onSuccess } = props;
-
     const updateId = mode === "update" ? props.id : "";
+
     const initialData = mode === "update" ? props.initialData : defaultPribadiFormValues;
 
     const methods = useForm<NasabahFormType>({

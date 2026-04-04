@@ -1,7 +1,11 @@
 "use server";
-import { ActionReturnState } from "@/lib/types";
+import { ActionReturnState, jenis_coas } from "@/lib/types";
 import { createClient } from "~/utils/supabase/server";
-import { PolisRow, polisSearchSchema, PolisTableSearchParams } from "@/features/polis/schema/table-types";
+import {
+  PolisRow,
+  polisSearchSchema,
+  PolisTableSearchParams,
+} from "@/features/polis/schema/table-types";
 import { PolisTableRow } from "@/features/polis/schema/table-types";
 // import { Polis } from "@/lib/polis/create-types";
 
@@ -16,20 +20,29 @@ export default async function getPolisTableData({
   const params = await searchParams;
 
   const parsedData = polisSearchSchema.safeParse(params).data;
-  const {search, page, size, jenis_bisnis, date_from, date_to} = parsedData as PolisTableSearchParams;
+  const { search, page, size, jenis_bisnis, jenis_coas, date_from, date_to } =
+    parsedData as PolisTableSearchParams;
+
+  console.log("Sending to RPC:", { date_from, date_to, search });
+
+  //  GET /dashboard/polis?date_from=2025-09-30&date_to=2026-03-20&page=1 200 in 155ms
 
   const { data, error } = await supabase.rpc("polis_table_route", {
     p_search: search,
     p_page: page,
     p_size: size,
     p_jenis_bisnis: jenis_bisnis,
+    p_jenis_coas: jenis_coas,
     p_date_from: date_from,
-    p_date_to: date_to
+    p_date_to: date_to,
   });
 
   if (error) {
-    console.error(error);
-    return { success: false, message: "Failed to fetch polis table data." };
+    console.error('Error fetching polis table data:', error.message);
+    return {
+      success: false,
+      message: "Failed to fetch polis table data.",
+    };
   }
 
   // Aggregate rows to handle co-insurance policies with multiple insurers
@@ -42,7 +55,7 @@ export default async function getPolisTableData({
       if (
         row.nama_perusahaan_asuransi &&
         !existingRow.nama_perusahaan_asuransi?.includes(
-          row.nama_perusahaan_asuransi
+          row.nama_perusahaan_asuransi,
         )
       ) {
         existingRow.nama_perusahaan_asuransi += `, ${row.nama_perusahaan_asuransi}`;

@@ -10,7 +10,10 @@ type Props = {
     search: string;
 };
 
-export default function Search({ placeholder, search }: Props) {
+export default function Search({ 
+    placeholder, 
+    search 
+}: Props) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();

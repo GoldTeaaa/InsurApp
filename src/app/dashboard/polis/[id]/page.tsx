@@ -1,6 +1,6 @@
-export default function page({ params }: { params: { id: string } }) {
+export default async function page({ searchParams }: { searchParams: Promise<{ id: string }> }) {
 
-    const { id } = params;
+    const { id } = await searchParams;
 
     return(
         <h1>{id}</h1>

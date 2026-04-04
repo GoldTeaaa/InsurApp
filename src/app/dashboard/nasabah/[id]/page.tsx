@@ -4,10 +4,9 @@ import getNasabahPolisList from '@/features/nasabah/actions/getNasabahPolisList'
 import { defaultDetailPolisNasabahColumn } from '@/features/nasabah/nasabahCard/defaultDetailPolisNasabahColumn';
 import { notFound } from 'next/navigation';
 
+export default async function DefaultPage({ searchParams }: { searchParams: Promise<{ id: string }> }) {
 
-export default async function DefaultPage({ params }: { params: { id: string } }) {
-
-  const { id } = await params;
+  const { id } = await searchParams;
 
   const polisOfNasabahById = await getNasabahPolisList({ id });
 

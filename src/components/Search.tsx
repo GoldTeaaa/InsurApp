@@ -21,6 +21,11 @@ export default function Search({
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
     const isInitialMount = useRef(true);
 
+    // // Sync internal state if the URL search param is cleared externally (e.g. Reset Button)
+    // useEffect(() => {
+    //     setSearchTerm(search);
+    // }, [search]);
+
     useEffect(() => {
         if (isInitialMount.current) {
             isInitialMount.current = false;

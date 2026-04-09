@@ -23,10 +23,6 @@ export default async function getPolisTableData({
   const { search, page, size, jenis_bisnis, jenis_coas, date_from, date_to } =
     parsedData as PolisTableSearchParams;
 
-  console.log("Sending to RPC:", { date_from, date_to, search });
-
-  //  GET /dashboard/polis?date_from=2025-09-30&date_to=2026-03-20&page=1 200 in 155ms
-
   const { data, error } = await supabase.rpc("polis_table_route", {
     p_search: search,
     p_page: page,
@@ -38,7 +34,7 @@ export default async function getPolisTableData({
   });
 
   if (error) {
-    console.error('Error fetching polis table data:', error.message);
+    console.error("Error fetching polis table data:", error.message);
     return {
       success: false,
       message: "Failed to fetch polis table data.",

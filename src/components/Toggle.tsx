@@ -4,25 +4,27 @@ import {
 } from "@/components/ui/toggle-group"
 
 type Props = {
-  value: readonly string[]
+  value: string;
+  options: readonly string[]
   handleChange: (value: string) => void;
 }
 
 export default function Toggle({
   value,
+  options,
   handleChange
 }: Props) {
   return (
     <ToggleGroup
       variant="outline"
       type="single"
-      // defaultValue="all"
+      value={value}
       onValueChange={(value) => handleChange(value)}
     >
       {
-        value.map((val) => (
-          <ToggleGroupItem key={val} value={val} aria-label={`Toggle ${val}`}>
-            {val}
+        options.map((opt) => (
+          <ToggleGroupItem key={opt} value={opt} aria-label={`Toggle ${opt}`}>
+            {opt}
           </ToggleGroupItem>
         ))
       }

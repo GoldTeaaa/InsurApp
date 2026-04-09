@@ -24,6 +24,14 @@ export default function PolisFilterBox() {
     // To get the current path
     const pathName = usePathname();
 
+    const currentFilters = {
+        search : searchParams.get('search') ?? "",
+        jenis_bisnis: searchParams.get('jenis_bisnis') ?? "",
+        jenis_coas: searchParams.get('jenis_coas') ?? "",
+        date_from: searchParams.get('date_from') ?? "",
+        date_to: searchParams.get('date_to') ?? "",
+    }
+
     const handleFilter = (key: keyof Props, value: string) => {
 
         if (value) {
@@ -37,6 +45,12 @@ export default function PolisFilterBox() {
     }
 
     const resetFilter = () => {
+        currentFilters.search = "";
+        currentFilters.jenis_bisnis = "";
+        currentFilters.jenis_coas = "";
+        currentFilters.date_from = "";
+        currentFilters.date_to = "";
+
         router.replace(pathName);
     }
 
@@ -44,13 +58,18 @@ export default function PolisFilterBox() {
         <div className="flex flex-col md:flex-row items-center gap-4 rounded-lg border bg-white p-4 shadow-sm w-full md:w-auto h-full">
             {/* Search Bar - 50% width */}
             <div className="w-full md:w-1/2">
-                <Search search="" placeholder="Cari..." />
+                <Search
+                    search={currentFilters.search}
+                    placeholder="Cari..."
+                />
             </div>
 
             {/* Date Picker - 25% width */}
             <div className="w-full md:w-1/5">
-                <DatePickerWithRange 
+                <DatePickerWithRange
                     name="Tanggal Dibuat"
+                    dateFrom={currentFilters.date_from}
+                    dateTo={currentFilters.date_to}
                     onChangeDateFrom={(searchParams => handleFilter('date_from', searchParams))}
                     onChangeDateTo={(searchParams => handleFilter('date_to', searchParams))}
                 />
@@ -60,12 +79,14 @@ export default function PolisFilterBox() {
             <div className="flex w-full md:w-1/4 flex-row items-center gap-4">
                 <div className="flex-1">
                     <PolisJenisBisnisSelect
+                        value={currentFilters.jenis_bisnis}
                         onChange={(searchParams => handleFilter('jenis_bisnis', searchParams))}
                     />
                 </div>
                 <div className="flex-shrink-0">
                     <Toggle
-                        value={jenis_coas}
+                        options={jenis_coas}
+                        value={currentFilters.jenis_coas}
                         handleChange={(searchParams => handleFilter('jenis_coas', searchParams))}
                     />
                 </div>

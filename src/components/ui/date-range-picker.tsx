@@ -7,34 +7,45 @@ import { type DateRange } from "react-day-picker"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Field } from "@/components/ui/field"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useEffect } from "react"
 
 type Props = {
   name: string
+  dateFrom?: string | null;
+  dateTo?: string | null;
   onChangeDateFrom: (value: string ) => void;
   onChangeDateTo: (value: string ) => void;
 }
 
 export function DatePickerWithRange({
   name,
+  dateFrom,
+  dateTo,
   onChangeDateFrom,
   onChangeDateTo
 }: Props) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(new Date().getFullYear(), 0, 20),
-    to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
-  })
+  const date = React.useMemo(() => {
+    if (!dateFrom) return undefined;
+    return {
+      from: new Date(dateFrom),
+      to: dateTo ? new Date(dateTo) : undefined,
+    };
+  }, [dateFrom, dateTo]);
 
-  useEffect(() => {
-    onChangeDateFrom(date?.from ? format(date?.from, "yyyy-MM-dd") : "")
-    onChangeDateTo(date?.to ? format(date?.to, "yyyy-MM-dd") : "")
-  }, [date])
+  // useEffect(() => {
+  //   onChangeDateFrom(date?.from ? format(date?.from, "yyyy-MM-dd") : "")
+  //   onChangeDateTo(date?.to ? format(date?.to, "yyyy-MM-dd") : "")
+  // }, [date])
+
+  const handleDateChange = (dates: DateRange | undefined) => {
+    onChangeDateFrom(dates?.from ? format(dates?.from, "yyyy-MM-dd") : "");
+    onChangeDateTo(dates?.to ? format(dates?.to, "yyyy-MM-dd") : "");
+  }
 
   return (
     <Field className="w-full">
@@ -66,7 +77,7 @@ export function DatePickerWithRange({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateChange}
             numberOfMonths={2}
           />
         </PopoverContent>

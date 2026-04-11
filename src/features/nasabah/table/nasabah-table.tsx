@@ -3,6 +3,7 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 import { UpdateInvoice, DeleteNasabah } from "../buttons";
 import { columnNasabah } from "./columns";
@@ -37,6 +38,7 @@ export default function NasabahTable({
     data,
     columns: columnNasabah,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     meta:{
       handleEdit,
       handleDelete

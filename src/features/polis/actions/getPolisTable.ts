@@ -4,12 +4,14 @@ import { createClient } from "~/utils/supabase/server";
 import {
   PolisRow,
   polisSearchSchema,
+  polisTableRowSchema,
+  polisTableSchema,
   PolisTableSearchParams,
 } from "@/features/polis/schema/table-types";
-import { PolisTableRow } from "@/features/polis/schema/table-types";
+import { PolisTableType } from "@/features/polis/schema/table-types";
 // import { Polis } from "@/lib/polis/create-types";
 
-type ReturnState = ActionReturnState<PolisTableRow>;
+type ReturnState = ActionReturnState<PolisTableType>;
 
 export default async function getPolisTableData({
   searchParams,
@@ -19,13 +21,9 @@ export default async function getPolisTableData({
   const supabase = await createClient();
   const params = await searchParams;
 
-  const parsedData = polisSearchSchema.safeParse(params).data;
+  const parsedSchema = polisSearchSchema.safeParse(params).data;
   const { search, page, size, jenis_bisnis, jenis_coas, date_from, date_to } =
-    parsedData as PolisTableSearchParams;
-
-  console.log("Sending to RPC:", { date_from, date_to, search });
-
-  //  GET /dashboard/polis?date_from=2025-09-30&date_to=2026-03-20&page=1 200 in 155ms
+    parsedSchema as PolisTableSearchParams;
 
   const { data, error } = await supabase.rpc("polis_table_route", {
     p_search: search,
@@ -45,37 +43,19 @@ export default async function getPolisTableData({
     };
   }
 
-  // Aggregate rows to handle co-insurance policies with multiple insurers
-  const aggregatedData = new Map<string, PolisRow>();
+  const parsedData = polisTableSchema.safeParse(data);
 
-  (data.rows as PolisRow[]).forEach((row) => {
-    const existingRow = aggregatedData.get(row.id);
-    if (existingRow) {
-      // If the insurer is not null and not already in the list, add it.
-      if (
-        row.nama_perusahaan_asuransi &&
-        !existingRow.nama_perusahaan_asuransi?.includes(
-          row.nama_perusahaan_asuransi,
-        )
-      ) {
-        existingRow.nama_perusahaan_asuransi += `, ${row.nama_perusahaan_asuransi}`;
-      }
-    } else {
-      // First time seeing this policy ID, add it to the map.
-      aggregatedData.set(row.id, { ...row });
-    }
-  });
-
-  const groupAsuransiPenanggung = Array.from(aggregatedData.values());
-
-  const returnData = {
-    rows: groupAsuransiPenanggung,
-    total_count: data.total_count,
-  };
+  if (!parsedData.success) {
+    console.error("Zod validation failed:", parsedData.error);
+    return {
+      success: false,
+      message: "Invalid data structure from API.",
+    };
+  }
 
   return {
     success: true,
     message: "Success",
-    data: returnData,
+    data: parsedData.data,
   };
 }

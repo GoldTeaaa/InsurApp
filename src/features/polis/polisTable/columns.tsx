@@ -82,10 +82,11 @@ export function getColumns(jenis_bisnis?: JenisBisnis): ColumnDef<PolisRow>[] {
 			},
 		},
 		{
-			accessorKey: "nama_perusahaan_asuransi",
+			accessorKey: "list_perusahaan_asuransi",
 			header: "Asuransi Penanggung",
 			cell: ({ row }) => {
-				const insurers = row.getValue<string | null>("nama_perusahaan_asuransi")
+				const insurers = row.getValue<Array<string>>("list_perusahaan_asuransi")
+				console.log("insurers: ", insurers);
 				return (
 					<AsuransiPenanggungCell insurers={insurers} />
 				)

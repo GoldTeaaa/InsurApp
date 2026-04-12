@@ -30,7 +30,6 @@ export default async function Page({
             <div className="w-full p-4">
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-2xl font-bold">Nasabah</h1>
-
                     <AddNasabahDrawer />
                 </div>
                 <div className='flex flex-col gap-2'>

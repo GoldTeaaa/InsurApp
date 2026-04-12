@@ -10,13 +10,18 @@ import { Button } from "@/components/ui/button";
 
 type Props = {
     search: string,
-    jenis_bisnis: keyof JenisBisnis;
-    jenis_coas: keyof JenisCoasType;
+    jenis_bisnis: JenisBisnis | null;
+    jenis_coas: JenisCoasType | null;
     date_from: string | null;
     date_to: string | null;
 }
 
-export default function PolisFilterBox() {
+export default function PolisFilterBox({
+    search,
+    jenis_bisnis,
+    date_from,
+    date_to,
+}: Props) {
     const router = useRouter();
     // To create the searchParam
     const searchParams = useSearchParams();
@@ -59,7 +64,7 @@ export default function PolisFilterBox() {
             {/* Search Bar - 50% width */}
             <div className="w-full md:w-1/2">
                 <Search
-                    search={currentFilters.search}
+                    search={search}
                     placeholder="Cari..."
                 />
             </div>
@@ -68,8 +73,8 @@ export default function PolisFilterBox() {
             <div className="w-full md:w-1/5">
                 <DatePickerWithRange
                     name="Tanggal Dibuat"
-                    dateFrom={currentFilters.date_from}
-                    dateTo={currentFilters.date_to}
+                    dateFrom={date_from}
+                    dateTo={date_to}
                     onChangeDateFrom={(searchParams => handleFilter('date_from', searchParams))}
                     onChangeDateTo={(searchParams => handleFilter('date_to', searchParams))}
                 />
@@ -79,7 +84,7 @@ export default function PolisFilterBox() {
             <div className="flex w-full md:w-1/4 flex-row items-center gap-4">
                 <div className="flex-1">
                     <PolisJenisBisnisSelect
-                        value={currentFilters.jenis_bisnis}
+                        value={jenis_bisnis ?? ""}
                         onChange={(searchParams => handleFilter('jenis_bisnis', searchParams))}
                     />
                 </div>

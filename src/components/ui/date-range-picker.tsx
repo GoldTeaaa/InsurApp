@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/popover"
 
 type Props = {
-  name: string
-  dateFrom?: string | null;
-  dateTo?: string | null;
+  name: string,
+  dateFrom?: string | null,
+  dateTo?: string | null,
   onChangeDateFrom: (value: string ) => void;
   onChangeDateTo: (value: string ) => void;
 }
@@ -29,22 +29,22 @@ export function DatePickerWithRange({
   onChangeDateFrom,
   onChangeDateTo
 }: Props) {
-  const date = React.useMemo(() => {
-    if (!dateFrom) return undefined;
-    return {
-      from: new Date(dateFrom),
-      to: dateTo ? new Date(dateTo) : undefined,
-    };
-  }, [dateFrom, dateTo]);
 
-  // useEffect(() => {
-  //   onChangeDateFrom(date?.from ? format(date?.from, "yyyy-MM-dd") : "")
-  //   onChangeDateTo(date?.to ? format(date?.to, "yyyy-MM-dd") : "")
-  // }, [date])
+  const date = React.useMemo<DateRange | undefined>(
+    () => {
+      if(!dateFrom && !dateTo){
+        return undefined;
+      }
+      return {
+        from: dateFrom ? new Date(dateFrom) : undefined,
+        to: dateTo ? new Date(dateTo) : undefined,
+      }
+    }, [dateFrom, dateTo]
+  )
 
-  const handleDateChange = (dates: DateRange | undefined) => {
-    onChangeDateFrom(dates?.from ? format(dates?.from, "yyyy-MM-dd") : "");
-    onChangeDateTo(dates?.to ? format(dates?.to, "yyyy-MM-dd") : "");
+  const handleDateChange = (newDateRange: DateRange | undefined) => {
+    onChangeDateFrom(newDateRange?.from ? format(newDateRange.from, "yyyy-MM-dd") : "");
+    onChangeDateTo(newDateRange?.to ? format(newDateRange.to, "yyyy-MM-dd") : "");
   }
 
   return (

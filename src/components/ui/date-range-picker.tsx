@@ -16,25 +16,37 @@ import {
 import { useEffect } from "react"
 
 type Props = {
-  name: string
+  name: string,
+  dateFrom?: string | null,
+  dateTo?: string | null,
   onChangeDateFrom: (value: string ) => void;
   onChangeDateTo: (value: string ) => void;
 }
 
 export function DatePickerWithRange({
   name,
+  dateFrom,
+  dateTo,
   onChangeDateFrom,
   onChangeDateTo
 }: Props) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(new Date().getFullYear(), 0, 20),
-    to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
-  })
 
-  useEffect(() => {
-    onChangeDateFrom(date?.from ? format(date?.from, "yyyy-MM-dd") : "")
-    onChangeDateTo(date?.to ? format(date?.to, "yyyy-MM-dd") : "")
-  }, [date])
+  const date = React.useMemo<DateRange | undefined>(
+    () => {
+      if(!dateFrom && !dateTo){
+        return undefined;
+      }
+      return {
+        from: dateFrom ? new Date(dateFrom) : undefined,
+        to: dateTo ? new Date(dateTo) : undefined,
+      }
+    }, [dateFrom, dateTo]
+  )
+
+  const handleDateChange = (newDateRange: DateRange | undefined) => {
+    onChangeDateFrom(newDateRange?.from ? format(newDateRange.from, "yyyy-MM-dd") : "");
+    onChangeDateTo(newDateRange?.to ? format(newDateRange.to, "yyyy-MM-dd") : "");
+  }
 
   return (
     <Field className="w-full">
@@ -66,7 +78,7 @@ export function DatePickerWithRange({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateChange}
             numberOfMonths={2}
           />
         </PopoverContent>

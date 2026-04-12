@@ -25,10 +25,14 @@ export default async function Page({
 	}
 
 	const params = parsed.data;
+
 	const search = params?.search ?? ""
 	const page = Number(params?.page ?? 1)
 	const size = Number(params?.size ?? 10)
 	const jenis_bisnis = params?.jenis_bisnis ?? null
+	const jenis_coas = params?.jenis_coas ?? null
+	const date_from = params?.date_from ?? null
+	const date_to = params?.date_to ?? null
 
 	
 	const res = await getPolisTableData({ searchParams: params });
@@ -58,7 +62,13 @@ export default async function Page({
 				<div className="w-full md:w-4/5">
 					{/* <FilterBox />
 					 */}
-					<PolisFilterBox/>
+					<PolisFilterBox
+						search={search}
+						jenis_bisnis={jenis_bisnis}
+						jenis_coas={jenis_coas}
+						date_from={date_from}
+						date_to={date_to}
+					/>
 				</div>
 				<div className="w-full md:w-1/5 flex flex-row gap-2">
 					{[

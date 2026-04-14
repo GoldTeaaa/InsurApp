@@ -70,7 +70,7 @@ export default function PolisFilterBox({
             </div>
 
             {/* Date Picker - 25% width */}
-            <div className="w-full md:w-1/5">
+            <div className="w-full md:w-1/4">
                 <DatePickerWithRange
                     name="Tanggal Dibuat"
                     dateFrom={date_from}
@@ -95,6 +95,10 @@ export default function PolisFilterBox({
                         handleChange={(searchParams => handleFilter('jenis_coas', searchParams))}
                     />
                 </div>
+            </div>
+
+            <div className="flex w-full md:w-1/4 flex-row items-center">
+
             </div>
 
             <Button

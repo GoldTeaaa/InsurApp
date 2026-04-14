@@ -37,7 +37,7 @@ export default async function Page({
 	
 	const res = await getPolisTableData({ searchParams: params });
 	const tableData : PolisRow[] = res.success ? res.data?.rows ?? [] : [];
-	const totalCount : number= res.success ? res.data?.total_count ?? 0 : 0;
+	const totalCount : number = res.success ? Math.ceil((res.data?.total_count ?? 0) / size) : 0;
 
 	// The key for Suspense ensures it re-renders when search or pagination changes.
 	const tableKey = `${search}-${page}-${size}`

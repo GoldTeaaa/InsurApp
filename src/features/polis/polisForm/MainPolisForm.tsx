@@ -17,8 +17,8 @@ import { steps } from "./PolisStep";
 
 const LOCAL_STORAGE_KEY = 'polisFormData';
 
-const getBisnisDetailsDefaultValue = (bisnis : string) => {
-    switch(bisnis){
+const getBisnisDetailsDefaultValue = (bisnis: string) => {
+    switch (bisnis) {
         case 'kendaraan':
             return {
                 bisnis: 'kendaraan',
@@ -37,7 +37,7 @@ const getBisnisDetailsDefaultValue = (bisnis : string) => {
         case 'property':
             return { bisnis: 'property' };
         default:
-            return {bisnis}
+            return { bisnis }
     }
 }
 
@@ -232,8 +232,9 @@ export default function MainPolisForm() {
                         {currentStep === steps.length - 1 && (
                             <div className="mt-8 flex justify-end">
                                 <Button
-                                    type="submit" 
+                                    type="submit"
                                     disabled={isSubmitting}
+                                    className="min-w-32"
                                 >
                                     {isSubmitting ? (
                                         <span className="flex items-center gap-2">Submitting...</span>
@@ -243,52 +244,26 @@ export default function MainPolisForm() {
                         )}
                     </motion.div>
                 </form>
-                <div className='mt-8 pt-5'>
-                    <div className='flex justify-between'>
-                        <button
-                            type='button'
+                <div className='mt-8 pt-5 border-t border-gray-200'>
+                    <div className='flex justify-end gap-4'>
+                        <Button
+                            type="button"
                             onClick={prev}
                             disabled={currentStep === 0}
-                            className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50 flex items-center gap-2'
+                            variant="outline"
+                            className="w-32"
                         >
-                            <p className="text-2xl">BACK</p>
-                            <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                                strokeWidth='1.5'
-                                stroke='currentColor'
-                                className='h-6 w-6'
+                            Back
+                        </Button>
+                        {currentStep < steps.length - 1 && (
+                            <Button
+                                type="button"
+                                onClick={next}
+                                    className="w-32"
                             >
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    d='M15.75 19.5L8.25 12l7.5-7.5'
-                                />
-                            </svg>
-                        </button>
-                        <button
-                            type='button'
-                            onClick={next}
-                            disabled={currentStep === steps.length - 1}
-                            className='rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50 flex items-center gap-2'
-                        >
-                            <p className="text-2xl">NEXT</p>
-                            <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                                strokeWidth='1.5'
-                                stroke='currentColor'
-                                className='h-6 w-6'
-                            >
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    d='M8.25 4.5l7.5 7.5-7.5 7.5'
-                                />
-                            </svg>
-                        </button>
+                                Next
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>

@@ -10,11 +10,11 @@ export const columnNasabah: ColumnDef<NasabahTableRow>[] = [
   {
     accessorKey: "nama",
     header: "Nama",
-    cell: ({row, table}) => {
-      const {handleEdit} = table.options.meta as TableMetaAction;
-      const {nasabah_id, created_at} = row.original;
+    cell: ({ row, table }) => {
+      const { handleEdit } = table.options.meta as TableMetaAction;
+      const { nasabah_id, created_at } = row.original;
 
-      return(
+      return (
         <button
           onClick={() => handleEdit(nasabah_id)}
           className="flex flex-col items-start text-left hover:underline decoration-current/20"
@@ -49,17 +49,21 @@ export const columnNasabah: ColumnDef<NasabahTableRow>[] = [
     ),
   },
   {
-    accessorKey: "jumlah_polis",
-    header: "Jumlah Polis",
+    accessorKey: "jumlah_polis_total",
+    header: "Jumlah Polis Total",
+  },
+  {
+    accessorKey: "jumlah_polis_aktif",
+    header: "Jumlah Polis Aktif"
   },
   {
     id: "actions",
     header: () => <span className="sr-only">Actions</span>,
     cell: ({ row, table }) => {
       const { handleEdit, handleDelete } = table.options.meta as TableMetaAction;
-      const { nasabah_id, nama  } = row.original;
+      const { nasabah_id, nama } = row.original;
       return (
-        <TableAction 
+        <TableAction
           id={nasabah_id}
           handleEdit={handleEdit}
           handleDelete={handleDelete}

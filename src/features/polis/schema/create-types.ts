@@ -6,7 +6,7 @@ const COAS_ROLE = z.enum(["leader", "member"]);
 const JENIS_RATE = z.enum(["mille", "percent"]);
 
 const noPolis = z.string().min(1, "Nomor polis wajib diisi");
-const nonNegative = z.coerce.number().min(1, "Nominal wajib diisi");
+const nonNegative = z.coerce.number().min(0, "Nilai tidak bisa negatif");
 
 // DETAIL SCHEMAS
 export const DetailPremiSchema = z.object({
@@ -67,7 +67,7 @@ export const basePolisObjectSchema = z.object({
   bisnis: JENIS_BISNIS,
   id_nasabah: z.string().uuid("Nasabah Belum Dipilih"),
   total_sum_insured: nonNegative,
-  nilai_rate: z.coerce.number().positive("Rate harus lebih dari 0"),
+  nilai_rate: nonNegative,
   jenis_rate: JENIS_RATE,
   total_premi: z.coerce.number().min(0, "Total Premi Wajib Diisi"),
   jenis_coas: JENIS_COAS,

@@ -2,10 +2,10 @@ const baseDefault = {
   nomor_polis: "",
   bisnis: undefined,
   id_nasabah: "",
-  total_sum_insured: undefined,
-  nilai_rate: undefined,
+  total_sum_insured: 0,
+  nilai_rate: 0,
   jenis_rate: "mille" as const,
-  total_premi: undefined,
+  total_premi: 0,
   periode_mulai: undefined,
   periode_akhir: undefined,
   detail_bisnis: {},
@@ -13,10 +13,10 @@ const baseDefault = {
 };
 
 const emptyDetailPremi = {
-  premi_gross: 0,
-  discount: 0,
-  biaya_admin_materai: 0,
-  premi_net: 0,
+  premi_gross: "",
+  discount: "",
+  biaya_admin_materai: "",
+  premi_net: "",
 };
 
 const emptyDetailKomisi = {

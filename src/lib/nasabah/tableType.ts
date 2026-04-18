@@ -9,7 +9,9 @@ export const NasabahTableRow = z.object({
   email: z.string().email().nullable(),
   alamat: z.string().nullable(),
   created_at: z.string(),
-  updated_at: z.string(),
+  updated_at: z.string().optional(),
+  jumlah_polis_aktif: z.coerce.number(),
+  jumlah_polis_total: z.coerce.number()
 });
 
 export const NasabahTableRowsSchema = z.array(NasabahTableRow);

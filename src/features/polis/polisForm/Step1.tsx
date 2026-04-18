@@ -16,8 +16,8 @@ import {
 import { SelectField } from "@/components/SelectField";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-import KendaraanSelectOrCreate from "../kendaraan/KendaraanSelectOrCreate";
 import KendaraanForm from "../kendaraan/KendaraanForm";
+import { jenis_bisnis } from "@/lib/types";
 
 function DetailItem({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: React.ReactNode }) {
     if (!value) return null;
@@ -144,7 +144,7 @@ export default function Step1() {
             <SelectField<Polis>
                 name='bisnis'
                 label="Bisnis"
-                options={["kendaraan", "health"]}
+                options={jenis_bisnis}
                 must={true}
             />
             {bisnis === "kendaraan" && (

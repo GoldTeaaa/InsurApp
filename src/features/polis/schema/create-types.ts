@@ -6,28 +6,49 @@ const COAS_ROLE = z.enum(["leader", "member"]);
 const JENIS_RATE = z.enum(["mille", "percent"]);
 
 const noPolis = z.string().min(1, "Nomor polis wajib diisi");
-const nonNegative = z.coerce.number().min(0, "Nilai tidak bisa negatif");
+
+const nonNegative = z.preprocess(
+  (val) => (val === "" ? undefined : Number(val)),
+  z.number({ invalid_type_error: "Harus berupa angka" }).min(0, "Nilai tidak bisa negatif").optional()
+);
+
+const requiredNumberSchema = (
+  requiredMessage: string,
+  minValueMessage?: string,
+) =>
+  z.preprocess(
+    (val) => (val === "" ? undefined : Number(val)),
+    z.number({
+      required_error: requiredMessage,
+      invalid_type_error: "Harus berupa angka",
+    }).min(0, minValueMessage || "Nilai tidak bisa negatif"),
+  );
 
 // DETAIL SCHEMAS
 export const DetailPremiSchema = z.object({
-  premi_gross: z.coerce.number().min(0, "Premi wajib diisi"),
-  discount: z.coerce.number().nonnegative(),
-  biaya_admin_materai: nonNegative,
-  premi_net: z.coerce.number().nonnegative("Premi tidak bisa negatif"),
+  premi_gross: requiredNumberSchema("Premi wajib diisi"),
+  discount: nonNegative,
+  biaya_admin_materai: requiredNumberSchema("Biaya admin materai wajib diisi"),
+  premi_net: requiredNumberSchema("Premi net wajib diisi", "Premi tidak bisa negatif"),
 });
 
 export const DetailKomisiSchema = z.object({
-  komisi_gross: nonNegative,
-  pph_komisi: nonNegative,
-  komisi_net: z.coerce.number().min(0, "Komisi wajib diisi"),
+  komisi_gross: requiredNumberSchema("Komisi gross wajib diisi"),
+  pph_komisi: requiredNumberSchema("PPH komisi wajib diisi"),
+  komisi_net: requiredNumberSchema("Komisi bersih wajib diisi"),
 });
 
 // SHARE SCHEMA
 export const PolisShareSchema = z.object({
-  persentase_share: z.coerce
-    .number()
-    .min(1, "Persentase share wajib diisi")
-    .max(100, "Persentase share tidak boleh lebih dari 100"),
+  persentase_share: z.preprocess(
+    (val) => (val === "" ? undefined : Number(val)),
+    z.number({
+      required_error: "Persentase share wajib diisi",
+      invalid_type_error: "Harus berupa angka",
+    })
+      .min(1, "Persentase share minimal 1")
+      .max(100, "Persentase share tidak boleh lebih dari 100")
+  ),
   coas_role: COAS_ROLE,
   id_perusahaan_asuransi: z.string().uuid("Asuransi Penanggung Belum Dipilih"),
   detail_premi: DetailPremiSchema,
@@ -66,24 +87,24 @@ export const basePolisObjectSchema = z.object({
   nomor_polis: noPolis,
   bisnis: JENIS_BISNIS,
   id_nasabah: z.string().uuid("Nasabah Belum Dipilih"),
-  total_sum_insured: nonNegative,
-  nilai_rate: nonNegative,
+  total_sum_insured: requiredNumberSchema("Total Sum Insured wajib diisi"),
+  nilai_rate: requiredNumberSchema("Nilai rate wajib diisi"),
   jenis_rate: JENIS_RATE,
-  total_premi: z.coerce.number().min(0, "Total Premi Wajib Diisi"),
+  total_premi: requiredNumberSchema("Total Premi Wajib Diisi"),
   jenis_coas: JENIS_COAS,
   periode_mulai: z.preprocess(
     (arg) => (typeof arg === "string" && arg.trim() === "" ? undefined : arg),
     z.coerce.date({
       required_error: "Periode mulai wajib diisi.",
       invalid_type_error: "Format tanggal periode mulai tidak valid.",
-    })
+    }),
   ),
   periode_akhir: z.preprocess(
     (arg) => (typeof arg === "string" && arg.trim() === "" ? undefined : arg),
     z.coerce.date({
       required_error: "Periode akhir wajib diisi.",
       invalid_type_error: "Format tanggal periode akhir tidak valid.",
-    })
+    }),
   ),
   bisnis_details: businessDetailsSchema,
   detail_bisnis: z.record(z.any()).optional(), // May be remove later
@@ -169,7 +190,7 @@ export const PolisSchema = z
     if (data.jenis_coas === "coas") {
       const sumPercent = sharesArr.reduce(
         (s, sh) => s + Number(sh.persentase_share ?? 0),
-        0
+        0,
       );
       const EPS = 1e-9;
       if (Math.abs(sumPercent - 100) > EPS) {
@@ -194,7 +215,7 @@ export const PolisSchema = z
     // 3) Sum of premi_net should match total_premi
     const sumPremiNet = sharesArr.reduce(
       (s, sh) => s + Number(sh.detail_premi.premi_net ?? 0),
-      0
+      0,
     );
     // Use a small epsilon for float comparison
     if (Math.abs(sumPremiNet - data.total_premi) > 1e-9) {
@@ -218,6 +239,7 @@ export const PolisSchema = z
   });
 
 export type Polis = z.infer<typeof PolisSchema>;
+export type PolisInputType = z.input<typeof PolisSchema>;
 export type PolisShare = z.infer<typeof PolisShareSchema>;
 export type DetailPremi = z.infer<typeof DetailPremiSchema>;
 export type DetailKomisi = z.infer<typeof DetailKomisiSchema>;

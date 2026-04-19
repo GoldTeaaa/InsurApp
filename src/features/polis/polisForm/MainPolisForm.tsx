@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { FormProvider, Resolver, useForm, useWatch, FieldErrors, Path } from "react-hook-form";
 import { Button } from "@/components/button";
 import { motion } from 'framer-motion'
-import { kendaraanSchema, healthSchema, lifeSchema, marineSchema, propertySchema, Polis, PolisSchema } from "@/features/polis/schema/create-types";
+import { kendaraanSchema, healthSchema, lifeSchema, marineSchema, propertySchema, Polis, PolisSchema, PolisInputType } from "@/features/polis/schema/create-types";
 import { getDefaultValues } from "@/features/polis/schema/defaultValues";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/lib/utils/useDebounce";
@@ -45,15 +45,15 @@ export default function MainPolisForm() {
     const router = useRouter();
     const [previousStep, setPreviousStep] = useState<number>(0);
     const [currentStep, setCurrentStep] = useState<number>(0);
-    const [toastErrors, setToastErrors] = useState<FieldErrors<Polis> | null>(null);
+    const [toastErrors, setToastErrors] = useState<FieldErrors<PolisInputType> | null>(null);
     const [fieldToModify, setFieldToModify] = useState<(Path<Polis>)[]>(steps[currentStep].fields || []);
     const [isInitialized, setIsInitialized] = useState(false);
 
     const delta = currentStep - previousStep;
 
-    const methods = useForm<Polis>({
+    const methods = useForm<PolisInputType>({
         mode: 'all',
-        resolver: zodResolver(PolisSchema) as Resolver<Polis>,
+        resolver: zodResolver(PolisSchema),
         defaultValues: getDefaultValues('non-coas'),
     });
 

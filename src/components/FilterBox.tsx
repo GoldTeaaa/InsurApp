@@ -49,7 +49,7 @@ export default function FilterBox() {
       startDate: params.get('date_from') || null,
       endDate: params.get('date_to') || null,
       jenis_bisnis: params.get('jenis_bisnis') || "",
-      jenis_coas: (params.get('jenis_coas')?.split(',').filter(Boolean) as ('coas' | 'non-coas')[]) || [],
+      jenis_coas: (params.get('jenis_coas')?.split(',').filter( Boolean) as ('coas' | 'non-coas')[]) || [],
     });
   }, [searchParams]);
 

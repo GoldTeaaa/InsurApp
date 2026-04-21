@@ -164,7 +164,7 @@ export default function MainPolisForm() {
         setCurrentStep(stepIndex);
     }
 
-    const submit = async (data: Polis) => {
+    const submit = async (data: PolisInputType) => {
         const res = await createPolis(data);
         console.log("Submit FORM");
 
@@ -177,7 +177,7 @@ export default function MainPolisForm() {
         }
     }
 
-    const onError = (errors: FieldErrors<Polis>) => {
+    const onError = (errors: FieldErrors<PolisInputType>) => {
         setToastErrors(errors);
     }
 
@@ -229,7 +229,7 @@ export default function MainPolisForm() {
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                     >
                         {steps[currentStep].component}
-                        {currentStep === steps.length - 1 && (
+                        {/* {currentStep === steps.length - 1 && (
                             <div className="mt-8 flex justify-end">
                                 <Button
                                     type="submit"
@@ -241,31 +241,43 @@ export default function MainPolisForm() {
                                     ) : 'Submit Polis'}
                                 </Button>
                             </div>
-                        )}
+                        )} */}
                     </motion.div>
-                </form>
-                <div className='mt-8 pt-5 border-t border-gray-200'>
-                    <div className='flex justify-end gap-4'>
-                        <Button
-                            type="button"
-                            onClick={prev}
-                            disabled={currentStep === 0}
-                            variant="outline"
-                            className="w-32"
-                        >
-                            Back
-                        </Button>
-                        {currentStep < steps.length - 1 && (
+                    <div className='mt-8 pt-5 border-t border-gray-200'>
+                        <div className='flex justify-end gap-4'>
                             <Button
                                 type="button"
-                                onClick={next}
-                                    className="w-32"
+                                onClick={prev}
+                                disabled={currentStep === 0}
+                                variant="outline"
+                                className="w-32"
                             >
-                                Next
+                                Back
                             </Button>
-                        )}
+                            {currentStep === steps.length - 1 ?
+                                <Button
+                                    key="submit-btn"
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="min-w-32"
+                                >
+                                    {isSubmitting ? (
+                                        <span className="flex items-center gap-2">Submitting...</span>
+                                    ) : 'Submit Polis'}
+                                </Button>
+                                :
+                                <Button
+                                    key="next-btn"
+                                    type="button"
+                                    onClick={next}
+                                    className="w-32"
+                                >
+                                    Next
+                                </Button>
+                            }
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </FormProvider>
     );

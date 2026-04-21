@@ -1,12 +1,12 @@
 "use server";
 import { ActionReturnState } from "@/lib/types";
 import { createClient } from "~/utils/supabase/server";
-import { PolisSchema, type Polis } from "@/features/polis/schema/create-types";
+import { PolisInputType, PolisSchema, type Polis } from "@/features/polis/schema/create-types";
 
 type ReturnState = ActionReturnState<Polis>;
 
 export default async function createPolis(
-  formData: Polis
+  formData: PolisInputType
 ): Promise<ReturnState> {
   const supabase = await createClient();
   const parsedData = PolisSchema.safeParse(formData);
@@ -25,8 +25,10 @@ export default async function createPolis(
     const { data, error } = await supabase.rpc("create_non_coas_polis", {
       payload: args,
     });
+    
     if (error) console.error(error);
     else console.log(data);
+
     if (data.status !== "ok") {
       return {
         success: false,
@@ -55,6 +57,5 @@ export default async function createPolis(
   return {
     success: true,
     message: "Success",
-    data: formData,
   };
 }

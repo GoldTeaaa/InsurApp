@@ -2,27 +2,27 @@ const baseDefault = {
   nomor_polis: "",
   bisnis: undefined,
   id_nasabah: "",
-  total_sum_insured: "" as unknown as number,
-  nilai_rate: "" as unknown as number,
+  total_sum_insured: "",
+  nilai_rate: "",
   jenis_rate: "mille" as const,
-  total_premi: "" as unknown as number,
-  periode_mulai: "" as unknown as Date,
-  periode_akhir: "" as unknown as Date,
+  total_premi: "",
+  periode_mulai: undefined,
+  periode_akhir: undefined,
   detail_bisnis: {},
   bisnis_details: { bisnis: undefined },
 };
 
 const emptyDetailPremi = {
-  premi_gross: "" as unknown as number,
-  discount: "" as unknown as number,
-  biaya_admin_materai: "" as unknown as number,
-  premi_net: "" as unknown as number,
+  premi_gross: "",
+  discount: "",
+  biaya_admin_materai: "",
+  premi_net: "",
 };
 
 const emptyDetailKomisi = {
-  komisi_gross: "" as unknown as number,
-  pph_komisi: "" as unknown as number,
-  komisi_net: "" as unknown as number,
+  komisi_gross: "",
+  pph_komisi: "",
+  komisi_net: "",
 };
 
 const emptyShare = {
@@ -41,9 +41,9 @@ const nonCoasDefault = {
 const coasDefault = {
   jenis_coas: "coas" as const,
   shares: [
-    // Indicating must be more than one box
-    { ...emptyShare, persentase_share: "" as unknown as number },
-    { ...emptyShare, persentase_share: "" as unknown as number },
+    //Indicating must be more than one box
+    { ...emptyShare, persentase_share: 0 },
+    { ...emptyShare, persentase_share: 0 },
   ],
 };
 
